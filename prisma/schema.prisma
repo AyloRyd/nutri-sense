@@ -1,0 +1,134 @@
+generator client {
+  provider      = "prisma-client"
+  output        = "../src/generated/prisma"
+  moduleFormat  = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Sex {
+  male
+  female
+  other
+}
+
+enum PlanGoal {
+  maintain
+  gain
+  lose
+}
+
+model User {
+  id              Int     @id @default(autoincrement())
+  hashed_password String  
+  email           String  @unique 
+  username        String  
+  avatar_url      String? 
+  sex             Sex?    
+
+  template_meals    TemplateMeal[]
+  template_foods    TemplateFood[]
+  meals             Meal[]
+  plans             Plan[]
+  user_measurements UserMeasurement[]
+
+  @@map("users")
+}
+
+model TemplateFood {
+  id       Int    @id @default(autoincrement()) 
+  user_id  Int    
+  name     String 
+  calories Float  
+  protein  Float  
+  fats     Float  
+  carbs    Float  
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("template_foods") 
+}
+
+model TemplateMeal {
+  id      Int    @id @default(autoincrement()) 
+  name    String 
+  user_id Int    
+
+  user User @relation(fields: [user_id], references: [id])
+  
+  template_meal_foods TemplateMealFood[]
+
+  @@map("template_meals") 
+}
+
+model TemplateMealFood {
+  id               Int    @id @default(autoincrement())
+  template_meal_id Int   
+  name             String
+  weight           Float 
+  calories         Float 
+  protein          Float 
+  fats             Float 
+  carbs            Float 
+
+  template_meal TemplateMeal @relation(fields: [template_meal_id], references: [id])
+
+  @@map("template_meal_foods")
+}
+
+model Meal {
+  id      Int      @id @default(autoincrement()) 
+  user_id Int      
+  name    String   
+  date    DateTime 
+
+  user User @relation(fields: [user_id], references: [id])
+
+  meal_foods MealFood[]
+
+  @@map("meals") 
+}
+
+model MealFood {
+  id       Int    @id @default(autoincrement()) 
+  meal_id  Int    
+  weight   Float  
+  name     String 
+  calories Float  
+  protein  Float  
+  fats     Float  
+  carbs    Float  
+
+  meal Meal @relation(fields: [meal_id], references: [id])
+
+  @@map("meal_foods") 
+}
+
+model Plan {
+  id           Int      @id @default(autoincrement()) 
+  user_id      Int      
+  start_date   DateTime 
+  plan         PlanGoal 
+  day_calories Float    
+  day_protein  Float    
+  day_fats     Float    
+  day_carbs    Float    
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("plans") 
+}
+
+model UserMeasurement {
+  id      Int      @id @default(autoincrement()) 
+  user_id Int      
+  date    DateTime 
+  weight  Float    
+  height  Float    
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("user_measurements") 
+}
