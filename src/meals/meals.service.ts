@@ -4,16 +4,17 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateMealDto, MealFoodDto } from './dto/create-meal.dto';
+import { CreateMealDto } from './dto/create-meal.dto';
 import { UpdateMealDto } from './dto/update-meal.dto';
 import { GetMealsFilterDto } from './dto/get-meals-filter.dto';
 import { MealEntity } from './entities/meal.entity';
+import { CreateMealFoodDto } from 'src/meal-foods/dto/create-meal-food.dto';
 
 @Injectable()
 export class MealsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private calculateFoodMacros(food: MealFoodDto) {
+  private calculateFoodMacros(food: CreateMealFoodDto) {
     const ratio = food.weight / 100;
     return {
       name: food.name,

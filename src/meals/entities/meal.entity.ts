@@ -1,31 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MealFood } from 'src/generated/prisma/client';
-
-export class MealFoodEntity implements MealFood {
-  @ApiProperty()
-  id: number;
-
-  @ApiProperty()
-  meal_id: number;
-
-  @ApiProperty()
-  name: string;
-
-  @ApiProperty()
-  weight: number;
-
-  @ApiProperty()
-  calories: number;
-
-  @ApiProperty()
-  protein: number;
-
-  @ApiProperty()
-  fats: number;
-
-  @ApiProperty()
-  carbs: number;
-}
+import { MealFoodEntity } from 'src/meal-foods/entities/meal-food.entity';
 
 export class MealEntity {
   @ApiProperty()
