@@ -7,12 +7,14 @@ import {
   Delete,
   UseGuards,
   Req,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import type { JwtRequest } from 'src/auth/types/jwt-request.interface';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { ApiNoContentResponse, ApiOkResponse } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 
 @Controller('users')
@@ -33,7 +35,9 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiNoContentResponse()
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    this.usersService.remove(+id);
   }
 }

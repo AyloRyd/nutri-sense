@@ -9,12 +9,19 @@ import {
   UseGuards,
   Req,
   ParseIntPipe,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { MeasurementsService } from './measurements.service';
 import { CreateMeasurementDto } from './dto/create-measurement.dto';
 import { UpdateMeasurementDto } from './dto/update-measurement.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import type { JwtRequest } from 'src/auth/types/jwt-request.interface';
 import { MeasurementEntity } from './entities/measurement.entity';
 
@@ -54,8 +61,9 @@ export class MeasurementsController {
   }
 
   @Delete(':id')
-  @ApiOkResponse({ type: MeasurementEntity })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiNoContentResponse()
   remove(@Req() req: JwtRequest, @Param('id', ParseIntPipe) id: number) {
-    return this.measurementsService.remove(req.user.userId, id);
+    this.measurementsService.remove(req.user.userId, id);
   }
 }
