@@ -15,8 +15,8 @@ export class AuthController {
 
   @Post('register')
   @ApiOkResponse({ type: AuthEntity })
-  register(@Body() registerDto: RegisterDto) {
-    return this.authService.register(registerDto);
+  register(@Body() dto: RegisterDto) {
+    return this.authService.register(dto);
   }
 
   @Post('login')
@@ -28,11 +28,11 @@ export class AuthController {
   @Post('change-password')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  changePassword(@Req() req: JwtRequest, @Body() changePasswordDto: ChangePasswordDto) {
+  changePassword(@Req() req: JwtRequest, @Body() dto: ChangePasswordDto) {
     return this.authService.changePassword(
       req.user.userId,
-      changePasswordDto.password,
-      changePasswordDto.new_password,
+      dto.password,
+      dto.new_password,
     );
   }
 }

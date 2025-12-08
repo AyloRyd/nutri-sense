@@ -16,4 +16,7 @@ export class MeasurementEntity implements UserMeasurement {
 
   @ApiProperty()
   height: number;
+
+  @ApiProperty()
+  activity: number;
 }

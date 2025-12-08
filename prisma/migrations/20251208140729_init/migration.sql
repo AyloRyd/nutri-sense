@@ -98,6 +98,7 @@ CREATE TABLE "user_measurements" (
     "date" TIMESTAMP(3) NOT NULL,
     "weight" DOUBLE PRECISION NOT NULL,
     "height" DOUBLE PRECISION NOT NULL,
+    "activity" DOUBLE PRECISION NOT NULL,
 
     CONSTRAINT "user_measurements_pkey" PRIMARY KEY ("id")
 );

@@ -128,6 +128,7 @@ model UserMeasurement {
   date    DateTime
   weight  Float
   height  Float
+  activity Float
 
   user User @relation(fields: [user_id], references: [id])
 

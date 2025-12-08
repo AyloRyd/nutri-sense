@@ -19,13 +19,13 @@ export class AuthService {
     private usersService: UsersService,
   ) {}
 
-  async register(registerDto: RegisterDto) {
-    const user = await this.usersService.create(registerDto);
+  async register(dto: RegisterDto) {
+    const user = await this.usersService.create(dto);
 
     try {
       return await this.login({
-        email: registerDto.email,
-        password: registerDto.password,
+        email: dto.email,
+        password: dto.password,
       });
     } catch (error) {
       await this.prisma.user.delete({ where: { id: user.id } });

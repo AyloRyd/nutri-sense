@@ -33,6 +33,7 @@ export class MeasurementsService {
         user_id: userId,
         weight: dto.weight,
         height: dto.height,
+        activity: dto.activity,
         date: dto.date ? new Date(dto.date) : new Date(),
       },
     });
@@ -56,6 +57,7 @@ export class MeasurementsService {
       data: {
         weight: dto.weight,
         height: dto.height,
+        activity: dto.activity,
         date: dto.date ? new Date(dto.date) : undefined,
       },
     });

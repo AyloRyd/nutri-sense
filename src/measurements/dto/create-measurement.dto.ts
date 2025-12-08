@@ -20,6 +20,12 @@ export class CreateMeasurementDto {
   @ApiProperty({ example: 180, description: 'Height in cm' })
   height: number;
 
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  @ApiProperty({ example: 1.2, description: 'Activity level' })
+  activity: number;
+
   @IsOptional()
   @IsDateString()
   @ApiProperty({ required: false, example: '2023-12-08T10:00:00Z' })

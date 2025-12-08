@@ -13,14 +13,14 @@ import { UserEntity } from './entities/user.entity';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(dto: CreateUserDto) {
     try {
       return await this.prisma.user.create({
         data: {
-          email: createUserDto.email,
-          username: createUserDto.username,
-          avatar_url: createUserDto.avatar_url,
-          hashed_password: await bcrypt.hash(createUserDto.password, 10),
+          email: dto.email,
+          username: dto.username,
+          avatar_url: dto.avatar_url,
+          hashed_password: await bcrypt.hash(dto.password, 10),
         },
       }) as UserEntity;
     } catch (error) {
@@ -36,7 +36,7 @@ export class UsersService {
     return await this.prisma.user.findUnique({ where: { id } }) as UserEntity;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, dto: UpdateUserDto) {
     const user = await this.findOne(id);
 
     if (!user) {
@@ -46,7 +46,7 @@ export class UsersService {
     try {
       return await this.prisma.user.update({
         where: { id },
-        data: updateUserDto,
+        data: dto,
       }) as UserEntity;
     } catch (error) {
       if (error.code === 'P2002') {
