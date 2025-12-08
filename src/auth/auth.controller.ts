@@ -28,11 +28,11 @@ export class AuthController {
   @Post('change-password')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  changePassword(@Req() req: JwtRequest, @Body() dto: ChangePasswordDto) {
+  changePassword(@Req() req: JwtRequest, @Body() changePasswordDto: ChangePasswordDto) {
     return this.authService.changePassword(
       req.user.userId,
-      dto.password,
-      dto.new_password,
+      changePasswordDto.password,
+      changePasswordDto.new_password,
     );
   }
 }
