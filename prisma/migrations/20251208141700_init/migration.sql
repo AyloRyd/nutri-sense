@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Sex" AS ENUM ('male', 'female', 'other');
+CREATE TYPE "Sex" AS ENUM ('male', 'female');
 
 -- CreateEnum
 CREATE TYPE "PlanGoal" AS ENUM ('maintain', 'gain', 'lose');
