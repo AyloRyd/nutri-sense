@@ -9,6 +9,7 @@ import { MeasurementsModule } from './measurements/measurements.module';
 import { PlansModule } from './plans/plans.module';
 import { MealsModule } from './meals/meals.module';
 import { MealFoodsModule } from './meal-foods/meal-foods.module';
+import { StatsModule } from './stats/stats.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MealFoodsModule } from './meal-foods/meal-foods.module';
     PlansModule,
     MealsModule,
     MealFoodsModule,
+    StatsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
