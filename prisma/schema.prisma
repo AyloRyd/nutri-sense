@@ -26,6 +26,7 @@ model User {
   hashed_password String
   username        String
   avatar_url      String?
+  date_of_birth   DateTime?
   sex             Sex?
 
   template_meals    TemplateMeal[]

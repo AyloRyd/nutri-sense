@@ -7,6 +7,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -19,10 +20,9 @@ export class UsersService {
           email: createUserDto.email,
           username: createUserDto.username,
           avatar_url: createUserDto.avatar_url,
-          sex: createUserDto.sex,
           hashed_password: await bcrypt.hash(createUserDto.password, 10),
         },
-      });
+      }) as UserEntity;
     } catch (error) {
       if (error.code === 'P2002') {
         throw new ConflictException('User with this email already exists');
@@ -33,7 +33,7 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    return this.prisma.user.findUnique({ where: { id } });
+    return await this.prisma.user.findUnique({ where: { id } }) as UserEntity;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
@@ -47,7 +47,7 @@ export class UsersService {
       return await this.prisma.user.update({
         where: { id },
         data: updateUserDto,
-      });
+      }) as UserEntity;
     } catch (error) {
       if (error.code === 'P2002') {
         throw new ConflictException('User with this email already exists');
@@ -64,7 +64,7 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    await this.prisma.user.delete({ where: { id } });
+    await this.prisma.user.delete({ where: { id } }) as UserEntity;
 
     return { success: true };
   }

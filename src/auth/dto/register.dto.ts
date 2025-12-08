@@ -8,7 +8,6 @@ import {
   IsUrl,
   MinLength,
 } from 'class-validator';
-import { Sex } from 'src/generated/prisma/enums';
 
 export class RegisterDto {
   @IsEmail()
@@ -32,9 +31,4 @@ export class RegisterDto {
   @IsUrl()
   @ApiProperty({ required: false })
   avatar_url?: string;
-
-  @IsOptional()
-  @IsEnum(Sex)
-  @ApiProperty({ required: false, enum: Sex })
-  sex?: Sex;
 }

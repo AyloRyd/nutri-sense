@@ -7,10 +7,11 @@ CREATE TYPE "PlanGoal" AS ENUM ('maintain', 'gain', 'lose');
 -- CreateTable
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
-    "hashed_password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "hashed_password" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "avatar_url" TEXT,
+    "date_of_birth" TIMESTAMP(3),
     "sex" "Sex",
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
