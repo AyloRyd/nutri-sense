@@ -13,7 +13,7 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/', app, documentFactory);
+  SwaggerModule.setup('/swagger', app, documentFactory);
 
   app.use(
     '/scalar',

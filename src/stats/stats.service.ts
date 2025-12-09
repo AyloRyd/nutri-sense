@@ -26,7 +26,7 @@ export class StatsService {
           userId,
           d.toISOString(),
         );
-      } catch (e) {
+      } catch (_) {
         throw new NotFoundException(`No active plan found for date ${dateStr}`);
       }
 

@@ -11,10 +11,9 @@ import { MealsModule } from './meals/meals.module';
 import { MealFoodsModule } from './meal-foods/meal-foods.module';
 import { StatsModule } from './stats/stats.module';
 import { TemplateFoodsModule } from './template-foods/template-foods.module';
+import { OpenfoodfactsModule } from './openfoodfacts/openfoodfacts.module';
 import { TemplateMealsModule } from './template-meals/template-meals.module';
 import { TemplateMealFoodsModule } from './template-meal-foods/template-meal-foods.module';
-import { TemplateMealFoodsModule } from './template-meal-foods/template-meal-foods.module';
-import { TemplateMealsModule } from './template-meals/template-meals.module';
 
 @Module({
   imports: [
@@ -30,6 +29,7 @@ import { TemplateMealsModule } from './template-meals/template-meals.module';
     TemplateFoodsModule,
     TemplateMealsModule,
     TemplateMealFoodsModule,
+    OpenfoodfactsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

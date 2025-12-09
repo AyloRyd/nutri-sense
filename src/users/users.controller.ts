@@ -14,10 +14,11 @@ import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import type { JwtRequest } from 'src/auth/types/jwt-request.interface';
-import { ApiNoContentResponse, ApiOkResponse } from '@nestjs/swagger';
+import { ApiNoContentResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
 
 @Controller('users')
+@ApiTags('users')
 @UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
