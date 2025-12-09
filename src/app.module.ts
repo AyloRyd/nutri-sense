@@ -10,6 +10,9 @@ import { PlansModule } from './plans/plans.module';
 import { MealsModule } from './meals/meals.module';
 import { MealFoodsModule } from './meal-foods/meal-foods.module';
 import { StatsModule } from './stats/stats.module';
+import { TemplateFoodsModule } from './template-foods/template-foods.module';
+import { TemplateMealsModule } from './template-meals/template-meals.module';
+import { TemplateMealFoodsModule } from './template-meal-foods/template-meal-foods.module';
 
 @Module({
   imports: [
@@ -22,6 +25,9 @@ import { StatsModule } from './stats/stats.module';
     MealsModule,
     MealFoodsModule,
     StatsModule,
+    TemplateFoodsModule,
+    TemplateMealsModule,
+    TemplateMealFoodsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
