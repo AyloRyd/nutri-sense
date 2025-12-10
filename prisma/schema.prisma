@@ -20,8 +20,8 @@ enum PlanGoal {
 }
 
 model User {
-  id              Int     @id @default(autoincrement())
-  email           String  @unique
+  id              Int       @id @default(autoincrement())
+  email           String    @unique
   hashed_password String
   username        String
   avatar_url      String?
@@ -46,7 +46,7 @@ model TemplateFood {
   fats     Float
   carbs    Float
 
-  user User @relation(fields: [user_id], references: [id])
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("template_foods")
 }
@@ -56,7 +56,7 @@ model TemplateMeal {
   name    String
   user_id Int
 
-  user User @relation(fields: [user_id], references: [id])
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   template_meal_foods TemplateMealFood[]
 
@@ -73,7 +73,7 @@ model TemplateMealFood {
   fats             Float
   carbs            Float
 
-  template_meal TemplateMeal @relation(fields: [template_meal_id], references: [id])
+  template_meal TemplateMeal @relation(fields: [template_meal_id], references: [id], onDelete: Cascade)
 
   @@map("template_meal_foods")
 }
@@ -84,7 +84,7 @@ model Meal {
   name    String
   date    DateTime
 
-  user User @relation(fields: [user_id], references: [id])
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   meal_foods MealFood[]
 
@@ -101,7 +101,7 @@ model MealFood {
   fats     Float
   carbs    Float
 
-  meal Meal @relation(fields: [meal_id], references: [id])
+  meal Meal @relation(fields: [meal_id], references: [id], onDelete: Cascade)
 
   @@map("meal_foods")
 }
@@ -116,20 +116,20 @@ model Plan {
   day_fats     Float
   day_carbs    Float
 
-  user User @relation(fields: [user_id], references: [id])
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("plans")
 }
 
 model UserMeasurement {
-  id      Int      @id @default(autoincrement())
-  user_id Int
-  date    DateTime
-  weight  Float
-  height  Float
+  id       Int      @id @default(autoincrement())
+  user_id  Int
+  date     DateTime
+  weight   Float
+  height   Float
   activity Float
 
-  user User @relation(fields: [user_id], references: [id])
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("user_measurements")
 }
