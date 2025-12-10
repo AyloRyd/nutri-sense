@@ -50,13 +50,13 @@ export class AuthService {
     }
 
     return {
-      access_token: this.jwtService.sign({ userId: user.id }),
+      access_token: this.jwtService.sign({ user_id: user.id }),
     };
   }
 
-  async changePassword(userId: number, password: string, new_password: string) {
+  async changePassword(user_id: number, password: string, new_password: string) {
     const user = await this.prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: user_id },
     });
 
     if (!user) {
@@ -72,7 +72,7 @@ export class AuthService {
     const newHashedPassword = await bcrypt.hash(new_password, 10);
 
     await this.prisma.user.update({
-      where: { id: userId },
+      where: { id: user_id },
       data: {
         hashed_password: newHashedPassword,
       },

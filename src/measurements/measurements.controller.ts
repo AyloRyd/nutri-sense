@@ -35,19 +35,19 @@ export class MeasurementsController {
   @Get()
   @ApiOkResponse({ type: MeasurementEntity, isArray: true })
   findAll(@Req() req: JwtRequest) {
-    return this.measurementsService.findAll(req.user.userId);
+    return this.measurementsService.findAll(req.user.id);
   }
 
   @Get('current')
   @ApiOkResponse({ type: MeasurementEntity })
   findCurrent(@Req() req: JwtRequest) {
-    return this.measurementsService.findCurrent(req.user.userId);
+    return this.measurementsService.findCurrent(req.user.id);
   }
 
   @Post()
   @ApiOkResponse({ type: MeasurementEntity })
   create(@Req() req: JwtRequest, @Body() dto: CreateMeasurementDto) {
-    return this.measurementsService.create(req.user.userId, dto);
+    return this.measurementsService.create(req.user.id, dto);
   }
 
   @Patch(':id')
@@ -57,13 +57,13 @@ export class MeasurementsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateMeasurementDto,
   ) {
-    return this.measurementsService.update(req.user.userId, id, dto);
+    return this.measurementsService.update(req.user.id, id, dto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse()
   remove(@Req() req: JwtRequest, @Param('id', ParseIntPipe) id: number) {
-    this.measurementsService.remove(req.user.userId, id);
+    this.measurementsService.remove(req.user.id, id);
   }
 }

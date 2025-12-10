@@ -26,7 +26,7 @@ export class LoggingExceptionFilter implements ExceptionFilter {
         : exception.message;
 
     const user =
-      req['user'] ? `userId=${req['user'].userId}` : 'guest';
+      req['user'] ? `user_id=${req['user'].userId}` : 'guest';
 
     this.logger.error(
       `${req.method} ${req.url} ERROR ${status} ${user}`,

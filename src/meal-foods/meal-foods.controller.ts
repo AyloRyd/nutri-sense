@@ -38,7 +38,7 @@ export class MealFoodsController {
     @Req() req: JwtRequest,
     @Param('mealId', ParseIntPipe) mealId: number,
   ) {
-    return this.mealFoodsService.findAll(req.user.userId, mealId);
+    return this.mealFoodsService.findAll(req.user.id, mealId);
   }
 
   @Get(':id')
@@ -48,7 +48,7 @@ export class MealFoodsController {
     @Param('mealId', ParseIntPipe) mealId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return this.mealFoodsService.findOne(req.user.userId, mealId, id);
+    return this.mealFoodsService.findOne(req.user.id, mealId, id);
   }
 
   @Post()
@@ -58,7 +58,7 @@ export class MealFoodsController {
     @Param('mealId', ParseIntPipe) mealId: number,
     @Body() dto: CreateMealFoodDto,
   ) {
-    return this.mealFoodsService.create(req.user.userId, mealId, dto);
+    return this.mealFoodsService.create(req.user.id, mealId, dto);
   }
 
   @Patch(':id')
@@ -69,7 +69,7 @@ export class MealFoodsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateMealFoodDto,
   ) {
-    return this.mealFoodsService.update(req.user.userId, mealId, id, dto);
+    return this.mealFoodsService.update(req.user.id, mealId, id, dto);
   }
 
   @Delete(':id')
@@ -80,6 +80,6 @@ export class MealFoodsController {
     @Param('mealId', ParseIntPipe) mealId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    this.mealFoodsService.remove(req.user.userId, mealId, id);
+    this.mealFoodsService.remove(req.user.id, mealId, id);
   }
 }

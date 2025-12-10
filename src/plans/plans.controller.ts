@@ -27,14 +27,14 @@ export class PlansController {
   @Get()
   @ApiOkResponse({ type: PlanEntity, isArray: true })
   findAll(@Req() req: JwtRequest) {
-    return this.plansService.findAll(req.user.userId);
+    return this.plansService.findAll(req.user.id);
   }
 
   @Get('current')
   @ApiOkResponse({ type: PlanEntity })
   findCurrent(@Req() req: JwtRequest) {
     return this.plansService.findActiveByDate(
-      req.user.userId,
+      req.user.id,
       new Date().toISOString(),
     );
   }
@@ -42,13 +42,13 @@ export class PlansController {
   @Get('date/:date')
   @ApiOkResponse({ type: PlanEntity })
   findByDate(@Req() req: JwtRequest, @Param('date') date: string) {
-    return this.plansService.findActiveByDate(req.user.userId, date);
+    return this.plansService.findActiveByDate(req.user.id, date);
   }
 
   @Post()
   @ApiOkResponse({ type: PlanEntity })
   create(@Req() req: JwtRequest, @Body() dto: CreatePlanDto) {
-    return this.plansService.create(req.user.userId, dto);
+    return this.plansService.create(req.user.id, dto);
   }
 
   @Patch(':id')
@@ -58,6 +58,6 @@ export class PlansController {
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdatePlanDto,
   ) {
-    return this.plansService.update(req.user.userId, id, dto);
+    return this.plansService.update(req.user.id, id, dto);
   }
 }

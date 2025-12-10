@@ -26,7 +26,7 @@ export class UsersController {
   @Get('me')
   @ApiOkResponse({ type: UserEntity })
   getMe(@Req() req: JwtRequest) {
-    return this.usersService.findOne(req.user.userId);
+    return this.usersService.findOne(req.user.id);
   }
 
   @Patch(':id')

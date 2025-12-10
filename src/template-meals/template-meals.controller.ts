@@ -35,13 +35,13 @@ export class TemplateMealsController {
   @Get()
   @ApiOkResponse({ type: TemplateMealEntity, isArray: true })
   findAll(@Req() req: JwtRequest) {
-    return this.templateMealsService.findAll(req.user.userId);
+    return this.templateMealsService.findAll(req.user.id);
   }
 
   @Get(':id')
   @ApiOkResponse({ type: TemplateMealEntity })
   findOne(@Req() req: JwtRequest, @Param('id', ParseIntPipe) id: number) {
-    return this.templateMealsService.findOne(req.user.userId, id);
+    return this.templateMealsService.findOne(req.user.id, id);
   }
 
   @Post()
@@ -51,7 +51,7 @@ export class TemplateMealsController {
     @Body() createTemplateMealDto: CreateTemplateMealDto,
   ) {
     return this.templateMealsService.create(
-      req.user.userId,
+      req.user.id,
       createTemplateMealDto,
     );
   }
@@ -64,7 +64,7 @@ export class TemplateMealsController {
     @Body() updateTemplateMealDto: UpdateTemplateMealDto,
   ) {
     return this.templateMealsService.update(
-      req.user.userId,
+      req.user.id,
       id,
       updateTemplateMealDto,
     );
@@ -74,6 +74,6 @@ export class TemplateMealsController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse()
   remove(@Req() req: JwtRequest, @Param('id', ParseIntPipe) id: number) {
-    this.templateMealsService.remove(req.user.userId, id);
+    this.templateMealsService.remove(req.user.id, id);
   }
 }

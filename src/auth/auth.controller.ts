@@ -30,7 +30,7 @@ export class AuthController {
   @ApiBearerAuth()
   changePassword(@Req() req: JwtRequest, @Body() dto: ChangePasswordDto) {
     return this.authService.changePassword(
-      req.user.userId,
+      req.user.id,
       dto.password,
       dto.new_password,
     );

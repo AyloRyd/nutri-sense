@@ -41,7 +41,7 @@ export class TemplateMealFoodsController {
     @Param('templateMealId', ParseIntPipe) templateMealId: number,
   ) {
     return this.templateMealFoodsService.findAll(
-      req.user.userId,
+      req.user.id,
       templateMealId,
     );
   }
@@ -54,7 +54,7 @@ export class TemplateMealFoodsController {
     @Param('id', ParseIntPipe) id: number,
   ) {
     return this.templateMealFoodsService.findOne(
-      req.user.userId,
+      req.user.id,
       templateMealId,
       id,
     );
@@ -68,7 +68,7 @@ export class TemplateMealFoodsController {
     @Body() dto: CreateTemplateMealFoodDto,
   ) {
     return this.templateMealFoodsService.create(
-      req.user.userId,
+      req.user.id,
       templateMealId,
       dto,
     );
@@ -83,7 +83,7 @@ export class TemplateMealFoodsController {
     @Body() dto: UpdateTemplateMealFoodDto,
   ) {
     return this.templateMealFoodsService.update(
-      req.user.userId,
+      req.user.id,
       templateMealId,
       id,
       dto,
@@ -98,6 +98,6 @@ export class TemplateMealFoodsController {
     @Param('templateMealId', ParseIntPipe) templateMealId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    this.templateMealFoodsService.remove(req.user.userId, templateMealId, id);
+    this.templateMealFoodsService.remove(req.user.id, templateMealId, id);
   }
 }

@@ -35,19 +35,19 @@ export class TemplateFoodsController {
   @Get()
   @ApiOkResponse({ type: TemplateFoodEntity, isArray: true })
   findAll(@Req() req: JwtRequest) {
-    return this.templateFoodsService.findAll(req.user.userId);
+    return this.templateFoodsService.findAll(req.user.id);
   }
 
   @Get(':id')
   @ApiOkResponse({ type: TemplateFoodEntity })
   findOne(@Req() req: JwtRequest, @Param('id', ParseIntPipe) id: number) {
-    return this.templateFoodsService.findOne(req.user.userId, id);
+    return this.templateFoodsService.findOne(req.user.id, id);
   }
 
   @Post()
   @ApiOkResponse({ type: TemplateFoodEntity })
   create(@Req() req: JwtRequest, @Body() dto: CreateTemplateFoodDto) {
-    return this.templateFoodsService.create(req.user.userId, dto);
+    return this.templateFoodsService.create(req.user.id, dto);
   }
 
   @Patch(':id')
@@ -57,13 +57,13 @@ export class TemplateFoodsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateTemplateFoodDto,
   ) {
-    return this.templateFoodsService.update(req.user.userId, id, dto);
+    return this.templateFoodsService.update(req.user.id, id, dto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse()
   remove(@Req() req: JwtRequest, @Param('id', ParseIntPipe) id: number) {
-    this.templateFoodsService.remove(req.user.userId, id);
+    this.templateFoodsService.remove(req.user.id, id);
   }
 }

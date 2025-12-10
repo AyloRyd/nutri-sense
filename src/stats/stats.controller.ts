@@ -16,6 +16,6 @@ export class StatsController {
   @Get()
   @ApiOkResponse({ type: DailyStatsEntity, isArray: true })
   getStats(@Req() req: JwtRequest, @Query() filter: GetStatsFilterDto) {
-    return this.statsService.getStats(req.user.userId, filter);
+    return this.statsService.getStats(req.user.id, filter);
   }
 }

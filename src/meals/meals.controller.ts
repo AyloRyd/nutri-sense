@@ -37,19 +37,19 @@ export class MealsController {
   @Get()
   @ApiOkResponse({ type: MealEntity, isArray: true })
   findAll(@Req() req: JwtRequest, @Query() filter: GetMealsFilterDto) {
-    return this.mealsService.findAll(req.user.userId, filter);
+    return this.mealsService.findAll(req.user.id, filter);
   }
 
   @Get(':id')
   @ApiOkResponse({ type: MealEntity })
   findOne(@Req() req: JwtRequest, @Param('id', ParseIntPipe) id: number) {
-    return this.mealsService.findOne(req.user.userId, id);
+    return this.mealsService.findOne(req.user.id, id);
   }
 
   @Post()
   @ApiOkResponse({ type: MealEntity })
   create(@Req() req: JwtRequest, @Body() createMealDto: CreateMealDto) {
-    return this.mealsService.create(req.user.userId, createMealDto);
+    return this.mealsService.create(req.user.id, createMealDto);
   }
 
   @Patch(':id')
@@ -59,13 +59,13 @@ export class MealsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateMealDto: UpdateMealDto,
   ) {
-    return this.mealsService.update(req.user.userId, id, updateMealDto);
+    return this.mealsService.update(req.user.id, id, updateMealDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse()
   remove(@Req() req: JwtRequest, @Param('id', ParseIntPipe) id: number) {
-    this.mealsService.remove(req.user.userId, id);
+    this.mealsService.remove(req.user.id, id);
   }
 }
