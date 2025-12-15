@@ -19,4 +19,7 @@ export class UserEntity implements Omit<User, 'hashed_password'> {
 
   @ApiProperty({ required: false })
   date_of_birth: Date;
+
+  @ApiProperty({ required: false })
+  device_serial_id: string;
 }

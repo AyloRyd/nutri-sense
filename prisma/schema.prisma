@@ -28,6 +28,8 @@ model User {
   date_of_birth   DateTime?
   sex             Sex?
 
+  device_serial_id String?   @unique
+
   template_meals    TemplateMeal[]
   template_foods    TemplateFood[]
   meals             Meal[]

@@ -14,6 +14,7 @@ import { TemplateFoodsModule } from './template-foods/template-foods.module';
 import { OpenfoodfactsModule } from './openfoodfacts/openfoodfacts.module';
 import { TemplateMealsModule } from './template-meals/template-meals.module';
 import { TemplateMealFoodsModule } from './template-meal-foods/template-meal-foods.module';
+import { IotModule } from './iot/iot.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { TemplateMealFoodsModule } from './template-meal-foods/template-meal-foo
     TemplateMealsModule,
     TemplateMealFoodsModule,
     OpenfoodfactsModule,
+    IotModule,
   ],
   controllers: [AppController],
   providers: [AppService],
