@@ -12,8 +12,6 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class IotService implements OnModuleInit {
   private mqttClient: mqtt.MqttClient;
-  private readonly brokerUrl = 'mqtt://test.mosquitto.org';
-
   constructor(
     private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
