@@ -12,9 +12,9 @@ export class GetMealsFilterDto {
 
   @IsDateString()
   @IsNotEmpty()
-  @ApiProperty({ 
-    example: '2023-12-08', 
-    description: 'End date (YYYY-MM-DD)' 
+  @ApiProperty({
+    example: '2023-12-14',
+    description: 'End date (YYYY-MM-DD)',
   })
   end: string;
 }

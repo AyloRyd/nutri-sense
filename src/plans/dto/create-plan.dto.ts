@@ -23,6 +23,7 @@ export class CreatePlanDto {
   @ApiProperty({
     enum: PlanGoal,
     required: false,
+    example: 'maintain',
     description: 'Required for auto-calculation',
   })
   goal?: PlanGoal;
@@ -32,6 +33,7 @@ export class CreatePlanDto {
   @IsPositive()
   @ApiProperty({
     required: false,
+    example: 2200,
     description: 'Manual override for daily calories',
   })
   day_calories?: number;
@@ -41,6 +43,7 @@ export class CreatePlanDto {
   @IsPositive()
   @ApiProperty({
     required: false,
+    example: 150,
     description: 'Manual override for daily protein (g)',
   })
   day_protein?: number;
@@ -50,6 +53,7 @@ export class CreatePlanDto {
   @IsPositive()
   @ApiProperty({
     required: false,
+    example: 73,
     description: 'Manual override for daily fats (g)',
   })
   day_fats?: number;
@@ -59,6 +63,7 @@ export class CreatePlanDto {
   @IsPositive()
   @ApiProperty({
     required: false,
+    example: 275,
     description: 'Manual override for daily carbs (g)',
   })
   day_carbs?: number;

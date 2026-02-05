@@ -12,23 +12,26 @@ import {
 export class RegisterDto {
   @IsEmail()
   @IsNotEmpty()
-  @ApiProperty()
+  @ApiProperty({ example: 'user@example.com' })
   email: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
-  @ApiProperty()
+  @ApiProperty({ example: 'johndoe' })
   username: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(6)
-  @ApiProperty()
+  @ApiProperty({ example: 'password123' })
   password: string;
 
   @IsOptional()
   @IsUrl()
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    required: false,
+    example: 'https://example.com/avatar.png',
+  })
   avatar_url?: string;
 }

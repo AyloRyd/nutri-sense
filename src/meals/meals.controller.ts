@@ -19,6 +19,7 @@ import { UpdateMealDto } from './dto/update-meal.dto';
 import { GetMealsFilterDto } from './dto/get-meals-filter.dto';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiTags,
@@ -48,6 +49,28 @@ export class MealsController {
 
   @Post()
   @ApiOkResponse({ type: MealEntity })
+  @ApiBody({
+    type: CreateMealDto,
+    examples: {
+      default: {
+        summary: 'Lunch with Chicken Breast',
+        value: {
+          name: 'Lunch',
+          date: '2023-12-08T12:00:00Z',
+          mealFoods: [
+            {
+              name: 'Chicken Breast',
+              weight: 150,
+              calories: 165,
+              protein: 31,
+              fats: 3.6,
+              carbs: 0,
+            },
+          ],
+        },
+      },
+    },
+  })
   create(@Req() req: JwtRequest, @Body() createMealDto: CreateMealDto) {
     return this.mealsService.create(req.user.id, createMealDto);
   }

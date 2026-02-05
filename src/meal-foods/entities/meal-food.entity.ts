@@ -2,27 +2,39 @@ import { ApiProperty } from '@nestjs/swagger';
 import { MealFood } from 'src/generated/prisma/client';
 
 export class MealFoodEntity implements MealFood {
-  @ApiProperty()
+  @ApiProperty({ example: 1 })
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 1 })
   meal_id: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'Chicken Breast' })
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 150, description: 'Weight in grams' })
   weight: number;
 
-  @ApiProperty({ description: 'Calculated calories for the specific weight' })
+  @ApiProperty({
+    example: 247.5,
+    description: 'Calculated calories for the specific weight',
+  })
   calories: number;
 
-  @ApiProperty({ description: 'Calculated protein for the specific weight' })
+  @ApiProperty({
+    example: 46.5,
+    description: 'Calculated protein for the specific weight',
+  })
   protein: number;
 
-  @ApiProperty({ description: 'Calculated fats for the specific weight' })
+  @ApiProperty({
+    example: 5.4,
+    description: 'Calculated fats for the specific weight',
+  })
   fats: number;
 
-  @ApiProperty({ description: 'Calculated carbs for the specific weight' })
+  @ApiProperty({
+    example: 0,
+    description: 'Calculated carbs for the specific weight',
+  })
   carbs: number;
 }

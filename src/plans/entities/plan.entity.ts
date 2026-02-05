@@ -3,27 +3,27 @@ import { Plan } from 'src/generated/prisma/client';
 import { PlanGoal } from 'src/generated/prisma/enums';
 
 export class PlanEntity implements Plan {
-  @ApiProperty()
+  @ApiProperty({ example: 1 })
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 1 })
   user_id: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: '2023-12-08T00:00:00.000Z' })
   start_date: Date;
 
-  @ApiProperty({ enum: PlanGoal })
+  @ApiProperty({ enum: PlanGoal, example: 'maintain' })
   plan: PlanGoal;
 
-  @ApiProperty()
+  @ApiProperty({ example: 2200 })
   day_calories: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 150 })
   day_protein: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 73 })
   day_fats: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 275 })
   day_carbs: number;
 }

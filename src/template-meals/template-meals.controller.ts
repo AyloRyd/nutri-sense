@@ -17,6 +17,7 @@ import { CreateTemplateMealDto } from './dto/create-template-meal.dto';
 import { UpdateTemplateMealDto } from './dto/update-template-meal.dto';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiTags,
@@ -46,6 +47,27 @@ export class TemplateMealsController {
 
   @Post()
   @ApiOkResponse({ type: TemplateMealEntity })
+  @ApiBody({
+    type: CreateTemplateMealDto,
+    examples: {
+      default: {
+        summary: 'Breakfast template with Chicken Breast',
+        value: {
+          name: 'My Breakfast Template',
+          templateMealFoods: [
+            {
+              name: 'Chicken Breast',
+              weight: 150,
+              calories: 165,
+              protein: 31,
+              fats: 3.6,
+              carbs: 0,
+            },
+          ],
+        },
+      },
+    },
+  })
   create(
     @Req() req: JwtRequest,
     @Body() createTemplateMealDto: CreateTemplateMealDto,

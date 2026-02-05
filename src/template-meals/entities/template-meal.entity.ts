@@ -2,25 +2,25 @@ import { ApiProperty } from '@nestjs/swagger';
 import { TemplateMealFoodEntity } from 'src/template-meal-foods/entities/template-meal-food.entity';
 
 export class TemplateMealEntity {
-  @ApiProperty()
+  @ApiProperty({ example: 1 })
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 1 })
   user_id: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'My Breakfast Template' })
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 247.5, description: 'Sum of template meal foods' })
   calories: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 46.5 })
   protein: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 5.4 })
   fats: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 0 })
   carbs: number;
 
   @ApiProperty({ type: [TemplateMealFoodEntity] })
