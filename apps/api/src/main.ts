@@ -11,6 +11,8 @@ async function bootstrap() {
     logger: ['error', 'warn', 'log', 'debug'],
   });
 
+  app.enableCors();
+
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalFilters(new LoggingExceptionFilter());
 

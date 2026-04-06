@@ -10,9 +10,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "App"
-        ]
+        "tags": ["App"]
       }
     },
     "/auth/register": {
@@ -41,9 +39,7 @@
             }
           }
         },
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/auth/login": {
@@ -72,9 +68,7 @@
             }
           }
         },
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/auth/change-password": {
@@ -101,9 +95,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/users/me": {
@@ -122,9 +114,7 @@
             }
           }
         },
-        "tags": [
-          "users"
-        ]
+        "tags": ["users"]
       }
     },
     "/users/{id}": {
@@ -162,9 +152,7 @@
             }
           }
         },
-        "tags": [
-          "users"
-        ]
+        "tags": ["users"]
       },
       "delete": {
         "operationId": "UsersController_remove",
@@ -183,9 +171,7 @@
             "description": ""
           }
         },
-        "tags": [
-          "users"
-        ]
+        "tags": ["users"]
       }
     },
     "/measurements": {
@@ -212,9 +198,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "measurements"
-        ]
+        "tags": ["measurements"]
       },
       "post": {
         "operationId": "MeasurementsController_create",
@@ -246,9 +230,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "measurements"
-        ]
+        "tags": ["measurements"]
       }
     },
     "/measurements/current": {
@@ -272,9 +254,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "measurements"
-        ]
+        "tags": ["measurements"]
       }
     },
     "/measurements/{id}": {
@@ -317,9 +297,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "measurements"
-        ]
+        "tags": ["measurements"]
       },
       "delete": {
         "operationId": "MeasurementsController_remove",
@@ -343,9 +321,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "measurements"
-        ]
+        "tags": ["measurements"]
       }
     },
     "/plans": {
@@ -372,9 +348,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "plans"
-        ]
+        "tags": ["plans"]
       },
       "post": {
         "operationId": "PlansController_create",
@@ -406,9 +380,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "plans"
-        ]
+        "tags": ["plans"]
       }
     },
     "/plans/current": {
@@ -432,9 +404,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "plans"
-        ]
+        "tags": ["plans"]
       }
     },
     "/plans/date/{date}": {
@@ -467,9 +437,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "plans"
-        ]
+        "tags": ["plans"]
       }
     },
     "/plans/{id}": {
@@ -512,9 +480,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "plans"
-        ]
+        "tags": ["plans"]
       }
     },
     "/meals": {
@@ -562,9 +528,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "meals"
-        ]
+        "tags": ["meals"]
       },
       "post": {
         "operationId": "MealsController_create",
@@ -615,9 +579,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "meals"
-        ]
+        "tags": ["meals"]
       }
     },
     "/meals/{id}": {
@@ -650,9 +612,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "meals"
-        ]
+        "tags": ["meals"]
       },
       "patch": {
         "operationId": "MealsController_update",
@@ -693,9 +653,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "meals"
-        ]
+        "tags": ["meals"]
       },
       "delete": {
         "operationId": "MealsController_remove",
@@ -719,9 +677,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "meals"
-        ]
+        "tags": ["meals"]
       }
     },
     "/meals/{mealId}/foods": {
@@ -757,9 +713,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "meal-foods"
-        ]
+        "tags": ["meal-foods"]
       },
       "post": {
         "operationId": "MealFoodsController_create",
@@ -800,9 +754,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "meal-foods"
-        ]
+        "tags": ["meal-foods"]
       }
     },
     "/meals/{mealId}/foods/{id}": {
@@ -843,9 +795,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "meal-foods"
-        ]
+        "tags": ["meal-foods"]
       },
       "patch": {
         "operationId": "MealFoodsController_update",
@@ -894,9 +844,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "meal-foods"
-        ]
+        "tags": ["meal-foods"]
       },
       "delete": {
         "operationId": "MealFoodsController_remove",
@@ -928,9 +876,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "meal-foods"
-        ]
+        "tags": ["meal-foods"]
       }
     },
     "/stats": {
@@ -978,9 +924,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "stats"
-        ]
+        "tags": ["stats"]
       }
     },
     "/templates/foods": {
@@ -1007,9 +951,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-foods"
-        ]
+        "tags": ["template-foods"]
       },
       "post": {
         "operationId": "TemplateFoodsController_create",
@@ -1041,9 +983,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-foods"
-        ]
+        "tags": ["template-foods"]
       }
     },
     "/templates/foods/{id}": {
@@ -1076,9 +1016,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-foods"
-        ]
+        "tags": ["template-foods"]
       },
       "patch": {
         "operationId": "TemplateFoodsController_update",
@@ -1119,9 +1057,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-foods"
-        ]
+        "tags": ["template-foods"]
       },
       "delete": {
         "operationId": "TemplateFoodsController_remove",
@@ -1145,9 +1081,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-foods"
-        ]
+        "tags": ["template-foods"]
       }
     },
     "/templates/meals": {
@@ -1174,9 +1108,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-meals"
-        ]
+        "tags": ["template-meals"]
       },
       "post": {
         "operationId": "TemplateMealsController_create",
@@ -1226,9 +1158,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-meals"
-        ]
+        "tags": ["template-meals"]
       }
     },
     "/templates/meals/{id}": {
@@ -1261,9 +1191,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-meals"
-        ]
+        "tags": ["template-meals"]
       },
       "patch": {
         "operationId": "TemplateMealsController_update",
@@ -1304,9 +1232,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-meals"
-        ]
+        "tags": ["template-meals"]
       },
       "delete": {
         "operationId": "TemplateMealsController_remove",
@@ -1330,9 +1256,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-meals"
-        ]
+        "tags": ["template-meals"]
       }
     },
     "/templates/meals/{templateMealId}/foods": {
@@ -1368,9 +1292,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-meal-foods"
-        ]
+        "tags": ["template-meal-foods"]
       },
       "post": {
         "operationId": "TemplateMealFoodsController_create",
@@ -1411,9 +1333,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-meal-foods"
-        ]
+        "tags": ["template-meal-foods"]
       }
     },
     "/templates/meals/{templateMealId}/foods/{id}": {
@@ -1454,9 +1374,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-meal-foods"
-        ]
+        "tags": ["template-meal-foods"]
       },
       "patch": {
         "operationId": "TemplateMealFoodsController_update",
@@ -1505,9 +1423,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-meal-foods"
-        ]
+        "tags": ["template-meal-foods"]
       },
       "delete": {
         "operationId": "TemplateMealFoodsController_remove",
@@ -1539,9 +1455,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "template-meal-foods"
-        ]
+        "tags": ["template-meal-foods"]
       }
     },
     "/openfoodfacts/product/{barcode}": {
@@ -1574,9 +1488,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "openfoodfacts"
-        ]
+        "tags": ["openfoodfacts"]
       }
     },
     "/iot/scales/link": {
@@ -1603,9 +1515,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "iot/scales"
-        ]
+        "tags": ["iot/scales"]
       },
       "delete": {
         "operationId": "IotController_unlinkDevice",
@@ -1620,9 +1530,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "iot/scales"
-        ]
+        "tags": ["iot/scales"]
       }
     },
     "/iot/scales/status": {
@@ -1639,9 +1547,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "iot/scales"
-        ]
+        "tags": ["iot/scales"]
       }
     },
     "/iot/scales/weight": {
@@ -1658,9 +1564,7 @@
             "bearer": []
           }
         ],
-        "tags": [
-          "iot/scales"
-        ]
+        "tags": ["iot/scales"]
       }
     }
   },
@@ -1701,11 +1605,7 @@
             "example": "https://example.com/avatar.png"
           }
         },
-        "required": [
-          "email",
-          "username",
-          "password"
-        ]
+        "required": ["email", "username", "password"]
       },
       "AuthEntity": {
         "type": "object",
@@ -1715,9 +1615,7 @@
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNlckBleGFtcGxlLmNvbSJ9.example"
           }
         },
-        "required": [
-          "access_token"
-        ]
+        "required": ["access_token"]
       },
       "LoginDto": {
         "type": "object",
@@ -1731,10 +1629,7 @@
             "example": "password123"
           }
         },
-        "required": [
-          "email",
-          "password"
-        ]
+        "required": ["email", "password"]
       },
       "ChangePasswordDto": {
         "type": "object",
@@ -1748,10 +1643,7 @@
             "example": "newpassword123"
           }
         },
-        "required": [
-          "password",
-          "new_password"
-        ]
+        "required": ["password", "new_password"]
       },
       "UserEntity": {
         "type": "object",
@@ -1774,10 +1666,7 @@
           },
           "sex": {
             "type": "string",
-            "enum": [
-              "male",
-              "female"
-            ],
+            "enum": ["male", "female"],
             "example": "male"
           },
           "date_of_birth": {
@@ -1790,11 +1679,7 @@
             "example": "SN-ESP32-998877"
           }
         },
-        "required": [
-          "id",
-          "email",
-          "username"
-        ]
+        "required": ["id", "email", "username"]
       },
       "UpdateUserDto": {
         "type": "object",
@@ -1813,10 +1698,7 @@
           },
           "sex": {
             "type": "string",
-            "enum": [
-              "male",
-              "female"
-            ],
+            "enum": ["male", "female"],
             "example": "male"
           },
           "date_of_birth": {
@@ -1859,14 +1741,7 @@
             "description": "Activity level"
           }
         },
-        "required": [
-          "id",
-          "user_id",
-          "date",
-          "weight",
-          "height",
-          "activity"
-        ]
+        "required": ["id", "user_id", "date", "weight", "height", "activity"]
       },
       "CreateMeasurementDto": {
         "type": "object",
@@ -1891,11 +1766,7 @@
             "example": "2023-12-08T10:00:00Z"
           }
         },
-        "required": [
-          "weight",
-          "height",
-          "activity"
-        ]
+        "required": ["weight", "height", "activity"]
       },
       "UpdateMeasurementDto": {
         "type": "object",
@@ -1939,11 +1810,7 @@
           },
           "plan": {
             "type": "string",
-            "enum": [
-              "maintain",
-              "gain",
-              "lose"
-            ],
+            "enum": ["maintain", "gain", "lose"],
             "example": "maintain"
           },
           "day_calories": {
@@ -1984,11 +1851,7 @@
           },
           "goal": {
             "type": "string",
-            "enum": [
-              "maintain",
-              "gain",
-              "lose"
-            ],
+            "enum": ["maintain", "gain", "lose"],
             "example": "maintain",
             "description": "Required for auto-calculation"
           },
@@ -2013,9 +1876,7 @@
             "description": "Manual override for daily carbs (g)"
           }
         },
-        "required": [
-          "start_date"
-        ]
+        "required": ["start_date"]
       },
       "UpdatePlanDto": {
         "type": "object",
@@ -2027,11 +1888,7 @@
           },
           "goal": {
             "type": "string",
-            "enum": [
-              "maintain",
-              "gain",
-              "lose"
-            ],
+            "enum": ["maintain", "gain", "lose"],
             "example": "maintain",
             "description": "Required for auto-calculation"
           },
@@ -2201,14 +2058,7 @@
             "description": "Carbs per 100g"
           }
         },
-        "required": [
-          "name",
-          "weight",
-          "calories",
-          "protein",
-          "fats",
-          "carbs"
-        ]
+        "required": ["name", "weight", "calories", "protein", "fats", "carbs"]
       },
       "CreateMealDto": {
         "type": "object",
@@ -2228,11 +2078,7 @@
             }
           }
         },
-        "required": [
-          "name",
-          "date",
-          "mealFoods"
-        ]
+        "required": ["name", "date", "mealFoods"]
       },
       "UpdateMealDto": {
         "type": "object",
@@ -2403,13 +2249,7 @@
             "description": "Carbs per 100g or unit"
           }
         },
-        "required": [
-          "name",
-          "calories",
-          "protein",
-          "fats",
-          "carbs"
-        ]
+        "required": ["name", "calories", "protein", "fats", "carbs"]
       },
       "UpdateTemplateFoodDto": {
         "type": "object",
@@ -2575,14 +2415,7 @@
             "description": "Carbs per 100g"
           }
         },
-        "required": [
-          "name",
-          "weight",
-          "calories",
-          "protein",
-          "fats",
-          "carbs"
-        ]
+        "required": ["name", "weight", "calories", "protein", "fats", "carbs"]
       },
       "CreateTemplateMealDto": {
         "type": "object",
@@ -2598,10 +2431,7 @@
             }
           }
         },
-        "required": [
-          "name",
-          "templateMealFoods"
-        ]
+        "required": ["name", "templateMealFoods"]
       },
       "UpdateTemplateMealDto": {
         "type": "object",
@@ -2680,13 +2510,7 @@
             "description": "Carbs per 100g"
           }
         },
-        "required": [
-          "name",
-          "calories",
-          "protein",
-          "fats",
-          "carbs"
-        ]
+        "required": ["name", "calories", "protein", "fats", "carbs"]
       },
       "LinkDeviceDto": {
         "type": "object",
@@ -2697,9 +2521,7 @@
             "description": "The unique serial number of the IoT scale"
           }
         },
-        "required": [
-          "serial_number"
-        ]
+        "required": ["serial_number"]
       }
     }
   }

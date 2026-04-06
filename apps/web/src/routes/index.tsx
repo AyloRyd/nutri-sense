@@ -1,87 +1,66 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
+import { Button } from '../components/ui/button'
 
-export const Route = createFileRoute('/')({ component: App })
+export const Route = createFileRoute('/')({
+  beforeLoad: () => {
+    if (localStorage.getItem('token')) {
+      throw redirect({ to: '/dashboard' })
+    }
+  },
+  component: Landing,
+})
 
-function App() {
+function Landing() {
   return (
-    <main className="page-wrap px-4 pb-8 pt-14">
-      <section className="island-shell rise-in relative overflow-hidden rounded-[2rem] px-6 py-10 sm:px-10 sm:py-14">
-        <div className="pointer-events-none absolute -left-20 -top-24 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(79,184,178,0.32),transparent_66%)]" />
-        <div className="pointer-events-none absolute -bottom-20 -right-20 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(47,106,74,0.18),transparent_66%)]" />
-        <p className="island-kicker mb-3">TanStack Start Base Template</p>
-        <h1 className="display-title mb-5 max-w-3xl text-4xl leading-[1.02] font-bold tracking-tight text-[var(--sea-ink)] sm:text-6xl">
-          Start simple, ship quickly.
+    <main className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+      <section className="w-full max-w-5xl border-4 border-[#333333] brutal-shadow p-12 lg:p-24 bg-black relative z-10">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-primary transform translate-x-16 -translate-y-16 border-4 border-[#333333] -z-10" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary transform -translate-x-20 translate-y-20 border-4 border-[#333333] -z-10" />
+
+        <h1 className="text-6xl md:text-8xl font-black font-mono tracking-tighter uppercase mb-6 leading-none selection:bg-primary selection:text-black">
+          Nutri<span className="text-primary">Sense</span>
         </h1>
-        <p className="mb-8 max-w-2xl text-base text-[var(--sea-ink-soft)] sm:text-lg">
-          This base starter intentionally keeps things light: two routes, clean
-          structure, and the essentials you need to build from scratch.
+        <p className="max-w-2xl text-xl md:text-2xl font-mono text-muted-foreground mb-12 uppercase tracking-wide selection:bg-primary selection:text-black">
+          Your personal nutrition & meal tracking system. No fluff. Just data.
         </p>
-        <div className="flex flex-wrap gap-3">
-          <a
-            href="/about"
-            className="rounded-full border border-[rgba(50,143,151,0.3)] bg-[rgba(79,184,178,0.14)] px-5 py-2.5 text-sm font-semibold text-[var(--lagoon-deep)] no-underline transition hover:-translate-y-0.5 hover:bg-[rgba(79,184,178,0.24)]"
-          >
-            About This Starter
-          </a>
-          <a
-            href="https://tanstack.com/router"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full border border-[rgba(23,58,64,0.2)] bg-white/50 px-5 py-2.5 text-sm font-semibold text-[var(--sea-ink)] no-underline transition hover:-translate-y-0.5 hover:border-[rgba(23,58,64,0.35)]"
-          >
-            Router Guide
-          </a>
+
+        <div className="flex flex-wrap gap-6">
+          <Button
+            render={
+              <Link
+                to="/auth/login"
+                className="no-underline hover:no-underline hover:bg-transparent hover:text-black outline-none border-none"
+              >
+                LOGIN_
+              </Link>
+            }
+            size="lg"
+            className="brutal-shadow brutal-border bg-primary text-black hover:bg-white text-xl uppercase font-bold py-8 px-12"
+          />
+          <Button
+            render={
+              <Link
+                to="/auth/register"
+                className="no-underline hover:no-underline hover:bg-primary outline-none border-none"
+              >
+                REGISTER_
+              </Link>
+            }
+            size="lg"
+            variant="outline"
+            className="brutal-shadow brutal-border bg-black text-white hover:bg-primary hover:text-black hover:border-black text-xl uppercase font-bold py-8 px-12"
+          />
         </div>
       </section>
 
-      <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          [
-            'Type-Safe Routing',
-            'Routes and links stay in sync across every page.',
-          ],
-          [
-            'Server Functions',
-            'Call server code from your UI without creating API boilerplate.',
-          ],
-          [
-            'Streaming by Default',
-            'Ship progressively rendered responses for faster experiences.',
-          ],
-          [
-            'Tailwind Native',
-            'Design quickly with utility-first styling and reusable tokens.',
-          ],
-        ].map(([title, desc], index) => (
-          <article
-            key={title}
-            className="island-shell feature-card rise-in rounded-2xl p-5"
-            style={{ animationDelay: `${index * 90 + 80}ms` }}
-          >
-            <h2 className="mb-2 text-base font-semibold text-[var(--sea-ink)]">
-              {title}
-            </h2>
-            <p className="m-0 text-sm text-[var(--sea-ink-soft)]">{desc}</p>
-          </article>
-        ))}
-      </section>
-
-      <section className="island-shell mt-8 rounded-2xl p-6">
-        <p className="island-kicker mb-2">Quick Start</p>
-        <ul className="m-0 list-disc space-y-2 pl-5 text-sm text-[var(--sea-ink-soft)]">
-          <li>
-            Edit <code>src/routes/index.tsx</code> to customize the home page.
-          </li>
-          <li>
-            Update <code>src/components/Header.tsx</code> and{' '}
-            <code>src/components/Footer.tsx</code> for brand links.
-          </li>
-          <li>
-            Add routes in <code>src/routes</code> and tweak visual tokens in{' '}
-            <code>src/styles.css</code>.
-          </li>
-        </ul>
-      </section>
+      <div
+        className="absolute inset-0 z-0 opacity-10 pointer-events-none"
+        style={{
+          backgroundImage:
+            'linear-gradient(#39FF14 1px, transparent 1px), linear-gradient(90deg, #39FF14 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+        }}
+      />
     </main>
   )
 }
