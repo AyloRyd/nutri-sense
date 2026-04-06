@@ -2,6 +2,7 @@ databases:
   - name: nutri-sense-db
     databaseName: nutrisense
     user: nutrisense_admin
+    plan: free
 
 services:
   - type: web
@@ -20,6 +21,7 @@ services:
   - type: web
     name: nutri-sense-api
     env: node
+    plan: free
     buildCommand: npm ci && cd apps/api && npx prisma generate && npx prisma migrate deploy && cd ../.. && npx turbo run build --filter=@nutri-sense/api
     startCommand: node apps/api/dist/src/main
     envVars:
