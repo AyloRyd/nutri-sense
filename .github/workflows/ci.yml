@@ -9,6 +9,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://user:password@localhost:5432/db
+      JWT_SECRET: dummy_secret_for_ci
+      MQTT_HOST: localhost
+      MQTT_PORT: 1883
 
     strategy:
       matrix:
