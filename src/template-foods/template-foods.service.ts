@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTemplateFoodDto } from './dto/create-template-food.dto';
 import { UpdateTemplateFoodDto } from './dto/update-template-food.dto';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class TemplateFoodsService {
@@ -39,7 +40,7 @@ export class TemplateFoodsService {
 
     return this.prisma.templateFood.update({
       where: { id },
-      data: dto,
+      data: dto as Prisma.TemplateFoodUpdateInput,
     });
   }
 

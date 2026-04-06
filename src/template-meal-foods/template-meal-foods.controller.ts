@@ -40,10 +40,7 @@ export class TemplateMealFoodsController {
     @Req() req: JwtRequest,
     @Param('templateMealId', ParseIntPipe) templateMealId: number,
   ) {
-    return this.templateMealFoodsService.findAll(
-      req.user.id,
-      templateMealId,
-    );
+    return this.templateMealFoodsService.findAll(req.user.id, templateMealId);
   }
 
   @Get(':id')
@@ -93,11 +90,15 @@ export class TemplateMealFoodsController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse()
-  remove(
+  async remove(
     @Req() req: JwtRequest,
     @Param('templateMealId', ParseIntPipe) templateMealId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    this.templateMealFoodsService.remove(req.user.id, templateMealId, id);
+    return this.templateMealFoodsService.remove(
+      req.user.id,
+      templateMealId,
+      id,
+    );
   }
 }

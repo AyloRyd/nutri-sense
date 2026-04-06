@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma } from 'src/generated/prisma/client';
 import { CreateTemplateMealFoodDto } from './dto/create-template-meal-food.dto';
 import { UpdateTemplateMealFoodDto } from './dto/update-template-meal-food.dto';
 
@@ -108,7 +109,8 @@ export class TemplateMealFoodsService {
 
     const newWeight = dto.weight ?? existingFood.weight;
     const ratio = newWeight / 100;
-    const data: any = {};
+
+    const data: Prisma.TemplateMealFoodUpdateInput = {};
     if (dto.name) data.name = dto.name;
     if (dto.weight) data.weight = dto.weight;
     if (dto.calories !== undefined)

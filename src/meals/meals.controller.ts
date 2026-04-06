@@ -88,7 +88,7 @@ export class MealsController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse()
-  remove(@Req() req: JwtRequest, @Param('id', ParseIntPipe) id: number) {
-    this.mealsService.remove(req.user.id, id);
+  async remove(@Req() req: JwtRequest, @Param('id', ParseIntPipe) id: number) {
+    return this.mealsService.remove(req.user.id, id);
   }
 }

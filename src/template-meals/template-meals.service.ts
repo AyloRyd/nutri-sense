@@ -9,6 +9,23 @@ import { UpdateTemplateMealDto } from './dto/update-template-meal.dto';
 import { TemplateMealEntity } from './entities/template-meal.entity';
 import { CreateTemplateMealFoodDto } from 'src/template-meal-foods/dto/create-template-meal-food.dto';
 
+import {
+  TemplateMeal,
+  TemplateMealFood,
+  Prisma,
+} from 'src/generated/prisma/client';
+
+interface TemplateMealWithFoods extends TemplateMeal {
+  template_meal_foods?: TemplateMealFood[];
+}
+
+interface MacroTotals {
+  calories: number;
+  protein: number;
+  fats: number;
+  carbs: number;
+}
+
 @Injectable()
 export class TemplateMealsService {
   constructor(private readonly prisma: PrismaService) {}
@@ -25,10 +42,12 @@ export class TemplateMealsService {
     };
   }
 
-  private enrichTemplateMealWithTotals(meal: any): TemplateMealEntity {
+  private enrichTemplateMealWithTotals(
+    meal: TemplateMealWithFoods,
+  ): TemplateMealEntity {
     const foods = meal.template_meal_foods || [];
     const totals = foods.reduce(
-      (acc, food) => ({
+      (acc: MacroTotals, food: TemplateMealFood) => ({
         calories: acc.calories + food.calories,
         protein: acc.protein + food.protein,
         fats: acc.fats + food.fats,
@@ -43,7 +62,7 @@ export class TemplateMealsService {
       protein: parseFloat(totals.protein.toFixed(2)),
       fats: parseFloat(totals.fats.toFixed(2)),
       carbs: parseFloat(totals.carbs.toFixed(2)),
-    };
+    } as TemplateMealEntity;
   }
 
   async create(userId: number, dto: CreateTemplateMealDto) {
@@ -104,7 +123,7 @@ export class TemplateMealsService {
     await this.findOne(userId, id);
 
     return this.prisma.$transaction(async (prisma) => {
-      const updateData: any = {};
+      const updateData: Prisma.TemplateMealUpdateInput = {};
 
       if (dto.name) {
         updateData.name = dto.name;
@@ -132,7 +151,9 @@ export class TemplateMealsService {
         },
       });
 
-      return this.enrichTemplateMealWithTotals(updatedTemplateMeal);
+      return this.enrichTemplateMealWithTotals(
+        updatedTemplateMeal as TemplateMealWithFoods,
+      );
     });
   }
 

@@ -39,6 +39,6 @@ export class UsersController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse()
   remove(@Param('id') id: string) {
-    this.usersService.remove(+id);
+    return this.usersService.remove(+id);
   }
 }

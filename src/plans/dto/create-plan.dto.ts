@@ -7,7 +7,7 @@ import {
   IsOptional,
   IsPositive,
 } from 'class-validator';
-import { PlanGoal } from 'src/generated/prisma/enums'; 
+import { PlanGoal } from 'src/generated/prisma/enums';
 
 export class CreatePlanDto {
   @IsDateString()

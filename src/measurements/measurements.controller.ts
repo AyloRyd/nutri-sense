@@ -63,7 +63,7 @@ export class MeasurementsController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse()
-  remove(@Req() req: JwtRequest, @Param('id', ParseIntPipe) id: number) {
-    this.measurementsService.remove(req.user.id, id);
+  async remove(@Req() req: JwtRequest, @Param('id', ParseIntPipe) id: number) {
+    return this.measurementsService.remove(req.user.id, id);
   }
 }

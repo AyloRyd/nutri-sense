@@ -24,7 +24,7 @@ export class IotService implements OnModuleInit {
   private connectToMqtt() {
     const host = this.configService.get<string>('MQTT_HOST');
     const port = this.configService.get<number>('MQTT_PORT');
-    
+
     const brokerUrl = `mqtt://${host}:${port}`;
 
     console.log(`[IoT] Connecting to ${brokerUrl}...`);
@@ -35,7 +35,7 @@ export class IotService implements OnModuleInit {
       console.log('[IoT] Connected to MQTT broker for IoT Service');
     });
 
-    this.mqttClient.on('error', (err) => {
+    this.mqttClient.on('error', (err: Error) => {
       console.error('[IoT] MQTT Connection Error:', err);
     });
   }
@@ -110,12 +110,13 @@ export class IotService implements OnModuleInit {
         );
       }, 60000);
 
-      this.mqttClient.subscribe(dataTopic, (err) => {
+      this.mqttClient.subscribe(dataTopic, (err: Error | null) => {
         if (err) {
           clearTimeout(timeout);
           reject(
             new BadRequestException('Failed to subscribe to device topic'),
           );
+          return;
         }
 
         console.log(
@@ -136,9 +137,9 @@ export class IotService implements OnModuleInit {
           );
 
           try {
-            const data = JSON.parse(message.toString());
+            const data = JSON.parse(message.toString()) as unknown;
             resolve(data);
-          } catch (e) {
+          } catch {
             reject(
               new BadRequestException('Invalid data received from device'),
             );

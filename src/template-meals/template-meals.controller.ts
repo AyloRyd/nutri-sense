@@ -72,10 +72,7 @@ export class TemplateMealsController {
     @Req() req: JwtRequest,
     @Body() createTemplateMealDto: CreateTemplateMealDto,
   ) {
-    return this.templateMealsService.create(
-      req.user.id,
-      createTemplateMealDto,
-    );
+    return this.templateMealsService.create(req.user.id, createTemplateMealDto);
   }
 
   @Patch(':id')
@@ -96,6 +93,6 @@ export class TemplateMealsController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse()
   remove(@Req() req: JwtRequest, @Param('id', ParseIntPipe) id: number) {
-    this.templateMealsService.remove(req.user.id, id);
+    return this.templateMealsService.remove(req.user.id, id);
   }
 }

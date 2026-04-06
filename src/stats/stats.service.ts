@@ -26,7 +26,7 @@ export class StatsService {
           userId,
           d.toISOString(),
         );
-      } catch (_) {
+      } catch {
         throw new NotFoundException(`No active plan found for date ${dateStr}`);
       }
 
@@ -35,8 +35,15 @@ export class StatsService {
         end: dateStr,
       });
 
+      interface MacroTotals {
+        calories: number;
+        protein: number;
+        fats: number;
+        carbs: number;
+      }
+
       const actuals = meals.reduce(
-        (acc, meal) => ({
+        (acc: MacroTotals, meal) => ({
           calories: acc.calories + meal.calories,
           protein: acc.protein + meal.protein,
           fats: acc.fats + meal.fats,

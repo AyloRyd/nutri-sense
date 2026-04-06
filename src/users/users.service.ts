@@ -8,6 +8,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from './entities/user.entity';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -15,16 +16,19 @@ export class UsersService {
 
   async create(dto: CreateUserDto) {
     try {
-      return await this.prisma.user.create({
+      return (await this.prisma.user.create({
         data: {
           email: dto.email,
           username: dto.username,
           avatar_url: dto.avatar_url,
           hashed_password: await bcrypt.hash(dto.password, 10),
         },
-      }) as UserEntity;
-    } catch (error) {
-      if (error.code === 'P2002') {
+      })) as UserEntity;
+    } catch (error: unknown) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
         throw new ConflictException('User with this email already exists');
       }
 
@@ -33,7 +37,7 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    return await this.prisma.user.findUnique({ where: { id } }) as UserEntity;
+    return (await this.prisma.user.findUnique({ where: { id } })) as UserEntity;
   }
 
   async update(id: number, dto: UpdateUserDto) {
@@ -44,12 +48,15 @@ export class UsersService {
     }
 
     try {
-      return await this.prisma.user.update({
+      return (await this.prisma.user.update({
         where: { id },
         data: dto,
-      }) as UserEntity;
-    } catch (error) {
-      if (error.code === 'P2002') {
+      })) as UserEntity;
+    } catch (error: unknown) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
         throw new ConflictException('User with this email already exists');
       }
 

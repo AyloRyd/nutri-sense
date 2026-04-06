@@ -1,12 +1,12 @@
 {
-	"folders": [
-		{
-			"path": "../.."
-		},
-		{
-			"name": "smart-scales",
-			"path": "."
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "../..",
+    },
+    {
+      "name": "smart-scales",
+      "path": ".",
+    },
+  ],
+  "settings": {},
 }

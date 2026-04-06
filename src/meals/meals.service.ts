@@ -7,8 +7,20 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateMealDto } from './dto/create-meal.dto';
 import { UpdateMealDto } from './dto/update-meal.dto';
 import { GetMealsFilterDto } from './dto/get-meals-filter.dto';
+import { Meal, MealFood, Prisma } from 'src/generated/prisma/client';
 import { MealEntity } from './entities/meal.entity';
 import { CreateMealFoodDto } from 'src/meal-foods/dto/create-meal-food.dto';
+
+interface MealWithFoods extends Meal {
+  meal_foods: MealFood[];
+}
+
+interface MacroTotals {
+  calories: number;
+  protein: number;
+  fats: number;
+  carbs: number;
+}
 
 @Injectable()
 export class MealsService {
@@ -26,9 +38,9 @@ export class MealsService {
     };
   }
 
-  private enrichMealWithTotals(meal: any): MealEntity {
+  private enrichMealWithTotals(meal: MealWithFoods): MealEntity {
     const totals = meal.meal_foods.reduce(
-      (acc, food) => ({
+      (acc: MacroTotals, food: MealFood) => ({
         calories: acc.calories + food.calories,
         protein: acc.protein + food.protein,
         fats: acc.fats + food.fats,
@@ -65,7 +77,7 @@ export class MealsService {
       },
     });
 
-    return this.enrichMealWithTotals(meal);
+    return this.enrichMealWithTotals(meal as MealWithFoods);
   }
 
   async findAll(userId: number, filter: GetMealsFilterDto) {
@@ -91,7 +103,9 @@ export class MealsService {
       },
     });
 
-    return meals.map((meal) => this.enrichMealWithTotals(meal));
+    return meals.map((meal) =>
+      this.enrichMealWithTotals(meal as MealWithFoods),
+    );
   }
 
   async findOne(userId: number, id: number) {
@@ -108,14 +122,14 @@ export class MealsService {
       throw new ForbiddenException('Access denied');
     }
 
-    return this.enrichMealWithTotals(meal);
+    return this.enrichMealWithTotals(meal as MealWithFoods);
   }
 
   async update(userId: number, id: number, dto: UpdateMealDto) {
-    await this.findOne(userId, id); 
+    await this.findOne(userId, id);
 
     return this.prisma.$transaction(async (prisma) => {
-      const updateData: any = {};
+      const updateData: Prisma.MealUpdateInput = {};
 
       if (dto.name) {
         updateData.name = dto.name;
@@ -147,7 +161,7 @@ export class MealsService {
         },
       });
 
-      return this.enrichMealWithTotals(updatedMeal);
+      return this.enrichMealWithTotals(updatedMeal as MealWithFoods);
     });
   }
 
