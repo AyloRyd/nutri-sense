@@ -6,7 +6,7 @@ databases:
 
 services:
   - type: web
-    name: nutri-sense-frontend
+    name: nutri-sense
     env: static
     buildCommand: npm ci && npx turbo run build --filter=web
     staticPublishPath: apps/web/dist
