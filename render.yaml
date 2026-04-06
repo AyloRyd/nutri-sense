@@ -1,3 +1,8 @@
+databases:
+  - name: nutri-sense-db
+    databaseName: nutrisense
+    user: nutrisense_admin
+
 services:
   - type: web
     name: nutri-sense-frontend
@@ -19,10 +24,12 @@ services:
     startCommand: node apps/api/dist/src/main
     envVars:
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: nutri-sense-db
+          property: connectionString
       - key: JWT_SECRET
-        sync: false
+        generateValue: true
       - key: MQTT_HOST
-        sync: false
+        value: test.mosquitto.org
       - key: MQTT_PORT
-        sync: false
+        value: "1883"
