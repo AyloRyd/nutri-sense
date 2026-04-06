@@ -29,14 +29,26 @@ export class IotService implements OnModuleInit {
 
     console.log(`[IoT] Connecting to ${brokerUrl}...`);
 
-    this.mqttClient = mqtt.connect(brokerUrl);
+    this.mqttClient = mqtt.connect(brokerUrl, {
+      reconnectPeriod: 5000,
+      connectTimeout: 50 * 1000,
+      clean: true,
+    });
 
     this.mqttClient.on('connect', () => {
       console.log('[IoT] Connected to MQTT broker for IoT Service');
     });
 
+    this.mqttClient.on('reconnect', () => {
+      console.log('[IoT] Attempting to reconnect to MQTT broker...');
+    });
+
     this.mqttClient.on('error', (err: Error) => {
-      console.error('[IoT] MQTT Connection Error:', err);
+      if (err.message.includes('ECONNRESET')) {
+        console.warn('[IoT] Broker not ready yet, retrying...');
+      } else {
+        console.error('[IoT] MQTT Connection Error:', err);
+      }
     });
   }
 

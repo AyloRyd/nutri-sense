@@ -1,0 +1,2706 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "App"
+        ]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthEntity"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthEntity"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/change-password": {
+      "post": {
+        "operationId": "AuthController_changePassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/users/me": {
+      "get": {
+        "operationId": "UsersController_getMe",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserEntity"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/users/{id}": {
+      "patch": {
+        "operationId": "UsersController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserEntity"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/measurements": {
+      "get": {
+        "operationId": "MeasurementsController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MeasurementEntity"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "measurements"
+        ]
+      },
+      "post": {
+        "operationId": "MeasurementsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMeasurementDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeasurementEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "measurements"
+        ]
+      }
+    },
+    "/measurements/current": {
+      "get": {
+        "operationId": "MeasurementsController_findCurrent",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeasurementEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "measurements"
+        ]
+      }
+    },
+    "/measurements/{id}": {
+      "patch": {
+        "operationId": "MeasurementsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMeasurementDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeasurementEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "measurements"
+        ]
+      },
+      "delete": {
+        "operationId": "MeasurementsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "measurements"
+        ]
+      }
+    },
+    "/plans": {
+      "get": {
+        "operationId": "PlansController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlanEntity"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "plans"
+        ]
+      },
+      "post": {
+        "operationId": "PlansController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "plans"
+        ]
+      }
+    },
+    "/plans/current": {
+      "get": {
+        "operationId": "PlansController_findCurrent",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "plans"
+        ]
+      }
+    },
+    "/plans/date/{date}": {
+      "get": {
+        "operationId": "PlansController_findByDate",
+        "parameters": [
+          {
+            "name": "date",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "plans"
+        ]
+      }
+    },
+    "/plans/{id}": {
+      "patch": {
+        "operationId": "PlansController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "plans"
+        ]
+      }
+    },
+    "/meals": {
+      "get": {
+        "operationId": "MealsController_findAll",
+        "parameters": [
+          {
+            "name": "start",
+            "required": true,
+            "in": "query",
+            "description": "Start date (YYYY-MM-DD)",
+            "schema": {
+              "example": "2023-12-08",
+              "type": "string"
+            }
+          },
+          {
+            "name": "end",
+            "required": true,
+            "in": "query",
+            "description": "End date (YYYY-MM-DD)",
+            "schema": {
+              "example": "2023-12-14",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MealEntity"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "meals"
+        ]
+      },
+      "post": {
+        "operationId": "MealsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMealDto"
+              },
+              "examples": {
+                "default": {
+                  "summary": "Lunch with Chicken Breast",
+                  "value": {
+                    "name": "Lunch",
+                    "date": "2023-12-08T12:00:00Z",
+                    "mealFoods": [
+                      {
+                        "name": "Chicken Breast",
+                        "weight": 150,
+                        "calories": 165,
+                        "protein": 31,
+                        "fats": 3.6,
+                        "carbs": 0
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MealEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "meals"
+        ]
+      }
+    },
+    "/meals/{id}": {
+      "get": {
+        "operationId": "MealsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MealEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "meals"
+        ]
+      },
+      "patch": {
+        "operationId": "MealsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMealDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MealEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "meals"
+        ]
+      },
+      "delete": {
+        "operationId": "MealsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "meals"
+        ]
+      }
+    },
+    "/meals/{mealId}/foods": {
+      "get": {
+        "operationId": "MealFoodsController_findAll",
+        "parameters": [
+          {
+            "name": "mealId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MealFoodEntity"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "meal-foods"
+        ]
+      },
+      "post": {
+        "operationId": "MealFoodsController_create",
+        "parameters": [
+          {
+            "name": "mealId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMealFoodDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MealFoodEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "meal-foods"
+        ]
+      }
+    },
+    "/meals/{mealId}/foods/{id}": {
+      "get": {
+        "operationId": "MealFoodsController_findOne",
+        "parameters": [
+          {
+            "name": "mealId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MealFoodEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "meal-foods"
+        ]
+      },
+      "patch": {
+        "operationId": "MealFoodsController_update",
+        "parameters": [
+          {
+            "name": "mealId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMealFoodDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MealFoodEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "meal-foods"
+        ]
+      },
+      "delete": {
+        "operationId": "MealFoodsController_remove",
+        "parameters": [
+          {
+            "name": "mealId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "meal-foods"
+        ]
+      }
+    },
+    "/stats": {
+      "get": {
+        "operationId": "StatsController_getStats",
+        "parameters": [
+          {
+            "name": "start",
+            "required": true,
+            "in": "query",
+            "description": "Start date (YYYY-MM-DD)",
+            "schema": {
+              "example": "2023-12-01",
+              "type": "string"
+            }
+          },
+          {
+            "name": "end",
+            "required": true,
+            "in": "query",
+            "description": "End date (YYYY-MM-DD)",
+            "schema": {
+              "example": "2023-12-07",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DailyStatsEntity"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "stats"
+        ]
+      }
+    },
+    "/templates/foods": {
+      "get": {
+        "operationId": "TemplateFoodsController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TemplateFoodEntity"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-foods"
+        ]
+      },
+      "post": {
+        "operationId": "TemplateFoodsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTemplateFoodDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateFoodEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-foods"
+        ]
+      }
+    },
+    "/templates/foods/{id}": {
+      "get": {
+        "operationId": "TemplateFoodsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateFoodEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-foods"
+        ]
+      },
+      "patch": {
+        "operationId": "TemplateFoodsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTemplateFoodDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateFoodEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-foods"
+        ]
+      },
+      "delete": {
+        "operationId": "TemplateFoodsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-foods"
+        ]
+      }
+    },
+    "/templates/meals": {
+      "get": {
+        "operationId": "TemplateMealsController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TemplateMealEntity"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-meals"
+        ]
+      },
+      "post": {
+        "operationId": "TemplateMealsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTemplateMealDto"
+              },
+              "examples": {
+                "default": {
+                  "summary": "Breakfast template with Chicken Breast",
+                  "value": {
+                    "name": "My Breakfast Template",
+                    "templateMealFoods": [
+                      {
+                        "name": "Chicken Breast",
+                        "weight": 150,
+                        "calories": 165,
+                        "protein": 31,
+                        "fats": 3.6,
+                        "carbs": 0
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateMealEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-meals"
+        ]
+      }
+    },
+    "/templates/meals/{id}": {
+      "get": {
+        "operationId": "TemplateMealsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateMealEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-meals"
+        ]
+      },
+      "patch": {
+        "operationId": "TemplateMealsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTemplateMealDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateMealEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-meals"
+        ]
+      },
+      "delete": {
+        "operationId": "TemplateMealsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-meals"
+        ]
+      }
+    },
+    "/templates/meals/{templateMealId}/foods": {
+      "get": {
+        "operationId": "TemplateMealFoodsController_findAll",
+        "parameters": [
+          {
+            "name": "templateMealId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TemplateMealFoodEntity"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-meal-foods"
+        ]
+      },
+      "post": {
+        "operationId": "TemplateMealFoodsController_create",
+        "parameters": [
+          {
+            "name": "templateMealId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTemplateMealFoodDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateMealFoodEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-meal-foods"
+        ]
+      }
+    },
+    "/templates/meals/{templateMealId}/foods/{id}": {
+      "get": {
+        "operationId": "TemplateMealFoodsController_findOne",
+        "parameters": [
+          {
+            "name": "templateMealId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateMealFoodEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-meal-foods"
+        ]
+      },
+      "patch": {
+        "operationId": "TemplateMealFoodsController_update",
+        "parameters": [
+          {
+            "name": "templateMealId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTemplateMealFoodDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateMealFoodEntity"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-meal-foods"
+        ]
+      },
+      "delete": {
+        "operationId": "TemplateMealFoodsController_remove",
+        "parameters": [
+          {
+            "name": "templateMealId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "template-meal-foods"
+        ]
+      }
+    },
+    "/openfoodfacts/product/{barcode}": {
+      "get": {
+        "operationId": "OpenfoodfactsController_getProduct",
+        "parameters": [
+          {
+            "name": "barcode",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "openfoodfacts"
+        ]
+      }
+    },
+    "/iot/scales/link": {
+      "post": {
+        "operationId": "IotController_linkDevice",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkDeviceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Device linked successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "iot/scales"
+        ]
+      },
+      "delete": {
+        "operationId": "IotController_unlinkDevice",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Device unlinked successfully"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "iot/scales"
+        ]
+      }
+    },
+    "/iot/scales/status": {
+      "get": {
+        "operationId": "IotController_getStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns linking status and serial number"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "iot/scales"
+        ]
+      }
+    },
+    "/iot/scales/weight": {
+      "get": {
+        "operationId": "IotController_getCurrentWeight",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns the weight measured by the scale"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "iot/scales"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "NutriSense API",
+    "description": "",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "username": {
+            "type": "string",
+            "example": "johndoe"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123"
+          },
+          "avatar_url": {
+            "type": "string",
+            "example": "https://example.com/avatar.png"
+          }
+        },
+        "required": [
+          "email",
+          "username",
+          "password"
+        ]
+      },
+      "AuthEntity": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidXNlckBleGFtcGxlLmNvbSJ9.example"
+          }
+        },
+        "required": [
+          "access_token"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "ChangePasswordDto": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "example": "password123"
+          },
+          "new_password": {
+            "type": "string",
+            "example": "newpassword123"
+          }
+        },
+        "required": [
+          "password",
+          "new_password"
+        ]
+      },
+      "UserEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "username": {
+            "type": "string",
+            "example": "johndoe"
+          },
+          "avatar_url": {
+            "type": "string",
+            "example": "https://example.com/avatar.png"
+          },
+          "sex": {
+            "type": "string",
+            "enum": [
+              "male",
+              "female"
+            ],
+            "example": "male"
+          },
+          "date_of_birth": {
+            "format": "date-time",
+            "type": "string",
+            "example": "1990-01-15T00:00:00.000Z"
+          },
+          "device_serial_id": {
+            "type": "string",
+            "example": "SN-ESP32-998877"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "username"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com"
+          },
+          "username": {
+            "type": "string",
+            "example": "johndoe"
+          },
+          "avatar_url": {
+            "type": "string",
+            "example": "https://example.com/avatar.png"
+          },
+          "sex": {
+            "type": "string",
+            "enum": [
+              "male",
+              "female"
+            ],
+            "example": "male"
+          },
+          "date_of_birth": {
+            "format": "date-time",
+            "type": "string",
+            "example": "1990-01-15T00:00:00.000Z",
+            "description": "ISO 8601 date string"
+          }
+        }
+      },
+      "MeasurementEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "user_id": {
+            "type": "number",
+            "example": 1
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2023-12-08T10:00:00.000Z"
+          },
+          "weight": {
+            "type": "number",
+            "example": 75.5,
+            "description": "Weight in kg"
+          },
+          "height": {
+            "type": "number",
+            "example": 180,
+            "description": "Height in cm"
+          },
+          "activity": {
+            "type": "number",
+            "example": 1.2,
+            "description": "Activity level"
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "date",
+          "weight",
+          "height",
+          "activity"
+        ]
+      },
+      "CreateMeasurementDto": {
+        "type": "object",
+        "properties": {
+          "weight": {
+            "type": "number",
+            "example": 75.5,
+            "description": "Weight in kg"
+          },
+          "height": {
+            "type": "number",
+            "example": 180,
+            "description": "Height in cm"
+          },
+          "activity": {
+            "type": "number",
+            "example": 1.2,
+            "description": "Activity level"
+          },
+          "date": {
+            "type": "string",
+            "example": "2023-12-08T10:00:00Z"
+          }
+        },
+        "required": [
+          "weight",
+          "height",
+          "activity"
+        ]
+      },
+      "UpdateMeasurementDto": {
+        "type": "object",
+        "properties": {
+          "weight": {
+            "type": "number",
+            "example": 75.5,
+            "description": "Weight in kg"
+          },
+          "height": {
+            "type": "number",
+            "example": 180,
+            "description": "Height in cm"
+          },
+          "activity": {
+            "type": "number",
+            "example": 1.2,
+            "description": "Activity level"
+          },
+          "date": {
+            "type": "string",
+            "example": "2023-12-08T10:00:00Z"
+          }
+        }
+      },
+      "PlanEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "user_id": {
+            "type": "number",
+            "example": 1
+          },
+          "start_date": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2023-12-08T00:00:00.000Z"
+          },
+          "plan": {
+            "type": "string",
+            "enum": [
+              "maintain",
+              "gain",
+              "lose"
+            ],
+            "example": "maintain"
+          },
+          "day_calories": {
+            "type": "number",
+            "example": 2200
+          },
+          "day_protein": {
+            "type": "number",
+            "example": 150
+          },
+          "day_fats": {
+            "type": "number",
+            "example": 73
+          },
+          "day_carbs": {
+            "type": "number",
+            "example": 275
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "start_date",
+          "plan",
+          "day_calories",
+          "day_protein",
+          "day_fats",
+          "day_carbs"
+        ]
+      },
+      "CreatePlanDto": {
+        "type": "object",
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "example": "2023-12-08T00:00:00Z",
+            "description": "Start date of the plan"
+          },
+          "goal": {
+            "type": "string",
+            "enum": [
+              "maintain",
+              "gain",
+              "lose"
+            ],
+            "example": "maintain",
+            "description": "Required for auto-calculation"
+          },
+          "day_calories": {
+            "type": "number",
+            "example": 2200,
+            "description": "Manual override for daily calories"
+          },
+          "day_protein": {
+            "type": "number",
+            "example": 150,
+            "description": "Manual override for daily protein (g)"
+          },
+          "day_fats": {
+            "type": "number",
+            "example": 73,
+            "description": "Manual override for daily fats (g)"
+          },
+          "day_carbs": {
+            "type": "number",
+            "example": 275,
+            "description": "Manual override for daily carbs (g)"
+          }
+        },
+        "required": [
+          "start_date"
+        ]
+      },
+      "UpdatePlanDto": {
+        "type": "object",
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "example": "2023-12-08T00:00:00Z",
+            "description": "Start date of the plan"
+          },
+          "goal": {
+            "type": "string",
+            "enum": [
+              "maintain",
+              "gain",
+              "lose"
+            ],
+            "example": "maintain",
+            "description": "Required for auto-calculation"
+          },
+          "day_calories": {
+            "type": "number",
+            "example": 2200,
+            "description": "Manual override for daily calories"
+          },
+          "day_protein": {
+            "type": "number",
+            "example": 150,
+            "description": "Manual override for daily protein (g)"
+          },
+          "day_fats": {
+            "type": "number",
+            "example": 73,
+            "description": "Manual override for daily fats (g)"
+          },
+          "day_carbs": {
+            "type": "number",
+            "example": 275,
+            "description": "Manual override for daily carbs (g)"
+          }
+        }
+      },
+      "MealFoodEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "meal_id": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Chicken Breast"
+          },
+          "weight": {
+            "type": "number",
+            "example": 150,
+            "description": "Weight in grams"
+          },
+          "calories": {
+            "type": "number",
+            "example": 247.5,
+            "description": "Calculated calories for the specific weight"
+          },
+          "protein": {
+            "type": "number",
+            "example": 46.5,
+            "description": "Calculated protein for the specific weight"
+          },
+          "fats": {
+            "type": "number",
+            "example": 5.4,
+            "description": "Calculated fats for the specific weight"
+          },
+          "carbs": {
+            "type": "number",
+            "example": 0,
+            "description": "Calculated carbs for the specific weight"
+          }
+        },
+        "required": [
+          "id",
+          "meal_id",
+          "name",
+          "weight",
+          "calories",
+          "protein",
+          "fats",
+          "carbs"
+        ]
+      },
+      "MealEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "user_id": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Lunch"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2023-12-08T12:00:00.000Z"
+          },
+          "calories": {
+            "type": "number",
+            "example": 247.5,
+            "description": "Sum of meal foods calories"
+          },
+          "protein": {
+            "type": "number",
+            "example": 46.5,
+            "description": "Sum of meal foods protein"
+          },
+          "fats": {
+            "type": "number",
+            "example": 5.4,
+            "description": "Sum of meal foods fats"
+          },
+          "carbs": {
+            "type": "number",
+            "example": 0,
+            "description": "Sum of meal foods carbs"
+          },
+          "meal_foods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MealFoodEntity"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "name",
+          "date",
+          "calories",
+          "protein",
+          "fats",
+          "carbs",
+          "meal_foods"
+        ]
+      },
+      "CreateMealFoodDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Chicken Breast"
+          },
+          "weight": {
+            "type": "number",
+            "example": 150,
+            "description": "Weight in grams"
+          },
+          "calories": {
+            "type": "number",
+            "example": 165,
+            "description": "Calories per 100g"
+          },
+          "protein": {
+            "type": "number",
+            "example": 31,
+            "description": "Protein per 100g"
+          },
+          "fats": {
+            "type": "number",
+            "example": 3.6,
+            "description": "Fats per 100g"
+          },
+          "carbs": {
+            "type": "number",
+            "example": 0,
+            "description": "Carbs per 100g"
+          }
+        },
+        "required": [
+          "name",
+          "weight",
+          "calories",
+          "protein",
+          "fats",
+          "carbs"
+        ]
+      },
+      "CreateMealDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Lunch"
+          },
+          "date": {
+            "type": "string",
+            "example": "2023-12-08T12:00:00Z"
+          },
+          "mealFoods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateMealFoodDto"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "date",
+          "mealFoods"
+        ]
+      },
+      "UpdateMealDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Lunch"
+          },
+          "date": {
+            "type": "string",
+            "example": "2023-12-08T12:00:00Z"
+          },
+          "mealFoods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateMealFoodDto"
+            }
+          }
+        }
+      },
+      "UpdateMealFoodDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Chicken Breast"
+          },
+          "weight": {
+            "type": "number",
+            "example": 150,
+            "description": "Weight in grams"
+          },
+          "calories": {
+            "type": "number",
+            "example": 165,
+            "description": "Calories per 100g"
+          },
+          "protein": {
+            "type": "number",
+            "example": 31,
+            "description": "Protein per 100g"
+          },
+          "fats": {
+            "type": "number",
+            "example": 3.6,
+            "description": "Fats per 100g"
+          },
+          "carbs": {
+            "type": "number",
+            "example": 0,
+            "description": "Carbs per 100g"
+          }
+        }
+      },
+      "DailyStatsEntity": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "example": "2023-12-08"
+          },
+          "plan": {
+            "description": "The active plan for this specific date",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PlanEntity"
+              }
+            ]
+          },
+          "actual_calories": {
+            "type": "number",
+            "example": 1850,
+            "description": "Sum of all meals for this date"
+          },
+          "actual_protein": {
+            "type": "number",
+            "example": 120
+          },
+          "actual_fats": {
+            "type": "number",
+            "example": 65
+          },
+          "actual_carbs": {
+            "type": "number",
+            "example": 210
+          }
+        },
+        "required": [
+          "date",
+          "plan",
+          "actual_calories",
+          "actual_protein",
+          "actual_fats",
+          "actual_carbs"
+        ]
+      },
+      "TemplateFoodEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "user_id": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Chicken Breast"
+          },
+          "calories": {
+            "type": "number",
+            "example": 165,
+            "description": "Per 100g or unit"
+          },
+          "protein": {
+            "type": "number",
+            "example": 31,
+            "description": "Per 100g or unit"
+          },
+          "fats": {
+            "type": "number",
+            "example": 3.6,
+            "description": "Per 100g or unit"
+          },
+          "carbs": {
+            "type": "number",
+            "example": 0,
+            "description": "Per 100g or unit"
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "name",
+          "calories",
+          "protein",
+          "fats",
+          "carbs"
+        ]
+      },
+      "CreateTemplateFoodDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Chicken Breast"
+          },
+          "calories": {
+            "type": "number",
+            "example": 165,
+            "description": "Calories per 100g or unit"
+          },
+          "protein": {
+            "type": "number",
+            "example": 31,
+            "description": "Protein per 100g or unit"
+          },
+          "fats": {
+            "type": "number",
+            "example": 3.6,
+            "description": "Fats per 100g or unit"
+          },
+          "carbs": {
+            "type": "number",
+            "example": 0,
+            "description": "Carbs per 100g or unit"
+          }
+        },
+        "required": [
+          "name",
+          "calories",
+          "protein",
+          "fats",
+          "carbs"
+        ]
+      },
+      "UpdateTemplateFoodDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Chicken Breast"
+          },
+          "calories": {
+            "type": "number",
+            "example": 165,
+            "description": "Calories per 100g or unit"
+          },
+          "protein": {
+            "type": "number",
+            "example": 31,
+            "description": "Protein per 100g or unit"
+          },
+          "fats": {
+            "type": "number",
+            "example": 3.6,
+            "description": "Fats per 100g or unit"
+          },
+          "carbs": {
+            "type": "number",
+            "example": 0,
+            "description": "Carbs per 100g or unit"
+          }
+        }
+      },
+      "TemplateMealFoodEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "template_meal_id": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Chicken Breast"
+          },
+          "weight": {
+            "type": "number",
+            "example": 150,
+            "description": "Weight in grams"
+          },
+          "calories": {
+            "type": "number",
+            "example": 247.5,
+            "description": "Calculated calories for the specific weight"
+          },
+          "protein": {
+            "type": "number",
+            "example": 46.5,
+            "description": "Calculated protein for the specific weight"
+          },
+          "fats": {
+            "type": "number",
+            "example": 5.4,
+            "description": "Calculated fats for the specific weight"
+          },
+          "carbs": {
+            "type": "number",
+            "example": 0,
+            "description": "Calculated carbs for the specific weight"
+          }
+        },
+        "required": [
+          "id",
+          "template_meal_id",
+          "name",
+          "weight",
+          "calories",
+          "protein",
+          "fats",
+          "carbs"
+        ]
+      },
+      "TemplateMealEntity": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "user_id": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "My Breakfast Template"
+          },
+          "calories": {
+            "type": "number",
+            "example": 247.5,
+            "description": "Sum of template meal foods"
+          },
+          "protein": {
+            "type": "number",
+            "example": 46.5
+          },
+          "fats": {
+            "type": "number",
+            "example": 5.4
+          },
+          "carbs": {
+            "type": "number",
+            "example": 0
+          },
+          "template_meal_foods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TemplateMealFoodEntity"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "name",
+          "calories",
+          "protein",
+          "fats",
+          "carbs",
+          "template_meal_foods"
+        ]
+      },
+      "CreateTemplateMealFoodDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Chicken Breast"
+          },
+          "weight": {
+            "type": "number",
+            "example": 150,
+            "description": "Weight in grams"
+          },
+          "calories": {
+            "type": "number",
+            "example": 165,
+            "description": "Calories per 100g"
+          },
+          "protein": {
+            "type": "number",
+            "example": 31,
+            "description": "Protein per 100g"
+          },
+          "fats": {
+            "type": "number",
+            "example": 3.6,
+            "description": "Fats per 100g"
+          },
+          "carbs": {
+            "type": "number",
+            "example": 0,
+            "description": "Carbs per 100g"
+          }
+        },
+        "required": [
+          "name",
+          "weight",
+          "calories",
+          "protein",
+          "fats",
+          "carbs"
+        ]
+      },
+      "CreateTemplateMealDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My Breakfast Template"
+          },
+          "templateMealFoods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateTemplateMealFoodDto"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "templateMealFoods"
+        ]
+      },
+      "UpdateTemplateMealDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My Breakfast Template"
+          },
+          "templateMealFoods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateTemplateMealFoodDto"
+            }
+          }
+        }
+      },
+      "UpdateTemplateMealFoodDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Chicken Breast"
+          },
+          "weight": {
+            "type": "number",
+            "example": 150,
+            "description": "Weight in grams"
+          },
+          "calories": {
+            "type": "number",
+            "example": 165,
+            "description": "Calories per 100g"
+          },
+          "protein": {
+            "type": "number",
+            "example": 31,
+            "description": "Protein per 100g"
+          },
+          "fats": {
+            "type": "number",
+            "example": 3.6,
+            "description": "Fats per 100g"
+          },
+          "carbs": {
+            "type": "number",
+            "example": 0,
+            "description": "Carbs per 100g"
+          }
+        }
+      },
+      "ProductResponseDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Nutella"
+          },
+          "calories": {
+            "type": "number",
+            "example": 539,
+            "description": "Kcal per 100g"
+          },
+          "protein": {
+            "type": "number",
+            "example": 6.3,
+            "description": "Protein per 100g"
+          },
+          "fats": {
+            "type": "number",
+            "example": 30.9,
+            "description": "Fats per 100g"
+          },
+          "carbs": {
+            "type": "number",
+            "example": 57.5,
+            "description": "Carbs per 100g"
+          }
+        },
+        "required": [
+          "name",
+          "calories",
+          "protein",
+          "fats",
+          "carbs"
+        ]
+      },
+      "LinkDeviceDto": {
+        "type": "object",
+        "properties": {
+          "serial_number": {
+            "type": "string",
+            "example": "SN-ESP32-998877",
+            "description": "The unique serial number of the IoT scale"
+          }
+        },
+        "required": [
+          "serial_number"
+        ]
+      }
+    }
+  }
+}
