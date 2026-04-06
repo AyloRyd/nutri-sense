@@ -111,42 +111,46 @@ describe('OpenfoodfactsService', () => {
 
   // Second way: Actual fetching (Live Test)
   // Note: This test requires internet access and depends on external API availability.
-  describe('getProduct (Actual Fetching - Live)', () => {
-    let liveService: OpenfoodfactsService;
+  // We skip this in CI to avoid flakiness and rate limiting (429).
+  (process.env.CI ? describe.skip : describe)(
+    'getProduct (Actual Fetching - Live)',
+    () => {
+      let liveService: OpenfoodfactsService;
 
-    beforeEach(async () => {
-      const axiosInstance: AxiosInstance = axios.create();
-      const module: TestingModule = await Test.createTestingModule({
-        // Use real HttpService with its dependencies (simplified for test)
-        providers: [
-          OpenfoodfactsService,
-          {
-            provide: HttpService,
-            useValue: new HttpService(axiosInstance),
-          },
-        ],
-      }).compile();
-      liveService = module.get<OpenfoodfactsService>(OpenfoodfactsService);
-    });
-
-    it('should fetch actual data for Nutella barcode 3017620422003', async () => {
-      const barcode = '3017620422003';
-      const result = await liveService.getProduct(barcode);
-
-      expect(result.name.toLowerCase()).toContain('nutella');
-      expect(result.calories).toBeGreaterThan(0);
-      expect(result.protein).toBeGreaterThan(0);
-      expect(result.fats).toBeGreaterThan(0);
-      expect(result.carbs).toBeGreaterThan(0);
-
-      // Specifically check the values provided by the user if they match exactly
-      expect(result).toEqual({
-        name: expect.any(String) as unknown, // Name might vary slightly (e.g. "Nutella" vs "Nutella 400g")
-        calories: 539,
-        protein: 6.3,
-        fats: 30.9,
-        carbs: 57.5,
+      beforeEach(async () => {
+        const axiosInstance: AxiosInstance = axios.create();
+        const module: TestingModule = await Test.createTestingModule({
+          // Use real HttpService with its dependencies (simplified for test)
+          providers: [
+            OpenfoodfactsService,
+            {
+              provide: HttpService,
+              useValue: new HttpService(axiosInstance),
+            },
+          ],
+        }).compile();
+        liveService = module.get<OpenfoodfactsService>(OpenfoodfactsService);
       });
-    }, 10000); // Increase timeout for live fetch
-  });
+
+      it('should fetch actual data for Nutella barcode 3017620422003', async () => {
+        const barcode = '3017620422003';
+        const result = await liveService.getProduct(barcode);
+
+        expect(result.name.toLowerCase()).toContain('nutella');
+        expect(result.calories).toBeGreaterThan(0);
+        expect(result.protein).toBeGreaterThan(0);
+        expect(result.fats).toBeGreaterThan(0);
+        expect(result.carbs).toBeGreaterThan(0);
+
+        // Specifically check the values provided by the user if they match exactly
+        expect(result).toEqual({
+          name: expect.any(String) as unknown, // Name might vary slightly (e.g. "Nutella" vs "Nutella 400g")
+          calories: 539,
+          protein: 6.3,
+          fats: 30.9,
+          carbs: 57.5,
+        });
+      }, 15000); // Increase timeout for live fetch
+    },
+  );
 });
