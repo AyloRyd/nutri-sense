@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: nutri-sense-frontend
+    env: static
+    buildCommand: npm ci && npx turbo run build --filter=web
+    staticPublishPath: apps/web/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: https://nutri-sense-api.onrender.com
+
+  - type: web
+    name: nutri-sense-api
+    env: node
+    buildCommand: npm ci && cd apps/api && npx prisma generate && npx prisma migrate deploy && cd ../.. && npx turbo run build --filter=@nutri-sense/api
+    startCommand: node apps/api/dist/src/main
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: MQTT_HOST
+        sync: false
+      - key: MQTT_PORT
+        sync: false
