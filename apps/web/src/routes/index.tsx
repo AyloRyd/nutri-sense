@@ -14,10 +14,10 @@ function Landing() {
   return (
     <main className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
       <section className="w-full max-w-5xl border-4 border-[#333333] brutal-shadow p-12 lg:p-24 bg-black relative z-10">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary transform translate-x-16 -translate-y-16 border-4 border-[#333333] -z-10" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary transform -translate-x-20 translate-y-20 border-4 border-[#333333] -z-10" />
+        <div className="absolute top-0 right-0 w-26 h-26 md:w-48 md:h-48 bg-primary transform translate-x-16 -translate-y-16 border-4 border-[#333333] -z-10" />
+        <div className="absolute bottom-0 left-0 w-26 h-26 md:w-36 md:h-36 bg-primary transform -translate-x-20 translate-y-20 border-4 border-[#333333] -z-10" />
 
-        <h1 className="text-6xl md:text-8xl font-black font-mono tracking-tighter uppercase mb-6 leading-none selection:bg-primary selection:text-black">
+        <h1 className="text-4xl md:text-8xl font-black font-mono tracking-tighter uppercase mb-6 leading-none selection:bg-primary selection:text-black">
           Nutri<span className="text-primary">Sense</span>
         </h1>
         <p className="max-w-2xl text-xl md:text-2xl font-mono text-muted-foreground mb-12 uppercase tracking-wide selection:bg-primary selection:text-black">

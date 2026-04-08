@@ -10,6 +10,7 @@ export class AppService {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriSense API</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -17,55 +18,89 @@ export class AppService {
             theme: {
                 extend: {
                     colors: {
-                        dark: '#0f172a',
-                        primary: '#38bdf8',
+                        black: '#000000',
+                        white: '#ffffff',
+                        primary: '#39FF14',
+                        border: '#333333'
+                    },
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                        mono: ['Space Mono', 'monospace'],
                     }
                 }
             }
         }
     </script>
     <style>
-        body { background-color: #0f172a; }
+        * { border-radius: 0 !important; }
+        body { 
+            background-color: #000000; 
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            background-image: linear-gradient(#39FF14 1px, transparent 1px), linear-gradient(90deg, #39FF14 1px, transparent 1px);
+            background-size: 40px 40px;
+            margin: 0;
+        }
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0,0,0,0.92);
+            z-index: -1;
+        }
+        .brutal-border {
+            border: 2px solid #ffffff;
+        }
+        .brutal-shadow {
+            box-shadow: 6px 6px 0px 0px #39FF14;
+            transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+        }
+        .brutal-shadow:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 4px 4px 0px 0px #39FF14;
+        }
+        .brutal-shadow:active {
+            transform: translate(6px, 6px);
+            box-shadow: 0px 0px 0px 0px #39FF14;
+        }
+        a { text-decoration: none; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen text-slate-200 selection:bg-primary/30">
-    <div class="max-w-2xl px-8 py-12 text-center bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-3xl shadow-2xl">
-        <div class="inline-flex items-center justify-center w-20 h-20 mb-8 bg-primary/10 rounded-2xl border border-primary/20">
-            <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-            </svg>
-        </div>
-        <h1 class="text-5xl font-bold tracking-tight text-white mb-4">
-            NutriSense <span class="text-primary italic">API</span>
+<body class="flex items-center justify-center min-h-screen selection:bg-primary selection:text-black">
+    <div class="bg-overlay"></div>
+    <div class="max-w-3xl w-full mx-4 p-8 md:p-12 bg-black brutal-border brutal-shadow relative">
+        <div class="absolute -top-4 -left-4 w-8 h-8 bg-primary brutal-border hidden sm:block"></div>
+        <div class="absolute -bottom-4 -right-4 w-8 h-8 bg-primary brutal-border hidden sm:block"></div>
+        
+        <h1 class="text-5xl md:text-7xl font-black font-mono tracking-tighter uppercase mb-4">
+            Nutri<span class="text-primary">Sense</span><span class="text-white text-3xl">_API</span>
         </h1>
-        <p class="text-xl text-slate-400 mb-12">
-            Professional Nutrition & Measurement Tracking API service for modern health applications.
+        <p class="text-lg md:text-xl font-mono text-gray-400 mb-12 uppercase tracking-wide border-b-2 border-border pb-6 relative">
+            Nutrition & Measurement Tracking Architecture
+            <span class="absolute bottom-0 left-0 w-24 h-1 bg-primary"></span>
         </p>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <a href="/scalar" class="group relative flex items-center justify-center px-8 py-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl transition-all duration-300">
-                <div class="flex flex-col items-center">
-                    <span class="text-sm font-medium text-slate-500 mb-1">Documentation</span>
-                    <span class="text-lg font-semibold text-white group-hover:text-primary transition-colors">Scalar API Ref</span>
-                </div>
-                <div class="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 rounded-2xl transition-all pointer-events-none"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
+            <a href="/scalar" class="flex flex-col items-start justify-center p-6 bg-black brutal-border brutal-shadow hover:bg-primary group transition-none">
+                <span class="text-xs font-bold font-mono tracking-widest text-gray-400 group-hover:text-black mb-2 uppercase">Documentation</span>
+                <span class="text-2xl font-black font-mono text-white group-hover:text-black uppercase">Scalar</span>
             </a>
-            <a href="/swagger" class="group relative flex items-center justify-center px-8 py-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl transition-all duration-300">
-                <div class="flex flex-col items-center">
-                    <span class="text-sm font-medium text-slate-500 mb-1">Testing UI</span>
-                    <span class="text-lg font-semibold text-white group-hover:text-primary transition-colors">Swagger UI</span>
-                </div>
-                <div class="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 rounded-2xl transition-all pointer-events-none"></div>
+            <a href="/swagger" class="flex flex-col items-start justify-center p-6 bg-black brutal-border brutal-shadow hover:bg-primary group transition-none">
+                <span class="text-xs font-bold font-mono tracking-widest text-gray-400 group-hover:text-black mb-2 uppercase">Documentation</span>
+                <span class="text-2xl font-black font-mono text-white group-hover:text-black uppercase">Swagger</span>
             </a>
         </div>
+
+        <a href="https://nutri-sense.onrender.com" target="_blank" class="block w-full text-center p-6 bg-black brutal-border brutal-shadow hover:bg-white group transition-none">
+            <span class="text-xl font-black font-mono text-primary group-hover:text-black uppercase tracking-widest">Go to Frontend</span>
+            <div class="text-xs font-mono text-gray-400 group-hover:text-black mt-2">nutri-sense.onrender.com</div>
+        </a>
         
-        <div class="mt-12 pt-12 border-t border-slate-800 flex flex-wrap justify-center gap-6 text-sm text-slate-500">
-            <div class="flex items-center gap-2">
-                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                API Operational
+        <div class="mt-12 pt-6 border-t-2 border-border flex flex-wrap items-center justify-between gap-6 text-sm font-mono text-gray-500 uppercase">
+            <div class="flex items-center gap-2 font-bold text-white">
+                <div class="w-3 h-3 bg-primary border border-primary"></div>
+                System_Online
             </div>
-            <span>Version 1.0</span>
-            <span>NestJS Core</span>
+            <span>V_1.0.0</span>
         </div>
     </div>
 </body>
