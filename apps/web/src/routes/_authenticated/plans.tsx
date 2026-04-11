@@ -8,14 +8,14 @@ import {
   getPlansControllerFindAllQueryOptions,
   usePlansControllerCreate,
   usePlansControllerRemove,
-} from '../api/endpoints/plans/plans'
+} from '../../api/endpoints/plans/plans'
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card'
-import { Button } from '../components/ui/button'
-import { Input } from '../components/ui/input'
-import { Label } from '../components/ui/label'
-import { FormDialog } from '../components/shared/FormDialog'
-import type { CreatePlanDtoGoal } from '../api/model/createPlanDtoGoal'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../components/ui/card'
+import { Button } from '../../components/ui/button'
+import { Input } from '../../components/ui/input'
+import { Label } from '../../components/ui/label'
+import { FormDialog } from '../../components/shared/FormDialog'
+import type { CreatePlanDtoGoal } from '../../api/model/createPlanDtoGoal'
 
 export const Route = createFileRoute('/_authenticated/plans')({
   loader: ({ context: { queryClient } }) =>
@@ -250,7 +250,7 @@ function Plans() {
                 <button
                   onClick={() => handleDeletePlan(plan.id)}
                   disabled={deletePlanMutation.isPending}
-                  className="text-muted-foreground hover:text-red-500 transition-colors"
+                  className="text-muted-foreground hover:text-red-500 transition-colors mt-0.5"
                   title="Delete Plan"
                 >
                   <Trash2 size={20} />

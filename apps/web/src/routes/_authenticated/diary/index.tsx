@@ -14,8 +14,8 @@ import {
 } from 'date-fns'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-import { getStatsControllerGetStatsQueryOptions } from '../api/endpoints/stats/stats'
-import { Button } from '../components/ui/button'
+import { getStatsControllerGetStatsQueryOptions } from '../../../api/endpoints/stats/stats'
+import { Button } from '../../../components/ui/button'
 
 export const Route = createFileRoute('/_authenticated/diary/')({
   component: DiaryCalendar,

@@ -3,10 +3,10 @@ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
 import { Eye, EyeOff, AlertTriangle } from 'lucide-react'
-import { useAuthControllerLogin } from '../api/endpoints/auth/auth'
-import { Button } from '../components/ui/button'
-import { Input } from '../components/ui/input'
-import { Label } from '../components/ui/label'
+import { useAuthControllerLogin } from '../../api/endpoints/auth/auth'
+import { Button } from '../../components/ui/button'
+import { Input } from '../../components/ui/input'
+import { Label } from '../../components/ui/label'
 
 export const Route = createFileRoute('/auth/login')({
   component: Login,

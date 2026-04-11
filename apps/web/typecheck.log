@@ -1,0 +1,46 @@
+
+> typecheck
+> tsc --noEmit
+
+src/routes/_authenticated/diary/$date.tsx(96,43): error TS2345: Argument of type '"mealFoods"' is not assignable to parameter of type '"name" | "date"'.
+src/routes/_authenticated/library.tsx(1,40): error TS6133: 'Link' is declared but its value is never read.
+src/routes/_authenticated/library.tsx(19,52): error TS6133: 'CardDescription' is declared but its value is never read.
+src/routes/_authenticated/library.tsx(33,101): error TS2339: Property 'getQueryOptions' does not exist on type '{ <TData = TemplateMealEntity[], TError = ErrorType<unknown>>(options: { query: Partial<UseQueryOptions<TemplateMealEntity[], TError, TData, readonly unknown[]>> & Pick<...>; request?: AxiosRequestConfig<...> | undefined; }, queryClient?: QueryClient | undefined): DefinedUseQueryResult<...> & { ...; }; <TData = Temp...'.
+src/routes/_authenticated/library.tsx(34,101): error TS2339: Property 'getQueryOptions' does not exist on type '{ <TData = TemplateFoodEntity[], TError = ErrorType<unknown>>(options: { query: Partial<UseQueryOptions<TemplateFoodEntity[], TError, TData, readonly unknown[]>> & Pick<...>; request?: AxiosRequestConfig<...> | undefined; }, queryClient?: QueryClient | undefined): DefinedUseQueryResult<...> & { ...; }; <TData = Temp...'.
+src/routes/_authenticated/library.tsx(114,29): error TS2339: Property 'map' does not exist on type '{}'.
+src/routes/_authenticated/library.tsx(114,33): error TS7006: Parameter 'meal' implicitly has an 'any' type.
+src/routes/_authenticated/library.tsx(205,29): error TS2339: Property 'map' does not exist on type '{}'.
+src/routes/_authenticated/library.tsx(205,33): error TS7006: Parameter 'food' implicitly has an 'any' type.
+src/routes/_authenticated/library/template-meal/$id.tsx(11,8): error TS2307: Cannot find module '../../../../../api/endpoints/template-meals/template-meals' or its corresponding type declarations.
+src/routes/_authenticated/library/template-meal/$id.tsx(15,8): error TS2307: Cannot find module '../../../../../api/endpoints/template-meal-foods/template-meal-foods' or its corresponding type declarations.
+src/routes/_authenticated/library/template-meal/$id.tsx(16,51): error TS2307: Cannot find module '../../../../../api/endpoints/openfoodfacts/openfoodfacts' or its corresponding type declarations.
+src/routes/_authenticated/library/template-meal/$id.tsx(17,51): error TS2307: Cannot find module '../../../../../api/endpoints/template-foods/template-foods' or its corresponding type declarations.
+src/routes/_authenticated/library/template-meal/$id.tsx(19,24): error TS2307: Cannot find module '../../../../../components/ui/button' or its corresponding type declarations.
+src/routes/_authenticated/library/template-meal/$id.tsx(20,23): error TS2307: Cannot find module '../../../../../components/ui/input' or its corresponding type declarations.
+src/routes/_authenticated/library/template-meal/$id.tsx(21,23): error TS2307: Cannot find module '../../../../../components/ui/label' or its corresponding type declarations.
+src/routes/_authenticated/library/template-meal/$id.tsx(22,58): error TS2307: Cannot find module '../../../../../components/ui/tabs' or its corresponding type declarations.
+src/routes/_authenticated/library/template-meal/$id.tsx(23,28): error TS2307: Cannot find module '../../../../../components/shared/FormDialog' or its corresponding type declarations.
+src/routes/_authenticated/library/template-meal/$id.tsx(108,103): error TS2339: Property 'name' does not exist on type '{}'.
+src/routes/_authenticated/library/template-meal/$id.tsx(137,33): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/routes/_authenticated/library/template-meal/$id.tsx(155,53): error TS7006: Parameter 't' implicitly has an 'any' type.
+src/routes/_authenticated/library/template-meal/$id.tsx(167,40): error TS7006: Parameter 'tf' implicitly has an 'any' type.
+src/routes/_authenticated/library/template-meal/$id.tsx(199,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/routes/_authenticated/library/template-meal/$id.tsx(216,35): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/routes/_authenticated/library/template-meal/$id.tsx(231,35): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/routes/_authenticated/library/template-meal/$id.tsx(250,34): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/routes/_authenticated/library/template-meal/$id.tsx(266,34): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/routes/_authenticated/library/template-meal/$id.tsx(282,34): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/routes/_authenticated/library/template-meal/$id.tsx(308,87): error TS2339: Property 'calories' does not exist on type '{}'.
+src/routes/_authenticated/library/template-meal/$id.tsx(312,74): error TS2339: Property 'protein' does not exist on type '{}'.
+src/routes/_authenticated/library/template-meal/$id.tsx(316,74): error TS2339: Property 'fats' does not exist on type '{}'.
+src/routes/_authenticated/library/template-meal/$id.tsx(320,74): error TS2339: Property 'carbs' does not exist on type '{}'.
+src/routes/_authenticated/library/template-meal/$id.tsx(325,15): error TS2339: Property 'template_meal_foods' does not exist on type '{}'.
+src/routes/_authenticated/library/template-meal/$id.tsx(330,15): error TS2339: Property 'template_meal_foods' does not exist on type '{}'.
+src/routes/_authenticated/library/template-meal/$id.tsx(330,40): error TS7006: Parameter 'food' implicitly has an 'any' type.
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /home/ayloryd/Documents/nure/5/refactor/nutri-sense/apps/web
+npm error workspace web
+npm error location /home/ayloryd/Documents/nure/5/refactor/nutri-sense/apps/web
+npm error command failed
+npm error command sh -c tsc --noEmit

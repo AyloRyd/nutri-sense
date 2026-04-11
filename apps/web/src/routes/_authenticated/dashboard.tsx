@@ -2,14 +2,14 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 
-import { getUsersControllerGetMeQueryOptions } from '../api/endpoints/users/users'
-import { getPlansControllerFindByDateQueryOptions } from '../api/endpoints/plans/plans'
-import { getMeasurementsControllerFindCurrentQueryOptions } from '../api/endpoints/measurements/measurements'
-import { getIotControllerGetStatusQueryOptions } from '../api/endpoints/iot-scales/iot-scales'
-import { getMealsControllerFindAllQueryOptions } from '../api/endpoints/meals/meals'
+import { getUsersControllerGetMeQueryOptions } from '../../api/endpoints/users/users'
+import { getPlansControllerFindByDateQueryOptions } from '../../api/endpoints/plans/plans'
+import { getMeasurementsControllerFindCurrentQueryOptions } from '../../api/endpoints/measurements/measurements'
+import { getIotControllerGetStatusQueryOptions } from '../../api/endpoints/iot-scales/iot-scales'
+import { getMealsControllerFindAllQueryOptions } from '../../api/endpoints/meals/meals'
 
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
-import { Progress } from '../components/ui/progress'
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card'
+import { Progress } from '../../components/ui/progress'
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
   loader: async ({ context: { queryClient } }) => {

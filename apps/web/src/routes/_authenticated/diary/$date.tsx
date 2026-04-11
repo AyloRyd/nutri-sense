@@ -8,12 +8,15 @@ import { PlusIcon, ArrowLeft } from 'lucide-react'
 import {
   getMealsControllerFindAllQueryOptions,
   useMealsControllerCreate,
-} from '../api/endpoints/meals/meals'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card'
-import { Button } from '../components/ui/button'
-import { Input } from '../components/ui/input'
-import { Label } from '../components/ui/label'
-import { FormDialog } from '../components/shared/FormDialog'
+} from '../../../api/endpoints/meals/meals'
+import {
+  useTemplateMealsControllerFindAll,
+} from '../../../api/endpoints/template-meals/template-meals'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card'
+import { Button } from '../../../components/ui/button'
+import { Input } from '../../../components/ui/input'
+import { Label } from '../../../components/ui/label'
+import { FormDialog } from '../../../components/shared/FormDialog'
 
 export const Route = createFileRoute('/_authenticated/diary/$date')({
   loader: ({ context: { queryClient }, params }) =>
@@ -26,20 +29,23 @@ function DiaryDate() {
   const navigate = useNavigate()
 
   const { data: meals, refetch } = useQuery(getMealsControllerFindAllQueryOptions({ start: date, end: date }))
+  const { data: templates } = useTemplateMealsControllerFindAll()
   const createMealMutation = useMealsControllerCreate()
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [mode, setMode] = useState<'blank' | 'template'>('blank')
 
   const form = useForm({
     defaultValues: {
       name: 'Breakfast',
       date: date,
-      mealFoods: []
+      mealFoods: [] as any[]
     },
     onSubmit: async ({ value }) => {
       try {
         const newMeal = await createMealMutation.mutateAsync({ data: value })
         refetch()
         setDialogOpen(false)
+        setMode('blank')
         navigate({ to: '/diary/meal/$mealId', params: { mealId: newMeal.id.toString() } })
       } catch (err) {
         console.error('Failed to create meal', err)
@@ -68,18 +74,71 @@ function DiaryDate() {
         
         <FormDialog
           open={dialogOpen}
-          onOpenChange={setDialogOpen}
+          onOpenChange={(open) => { setDialogOpen(open); if (!open) { setMode('blank'); form.reset() } }}
           title="INITIALIZE NEW MEAL"
           description={`Log a new meal for ${date}`}
           trigger={<Button className="brutal-border hover:bg-primary w-full md:w-auto font-mono uppercase font-bold rounded-none"><PlusIcon className="w-4 h-4 mr-2"/>New Meal_</Button>}
         >
+          {/* Mode toggle */}
+          <div className="grid grid-cols-2 mt-4 border border-white rounded-none overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setMode('blank')}
+              className={`py-2 font-mono text-xs uppercase tracking-widest transition-colors ${mode === 'blank' ? 'bg-white text-black font-bold' : 'bg-black text-muted-foreground hover:text-white'}`}
+            >
+              Blank
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode('template')}
+              className={`py-2 font-mono text-xs uppercase tracking-widest transition-colors ${mode === 'template' ? 'bg-white text-black font-bold' : 'bg-black text-muted-foreground hover:text-white'}`}
+            >
+              From Template
+            </button>
+          </div>
+
+          {/* Template selector — only shown in template mode */}
+          {mode === 'template' && (
+            <div className="mt-4 flex flex-col gap-2">
+              <Label className="font-mono uppercase text-xs">Select Template</Label>
+              <select
+                className="brutal-border rounded-none bg-black text-white h-10 w-full font-mono px-3"
+                defaultValue=""
+                onChange={(e) => {
+                  const selectedTemp = templates?.find(t => t.id.toString() === e.target.value)
+                  if (selectedTemp) {
+                    form.setFieldValue('name', selectedTemp.name)
+                    form.setFieldValue('mealFoods', selectedTemp.template_meal_foods.map(f => ({
+                      name: f.name,
+                      weight: f.weight,
+                      calories: f.calories,
+                      protein: f.protein,
+                      fats: f.fats,
+                      carbs: f.carbs,
+                    })))
+                  }
+                }}
+              >
+                <option value="" disabled>-- Choose a template --</option>
+                {templates?.map(temp => (
+                  <option key={temp.id} value={temp.id}>
+                    {temp.name} ({Math.round(temp.calories)} kcal)
+                  </option>
+                ))}
+              </select>
+              <p className="font-mono text-[10px] uppercase text-muted-foreground">
+                Selecting a template pre-fills the meal name and foods.
+              </p>
+            </div>
+          )}
+
           <form
             onSubmit={(e) => {
               e.preventDefault()
               e.stopPropagation()
               form.handleSubmit()
             }}
-            className="flex flex-col gap-4 font-mono uppercase text-xs"
+            className="flex flex-col gap-4 font-mono uppercase text-xs mt-4"
           >
             <form.Field
               name="name"
@@ -103,9 +162,9 @@ function DiaryDate() {
                 <Button
                   type="submit"
                   disabled={!canSubmit || isSubmitting}
-                  className="w-full mt-4 brutal-border bg-primary text-black uppercase font-bold tracking-widest rounded-none h-12"
+                  className="w-full mt-2 brutal-border bg-primary text-black uppercase font-bold tracking-widest rounded-none h-12"
                 >
-                  {isSubmitting ? 'PROCESSING...' : 'CREATE MEAL & ADD FOODS'}
+                  {isSubmitting ? 'PROCESSING...' : mode === 'template' ? 'CREATE FROM TEMPLATE' : 'CREATE MEAL & ADD FOODS'}
                 </Button>
               )}
             />
@@ -142,7 +201,7 @@ function DiaryDate() {
           <Card key={meal.id} className="brutal-border brutal-shadow rounded-none bg-black hover:bg-neutral-900 transition-colors h-full flex flex-col cursor-pointer" onClick={() => navigate({ to: '/diary/meal/$mealId', params: { mealId: meal.id.toString() } })}>
             <CardHeader className="border-b border-(--border) pb-4 relative">
               <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
-              <div className="flex justify-between items-center pt-2">
+              <div className="flex justify-between items-start pt-2">
                 <CardTitle className="text-xl font-bold font-mono tracking-tighter uppercase text-white truncate pr-2">
                   {meal.name}
                 </CardTitle>
@@ -166,12 +225,6 @@ function DiaryDate() {
                   <span className="text-muted-foreground text-[10px]">C</span>
                   <span className="font-bold">{Math.round(meal.carbs)}g</span>
                 </div>
-              </div>
-              
-              <div className="mt-auto pt-4 border-t border-(--border)/50 flex justify-end">
-                <span className="text-primary text-[10px] font-mono uppercase opacity-0 group-hover:opacity-100 transition-opacity">
-                  EDIT MEAL →
-                </span>
               </div>
             </CardContent>
           </Card>

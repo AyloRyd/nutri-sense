@@ -16,7 +16,7 @@ import {
   getMeasurementsControllerFindAllQueryOptions,
   useMeasurementsControllerCreate,
   useMeasurementsControllerRemove,
-} from '../api/endpoints/measurements/measurements'
+} from '../../api/endpoints/measurements/measurements'
 
 import {
   Card,
@@ -24,11 +24,11 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from '../components/ui/card'
-import { Button } from '../components/ui/button'
-import { Input } from '../components/ui/input'
-import { Label } from '../components/ui/label'
-import { FormDialog } from '../components/shared/FormDialog'
+} from '../../components/ui/card'
+import { Button } from '../../components/ui/button'
+import { Input } from '../../components/ui/input'
+import { Label } from '../../components/ui/label'
+import { FormDialog } from '../../components/shared/FormDialog'
 
 export const Route = createFileRoute('/_authenticated/measurements')({
   loader: ({ context: { queryClient } }) =>
@@ -265,7 +265,7 @@ function Measurements() {
                   <button
                     onClick={() => handleDeleteMeasurement(entry.id)}
                     disabled={deleteMeasurementMutation.isPending}
-                    className="text-muted-foreground hover:text-red-500 transition-colors"
+                    className="text-muted-foreground hover:text-red-500 transition-colors mt-0.5"
                     title="Delete Entry"
                   >
                     <Trash2 size={20} />

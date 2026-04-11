@@ -2,10 +2,10 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
-import { getUsersControllerGetMeQueryOptions, useUsersControllerUpdate } from '../api/endpoints/users/users'
-import type { UpdateUserDtoSex } from '../api/model/updateUserDtoSex'
-import { useAuthControllerChangePassword } from '../api/endpoints/auth/auth'
-import { useIotControllerLinkDevice, useIotControllerUnlinkDevice, getIotControllerGetStatusQueryOptions } from '../api/endpoints/iot-scales/iot-scales'
+import { getUsersControllerGetMeQueryOptions, useUsersControllerUpdate } from '../../api/endpoints/users/users'
+import type { UpdateUserDtoSex } from '../../api/model/updateUserDtoSex'
+import { useAuthControllerChangePassword } from '../../api/endpoints/auth/auth'
+import { useIotControllerLinkDevice, useIotControllerUnlinkDevice, getIotControllerGetStatusQueryOptions } from '../../api/endpoints/iot-scales/iot-scales'
 
 import {
   Card,
@@ -13,10 +13,10 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from '../components/ui/card'
-import { Button } from '../components/ui/button'
-import { Input } from '../components/ui/input'
-import { Label } from '../components/ui/label'
+} from '../../components/ui/card'
+import { Button } from '../../components/ui/button'
+import { Input } from '../../components/ui/input'
+import { Label } from '../../components/ui/label'
 
 export const Route = createFileRoute('/_authenticated/settings')({
   loader: async ({ context: { queryClient } }) => {

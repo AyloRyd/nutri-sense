@@ -11,16 +11,18 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthRegisterRouteImport } from './routes/auth.register'
-import { Route as AuthLoginRouteImport } from './routes/auth.login'
-import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated.settings'
-import { Route as AuthenticatedPlansRouteImport } from './routes/_authenticated.plans'
-import { Route as AuthenticatedMeasurementsRouteImport } from './routes/_authenticated.measurements'
-import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated.library'
-import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
-import { Route as AuthenticatedDiaryIndexRouteImport } from './routes/_authenticated.diary.index'
-import { Route as AuthenticatedDiaryDateRouteImport } from './routes/_authenticated.diary.$date'
-import { Route as AuthenticatedDiaryMealMealIdRouteImport } from './routes/_authenticated.diary.meal.$mealId'
+import { Route as AuthRegisterRouteImport } from './routes/auth/register'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedPlansRouteImport } from './routes/_authenticated/plans'
+import { Route as AuthenticatedMeasurementsRouteImport } from './routes/_authenticated/measurements'
+import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedLibraryIndexRouteImport } from './routes/_authenticated/library/index'
+import { Route as AuthenticatedDiaryIndexRouteImport } from './routes/_authenticated/diary/index'
+import { Route as AuthenticatedDiaryDateRouteImport } from './routes/_authenticated/diary/$date'
+import { Route as AuthenticatedLibraryTemplateMealIdRouteImport } from './routes/_authenticated/library/template-meal/$id'
+import { Route as AuthenticatedDiaryMealMealIdRouteImport } from './routes/_authenticated/diary/meal/$mealId'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -67,6 +69,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedLibraryIndexRoute =
+  AuthenticatedLibraryIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedLibraryRoute,
+  } as any)
 const AuthenticatedDiaryIndexRoute = AuthenticatedDiaryIndexRouteImport.update({
   id: '/diary/',
   path: '/diary/',
@@ -77,6 +85,12 @@ const AuthenticatedDiaryDateRoute = AuthenticatedDiaryDateRouteImport.update({
   path: '/diary/$date',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedLibraryTemplateMealIdRoute =
+  AuthenticatedLibraryTemplateMealIdRouteImport.update({
+    id: '/template-meal/$id',
+    path: '/template-meal/$id',
+    getParentRoute: () => AuthenticatedLibraryRoute,
+  } as any)
 const AuthenticatedDiaryMealMealIdRoute =
   AuthenticatedDiaryMealMealIdRouteImport.update({
     id: '/diary/meal/$mealId',
@@ -87,7 +101,7 @@ const AuthenticatedDiaryMealMealIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/library': typeof AuthenticatedLibraryRoute
+  '/library': typeof AuthenticatedLibraryRouteWithChildren
   '/measurements': typeof AuthenticatedMeasurementsRoute
   '/plans': typeof AuthenticatedPlansRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -95,12 +109,13 @@ export interface FileRoutesByFullPath {
   '/auth/register': typeof AuthRegisterRoute
   '/diary/$date': typeof AuthenticatedDiaryDateRoute
   '/diary/': typeof AuthenticatedDiaryIndexRoute
+  '/library/': typeof AuthenticatedLibraryIndexRoute
   '/diary/meal/$mealId': typeof AuthenticatedDiaryMealMealIdRoute
+  '/library/template-meal/$id': typeof AuthenticatedLibraryTemplateMealIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/library': typeof AuthenticatedLibraryRoute
   '/measurements': typeof AuthenticatedMeasurementsRoute
   '/plans': typeof AuthenticatedPlansRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -108,14 +123,16 @@ export interface FileRoutesByTo {
   '/auth/register': typeof AuthRegisterRoute
   '/diary/$date': typeof AuthenticatedDiaryDateRoute
   '/diary': typeof AuthenticatedDiaryIndexRoute
+  '/library': typeof AuthenticatedLibraryIndexRoute
   '/diary/meal/$mealId': typeof AuthenticatedDiaryMealMealIdRoute
+  '/library/template-meal/$id': typeof AuthenticatedLibraryTemplateMealIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
-  '/_authenticated/library': typeof AuthenticatedLibraryRoute
+  '/_authenticated/library': typeof AuthenticatedLibraryRouteWithChildren
   '/_authenticated/measurements': typeof AuthenticatedMeasurementsRoute
   '/_authenticated/plans': typeof AuthenticatedPlansRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
@@ -123,7 +140,9 @@ export interface FileRoutesById {
   '/auth/register': typeof AuthRegisterRoute
   '/_authenticated/diary/$date': typeof AuthenticatedDiaryDateRoute
   '/_authenticated/diary/': typeof AuthenticatedDiaryIndexRoute
+  '/_authenticated/library/': typeof AuthenticatedLibraryIndexRoute
   '/_authenticated/diary/meal/$mealId': typeof AuthenticatedDiaryMealMealIdRoute
+  '/_authenticated/library/template-meal/$id': typeof AuthenticatedLibraryTemplateMealIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -138,12 +157,13 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/diary/$date'
     | '/diary/'
+    | '/library/'
     | '/diary/meal/$mealId'
+    | '/library/template-meal/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
-    | '/library'
     | '/measurements'
     | '/plans'
     | '/settings'
@@ -151,7 +171,9 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/diary/$date'
     | '/diary'
+    | '/library'
     | '/diary/meal/$mealId'
+    | '/library/template-meal/$id'
   id:
     | '__root__'
     | '/'
@@ -165,7 +187,9 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/_authenticated/diary/$date'
     | '/_authenticated/diary/'
+    | '/_authenticated/library/'
     | '/_authenticated/diary/meal/$mealId'
+    | '/_authenticated/library/template-meal/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -240,6 +264,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/library/': {
+      id: '/_authenticated/library/'
+      path: '/'
+      fullPath: '/library/'
+      preLoaderRoute: typeof AuthenticatedLibraryIndexRouteImport
+      parentRoute: typeof AuthenticatedLibraryRoute
+    }
     '/_authenticated/diary/': {
       id: '/_authenticated/diary/'
       path: '/diary'
@@ -254,6 +285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDiaryDateRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/library/template-meal/$id': {
+      id: '/_authenticated/library/template-meal/$id'
+      path: '/template-meal/$id'
+      fullPath: '/library/template-meal/$id'
+      preLoaderRoute: typeof AuthenticatedLibraryTemplateMealIdRouteImport
+      parentRoute: typeof AuthenticatedLibraryRoute
+    }
     '/_authenticated/diary/meal/$mealId': {
       id: '/_authenticated/diary/meal/$mealId'
       path: '/diary/meal/$mealId'
@@ -264,9 +302,23 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedLibraryRouteChildren {
+  AuthenticatedLibraryIndexRoute: typeof AuthenticatedLibraryIndexRoute
+  AuthenticatedLibraryTemplateMealIdRoute: typeof AuthenticatedLibraryTemplateMealIdRoute
+}
+
+const AuthenticatedLibraryRouteChildren: AuthenticatedLibraryRouteChildren = {
+  AuthenticatedLibraryIndexRoute: AuthenticatedLibraryIndexRoute,
+  AuthenticatedLibraryTemplateMealIdRoute:
+    AuthenticatedLibraryTemplateMealIdRoute,
+}
+
+const AuthenticatedLibraryRouteWithChildren =
+  AuthenticatedLibraryRoute._addFileChildren(AuthenticatedLibraryRouteChildren)
+
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRoute
+  AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRouteWithChildren
   AuthenticatedMeasurementsRoute: typeof AuthenticatedMeasurementsRoute
   AuthenticatedPlansRoute: typeof AuthenticatedPlansRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
@@ -277,7 +329,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  AuthenticatedLibraryRoute: AuthenticatedLibraryRoute,
+  AuthenticatedLibraryRoute: AuthenticatedLibraryRouteWithChildren,
   AuthenticatedMeasurementsRoute: AuthenticatedMeasurementsRoute,
   AuthenticatedPlansRoute: AuthenticatedPlansRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
