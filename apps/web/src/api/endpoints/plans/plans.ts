@@ -4,7 +4,10 @@
  * NutriSense API
  * OpenAPI spec version: 1.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query'
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -17,639 +20,442 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
-} from '@tanstack/react-query'
+  UseQueryResult
+} from '@tanstack/react-query';
 
-import type { CreatePlanDto, PlanEntity, UpdatePlanDto } from '../../model'
+import type {
+  CreatePlanDto,
+  PlanEntity,
+  UpdatePlanDto
+} from '../../model';
 
-import { customInstance } from '../../../lib/axios'
-import type { ErrorType } from '../../../lib/axios'
+import { customInstance } from '../../../lib/axios';
+import type { ErrorType } from '../../../lib/axios';
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 export const plansControllerFindAll = (
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PlanEntity[]>(
-    { url: `/plans`, method: 'GET', signal },
-    options,
-  )
-}
+
+
+      return customInstance<PlanEntity[]>(
+      {url: `/plans`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
 
 export const getPlansControllerFindAllQueryKey = () => {
-  return [`/plans`] as const
+    return [
+    `/plans`
+    ] as const;
+    }
+
+
+export const getPlansControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof plansControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getPlansControllerFindAllQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof plansControllerFindAll>>> = ({ signal }) => plansControllerFindAll(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindAll>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getPlansControllerFindAllQueryOptions = <
-  TData = Awaited<ReturnType<typeof plansControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof plansControllerFindAll>>,
-      TError,
-      TData
-    >
-  >
-  request?: SecondParameter<typeof customInstance>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
-
-  const queryKey = queryOptions?.queryKey ?? getPlansControllerFindAllQueryKey()
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof plansControllerFindAll>>
-  > = ({ signal }) => plansControllerFindAll(requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof plansControllerFindAll>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type PlansControllerFindAllQueryResult = NonNullable<
-  Awaited<ReturnType<typeof plansControllerFindAll>>
->
+export type PlansControllerFindAllQueryResult = NonNullable<Awaited<ReturnType<typeof plansControllerFindAll>>>
 export type PlansControllerFindAllQueryError = ErrorType<unknown>
 
-export function usePlansControllerFindAll<
-  TData = Awaited<ReturnType<typeof plansControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof plansControllerFindAll>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+
+export function usePlansControllerFindAll<TData = Awaited<ReturnType<typeof plansControllerFindAll>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindAll>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof plansControllerFindAll>>,
           TError,
           Awaited<ReturnType<typeof plansControllerFindAll>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function usePlansControllerFindAll<
-  TData = Awaited<ReturnType<typeof plansControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof plansControllerFindAll>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function usePlansControllerFindAll<TData = Awaited<ReturnType<typeof plansControllerFindAll>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindAll>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof plansControllerFindAll>>,
           TError,
           Awaited<ReturnType<typeof plansControllerFindAll>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function usePlansControllerFindAll<
-  TData = Awaited<ReturnType<typeof plansControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof plansControllerFindAll>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function usePlansControllerFindAll<TData = Awaited<ReturnType<typeof plansControllerFindAll>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function usePlansControllerFindAll<
-  TData = Awaited<ReturnType<typeof plansControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof plansControllerFindAll>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
+export function usePlansControllerFindAll<TData = Awaited<ReturnType<typeof plansControllerFindAll>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getPlansControllerFindAllQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return { ...query, queryKey: queryOptions.queryKey }
+  return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
 
 export const plansControllerCreate = (
-  createPlanDto: CreatePlanDto,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+    createPlanDto: CreatePlanDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PlanEntity>(
-    {
-      url: `/plans`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: createPlanDto,
-      signal,
+
+
+      return customInstance<PlanEntity>(
+      {url: `/plans`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createPlanDto, signal
     },
-    options,
-  )
-}
+      options);
+    }
 
-export const getPlansControllerCreateMutationOptions = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof plansControllerCreate>>,
-    TError,
-    { data: CreatePlanDto },
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof plansControllerCreate>>,
-  TError,
-  { data: CreatePlanDto },
-  TContext
-> => {
-  const mutationKey = ['plansControllerCreate']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof plansControllerCreate>>,
-    { data: CreatePlanDto }
-  > = (props) => {
-    const { data } = props ?? {}
 
-    return plansControllerCreate(data, requestOptions)
-  }
+export const getPlansControllerCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof plansControllerCreate>>, TError,{data: CreatePlanDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof plansControllerCreate>>, TError,{data: CreatePlanDto}, TContext> => {
 
-  return { mutationFn, ...mutationOptions }
-}
+const mutationKey = ['plansControllerCreate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PlansControllerCreateMutationResult = NonNullable<
-  Awaited<ReturnType<typeof plansControllerCreate>>
->
-export type PlansControllerCreateMutationBody = CreatePlanDto
-export type PlansControllerCreateMutationError = ErrorType<unknown>
 
-export const usePlansControllerCreate = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof plansControllerCreate>>,
-      TError,
-      { data: CreatePlanDto },
-      TContext
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof plansControllerCreate>>,
-  TError,
-  { data: CreatePlanDto },
-  TContext
-> => {
-  return useMutation(
-    getPlansControllerCreateMutationOptions(options),
-    queryClient,
-  )
-}
-export const plansControllerFindCurrent = (
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof plansControllerCreate>>, {data: CreatePlanDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  plansControllerCreate(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PlansControllerCreateMutationResult = NonNullable<Awaited<ReturnType<typeof plansControllerCreate>>>
+    export type PlansControllerCreateMutationBody = CreatePlanDto
+    export type PlansControllerCreateMutationError = ErrorType<unknown>
+
+    export const usePlansControllerCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof plansControllerCreate>>, TError,{data: CreatePlanDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof plansControllerCreate>>,
+        TError,
+        {data: CreatePlanDto},
+        TContext
+      > => {
+      return useMutation(getPlansControllerCreateMutationOptions(options), queryClient);
+    }
+    export const plansControllerFindCurrent = (
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PlanEntity>(
-    { url: `/plans/current`, method: 'GET', signal },
-    options,
-  )
-}
+
+
+      return customInstance<PlanEntity>(
+      {url: `/plans/current`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
 
 export const getPlansControllerFindCurrentQueryKey = () => {
-  return [`/plans/current`] as const
+    return [
+    `/plans/current`
+    ] as const;
+    }
+
+
+export const getPlansControllerFindCurrentQueryOptions = <TData = Awaited<ReturnType<typeof plansControllerFindCurrent>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindCurrent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getPlansControllerFindCurrentQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof plansControllerFindCurrent>>> = ({ signal }) => plansControllerFindCurrent(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindCurrent>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getPlansControllerFindCurrentQueryOptions = <
-  TData = Awaited<ReturnType<typeof plansControllerFindCurrent>>,
-  TError = ErrorType<unknown>,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof plansControllerFindCurrent>>,
-      TError,
-      TData
-    >
-  >
-  request?: SecondParameter<typeof customInstance>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
-
-  const queryKey =
-    queryOptions?.queryKey ?? getPlansControllerFindCurrentQueryKey()
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof plansControllerFindCurrent>>
-  > = ({ signal }) => plansControllerFindCurrent(requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof plansControllerFindCurrent>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type PlansControllerFindCurrentQueryResult = NonNullable<
-  Awaited<ReturnType<typeof plansControllerFindCurrent>>
->
+export type PlansControllerFindCurrentQueryResult = NonNullable<Awaited<ReturnType<typeof plansControllerFindCurrent>>>
 export type PlansControllerFindCurrentQueryError = ErrorType<unknown>
 
-export function usePlansControllerFindCurrent<
-  TData = Awaited<ReturnType<typeof plansControllerFindCurrent>>,
-  TError = ErrorType<unknown>,
->(
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof plansControllerFindCurrent>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+
+export function usePlansControllerFindCurrent<TData = Awaited<ReturnType<typeof plansControllerFindCurrent>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindCurrent>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof plansControllerFindCurrent>>,
           TError,
           Awaited<ReturnType<typeof plansControllerFindCurrent>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function usePlansControllerFindCurrent<
-  TData = Awaited<ReturnType<typeof plansControllerFindCurrent>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof plansControllerFindCurrent>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function usePlansControllerFindCurrent<TData = Awaited<ReturnType<typeof plansControllerFindCurrent>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindCurrent>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof plansControllerFindCurrent>>,
           TError,
           Awaited<ReturnType<typeof plansControllerFindCurrent>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function usePlansControllerFindCurrent<
-  TData = Awaited<ReturnType<typeof plansControllerFindCurrent>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof plansControllerFindCurrent>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function usePlansControllerFindCurrent<TData = Awaited<ReturnType<typeof plansControllerFindCurrent>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindCurrent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function usePlansControllerFindCurrent<
-  TData = Awaited<ReturnType<typeof plansControllerFindCurrent>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof plansControllerFindCurrent>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
+export function usePlansControllerFindCurrent<TData = Awaited<ReturnType<typeof plansControllerFindCurrent>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindCurrent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getPlansControllerFindCurrentQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return { ...query, queryKey: queryOptions.queryKey }
+  return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
 
 export const plansControllerFindByDate = (
-  date: string,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+    date: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PlanEntity>(
-    { url: `/plans/date/${date}`, method: 'GET', signal },
-    options,
-  )
-}
 
-export const getPlansControllerFindByDateQueryKey = (date: string) => {
-  return [`/plans/date/${date}`] as const
-}
 
-export const getPlansControllerFindByDateQueryOptions = <
-  TData = Awaited<ReturnType<typeof plansControllerFindByDate>>,
-  TError = ErrorType<unknown>,
->(
-  date: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof plansControllerFindByDate>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
+      return customInstance<PlanEntity>(
+      {url: `/plans/date/${date}`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getPlansControllerFindByDateQueryKey = (date: string,) => {
+    return [
+    `/plans/date/${date}`
+    ] as const;
+    }
+
+
+export const getPlansControllerFindByDateQueryOptions = <TData = Awaited<ReturnType<typeof plansControllerFindByDate>>, TError = ErrorType<unknown>>(date: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindByDate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getPlansControllerFindByDateQueryKey(date)
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof plansControllerFindByDate>>
-  > = ({ signal }) => plansControllerFindByDate(date, requestOptions, signal)
+  const queryKey =  queryOptions?.queryKey ?? getPlansControllerFindByDateQueryKey(date);
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!date,
-    ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof plansControllerFindByDate>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof plansControllerFindByDate>>> = ({ signal }) => plansControllerFindByDate(date, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(date), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindByDate>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type PlansControllerFindByDateQueryResult = NonNullable<
-  Awaited<ReturnType<typeof plansControllerFindByDate>>
->
+export type PlansControllerFindByDateQueryResult = NonNullable<Awaited<ReturnType<typeof plansControllerFindByDate>>>
 export type PlansControllerFindByDateQueryError = ErrorType<unknown>
 
-export function usePlansControllerFindByDate<
-  TData = Awaited<ReturnType<typeof plansControllerFindByDate>>,
-  TError = ErrorType<unknown>,
->(
-  date: string,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof plansControllerFindByDate>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+
+export function usePlansControllerFindByDate<TData = Awaited<ReturnType<typeof plansControllerFindByDate>>, TError = ErrorType<unknown>>(
+ date: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindByDate>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof plansControllerFindByDate>>,
           TError,
           Awaited<ReturnType<typeof plansControllerFindByDate>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function usePlansControllerFindByDate<
-  TData = Awaited<ReturnType<typeof plansControllerFindByDate>>,
-  TError = ErrorType<unknown>,
->(
-  date: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof plansControllerFindByDate>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function usePlansControllerFindByDate<TData = Awaited<ReturnType<typeof plansControllerFindByDate>>, TError = ErrorType<unknown>>(
+ date: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindByDate>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof plansControllerFindByDate>>,
           TError,
           Awaited<ReturnType<typeof plansControllerFindByDate>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function usePlansControllerFindByDate<
-  TData = Awaited<ReturnType<typeof plansControllerFindByDate>>,
-  TError = ErrorType<unknown>,
->(
-  date: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof plansControllerFindByDate>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function usePlansControllerFindByDate<TData = Awaited<ReturnType<typeof plansControllerFindByDate>>, TError = ErrorType<unknown>>(
+ date: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindByDate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function usePlansControllerFindByDate<TData = Awaited<ReturnType<typeof plansControllerFindByDate>>, TError = ErrorType<unknown>>(
+ date: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof plansControllerFindByDate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getPlansControllerFindByDateQueryOptions(date,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export function usePlansControllerFindByDate<
-  TData = Awaited<ReturnType<typeof plansControllerFindByDate>>,
-  TError = ErrorType<unknown>,
->(
-  date: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof plansControllerFindByDate>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
-  const queryOptions = getPlansControllerFindByDateQueryOptions(date, options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-  return { ...query, queryKey: queryOptions.queryKey }
-}
 
 export const plansControllerUpdate = (
-  id: number,
-  updatePlanDto: UpdatePlanDto,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+    id: number,
+    updatePlanDto: UpdatePlanDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<PlanEntity>(
-    {
-      url: `/plans/${id}`,
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      data: updatePlanDto,
-      signal,
+
+
+      return customInstance<PlanEntity>(
+      {url: `/plans/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updatePlanDto, signal
     },
-    options,
-  )
-}
+      options);
+    }
 
-export const getPlansControllerUpdateMutationOptions = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof plansControllerUpdate>>,
-    TError,
-    { id: number; data: UpdatePlanDto },
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof plansControllerUpdate>>,
-  TError,
-  { id: number; data: UpdatePlanDto },
-  TContext
-> => {
-  const mutationKey = ['plansControllerUpdate']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof plansControllerUpdate>>,
-    { id: number; data: UpdatePlanDto }
-  > = (props) => {
-    const { id, data } = props ?? {}
 
-    return plansControllerUpdate(id, data, requestOptions)
-  }
+export const getPlansControllerUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof plansControllerUpdate>>, TError,{id: number;data: UpdatePlanDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof plansControllerUpdate>>, TError,{id: number;data: UpdatePlanDto}, TContext> => {
 
-  return { mutationFn, ...mutationOptions }
-}
+const mutationKey = ['plansControllerUpdate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type PlansControllerUpdateMutationResult = NonNullable<
-  Awaited<ReturnType<typeof plansControllerUpdate>>
->
-export type PlansControllerUpdateMutationBody = UpdatePlanDto
-export type PlansControllerUpdateMutationError = ErrorType<unknown>
 
-export const usePlansControllerUpdate = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof plansControllerUpdate>>,
-      TError,
-      { id: number; data: UpdatePlanDto },
-      TContext
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof plansControllerUpdate>>,
-  TError,
-  { id: number; data: UpdatePlanDto },
-  TContext
-> => {
-  return useMutation(
-    getPlansControllerUpdateMutationOptions(options),
-    queryClient,
-  )
-}
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof plansControllerUpdate>>, {id: number;data: UpdatePlanDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  plansControllerUpdate(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PlansControllerUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof plansControllerUpdate>>>
+    export type PlansControllerUpdateMutationBody = UpdatePlanDto
+    export type PlansControllerUpdateMutationError = ErrorType<unknown>
+
+    export const usePlansControllerUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof plansControllerUpdate>>, TError,{id: number;data: UpdatePlanDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof plansControllerUpdate>>,
+        TError,
+        {id: number;data: UpdatePlanDto},
+        TContext
+      > => {
+      return useMutation(getPlansControllerUpdateMutationOptions(options), queryClient);
+    }
+    export const plansControllerRemove = (
+    id: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<PlanEntity>(
+      {url: `/plans/${id}`, method: 'DELETE', signal
+    },
+      options);
+    }
+
+
+
+export const getPlansControllerRemoveMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof plansControllerRemove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof plansControllerRemove>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['plansControllerRemove'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof plansControllerRemove>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  plansControllerRemove(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PlansControllerRemoveMutationResult = NonNullable<Awaited<ReturnType<typeof plansControllerRemove>>>
+
+    export type PlansControllerRemoveMutationError = ErrorType<unknown>
+
+    export const usePlansControllerRemove = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof plansControllerRemove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof plansControllerRemove>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getPlansControllerRemoveMutationOptions(options), queryClient);
+    }

@@ -4,13 +4,13 @@
  * NutriSense API
  * OpenAPI spec version: 1.0
  */
-import type { UpdateUserDtoSex } from './updateUserDtoSex'
+import type { UpdateUserDtoSex } from './updateUserDtoSex';
 
 export interface UpdateUserDto {
-  email?: string
-  username?: string
-  avatar_url?: string
-  sex?: UpdateUserDtoSex
+  email?: string;
+  username?: string;
+  avatar_url?: string;
+  sex?: UpdateUserDtoSex;
   /** ISO 8601 date string */
-  date_of_birth?: string
+  date_of_birth?: string;
 }

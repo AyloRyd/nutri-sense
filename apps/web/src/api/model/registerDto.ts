@@ -6,8 +6,8 @@
  */
 
 export interface RegisterDto {
-  email: string
-  username: string
-  password: string
-  avatar_url?: string
+  email: string;
+  username: string;
+  password: string;
+  avatar_url?: string;
 }

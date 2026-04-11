@@ -4,7 +4,10 @@
  * NutriSense API
  * OpenAPI spec version: 1.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query'
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -17,580 +20,358 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
-} from '@tanstack/react-query'
+  UseQueryResult
+} from '@tanstack/react-query';
 
 import type {
   CreateTemplateFoodDto,
   TemplateFoodEntity,
-  UpdateTemplateFoodDto,
-} from '../../model'
+  UpdateTemplateFoodDto
+} from '../../model';
 
-import { customInstance } from '../../../lib/axios'
-import type { ErrorType } from '../../../lib/axios'
+import { customInstance } from '../../../lib/axios';
+import type { ErrorType } from '../../../lib/axios';
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 export const templateFoodsControllerFindAll = (
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<TemplateFoodEntity[]>(
-    { url: `/templates/foods`, method: 'GET', signal },
-    options,
-  )
-}
+
+
+      return customInstance<TemplateFoodEntity[]>(
+      {url: `/templates/foods`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
 
 export const getTemplateFoodsControllerFindAllQueryKey = () => {
-  return [`/templates/foods`] as const
+    return [
+    `/templates/foods`
+    ] as const;
+    }
+
+
+export const getTemplateFoodsControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof templateFoodsControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof templateFoodsControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getTemplateFoodsControllerFindAllQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof templateFoodsControllerFindAll>>> = ({ signal }) => templateFoodsControllerFindAll(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof templateFoodsControllerFindAll>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getTemplateFoodsControllerFindAllQueryOptions = <
-  TData = Awaited<ReturnType<typeof templateFoodsControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof templateFoodsControllerFindAll>>,
-      TError,
-      TData
-    >
-  >
-  request?: SecondParameter<typeof customInstance>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
-
-  const queryKey =
-    queryOptions?.queryKey ?? getTemplateFoodsControllerFindAllQueryKey()
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof templateFoodsControllerFindAll>>
-  > = ({ signal }) => templateFoodsControllerFindAll(requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof templateFoodsControllerFindAll>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type TemplateFoodsControllerFindAllQueryResult = NonNullable<
-  Awaited<ReturnType<typeof templateFoodsControllerFindAll>>
->
+export type TemplateFoodsControllerFindAllQueryResult = NonNullable<Awaited<ReturnType<typeof templateFoodsControllerFindAll>>>
 export type TemplateFoodsControllerFindAllQueryError = ErrorType<unknown>
 
-export function useTemplateFoodsControllerFindAll<
-  TData = Awaited<ReturnType<typeof templateFoodsControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof templateFoodsControllerFindAll>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+
+export function useTemplateFoodsControllerFindAll<TData = Awaited<ReturnType<typeof templateFoodsControllerFindAll>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof templateFoodsControllerFindAll>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof templateFoodsControllerFindAll>>,
           TError,
           Awaited<ReturnType<typeof templateFoodsControllerFindAll>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useTemplateFoodsControllerFindAll<
-  TData = Awaited<ReturnType<typeof templateFoodsControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof templateFoodsControllerFindAll>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useTemplateFoodsControllerFindAll<TData = Awaited<ReturnType<typeof templateFoodsControllerFindAll>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof templateFoodsControllerFindAll>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof templateFoodsControllerFindAll>>,
           TError,
           Awaited<ReturnType<typeof templateFoodsControllerFindAll>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useTemplateFoodsControllerFindAll<
-  TData = Awaited<ReturnType<typeof templateFoodsControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof templateFoodsControllerFindAll>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useTemplateFoodsControllerFindAll<TData = Awaited<ReturnType<typeof templateFoodsControllerFindAll>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof templateFoodsControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useTemplateFoodsControllerFindAll<
-  TData = Awaited<ReturnType<typeof templateFoodsControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof templateFoodsControllerFindAll>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
+export function useTemplateFoodsControllerFindAll<TData = Awaited<ReturnType<typeof templateFoodsControllerFindAll>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof templateFoodsControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getTemplateFoodsControllerFindAllQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return { ...query, queryKey: queryOptions.queryKey }
+  return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
 
 export const templateFoodsControllerCreate = (
-  createTemplateFoodDto: CreateTemplateFoodDto,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+    createTemplateFoodDto: CreateTemplateFoodDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<TemplateFoodEntity>(
-    {
-      url: `/templates/foods`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: createTemplateFoodDto,
-      signal,
+
+
+      return customInstance<TemplateFoodEntity>(
+      {url: `/templates/foods`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createTemplateFoodDto, signal
     },
-    options,
-  )
-}
+      options);
+    }
 
-export const getTemplateFoodsControllerCreateMutationOptions = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof templateFoodsControllerCreate>>,
-    TError,
-    { data: CreateTemplateFoodDto },
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof templateFoodsControllerCreate>>,
-  TError,
-  { data: CreateTemplateFoodDto },
-  TContext
-> => {
-  const mutationKey = ['templateFoodsControllerCreate']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof templateFoodsControllerCreate>>,
-    { data: CreateTemplateFoodDto }
-  > = (props) => {
-    const { data } = props ?? {}
 
-    return templateFoodsControllerCreate(data, requestOptions)
-  }
+export const getTemplateFoodsControllerCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof templateFoodsControllerCreate>>, TError,{data: CreateTemplateFoodDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof templateFoodsControllerCreate>>, TError,{data: CreateTemplateFoodDto}, TContext> => {
 
-  return { mutationFn, ...mutationOptions }
-}
+const mutationKey = ['templateFoodsControllerCreate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type TemplateFoodsControllerCreateMutationResult = NonNullable<
-  Awaited<ReturnType<typeof templateFoodsControllerCreate>>
->
-export type TemplateFoodsControllerCreateMutationBody = CreateTemplateFoodDto
-export type TemplateFoodsControllerCreateMutationError = ErrorType<unknown>
 
-export const useTemplateFoodsControllerCreate = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof templateFoodsControllerCreate>>,
-      TError,
-      { data: CreateTemplateFoodDto },
-      TContext
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof templateFoodsControllerCreate>>,
-  TError,
-  { data: CreateTemplateFoodDto },
-  TContext
-> => {
-  return useMutation(
-    getTemplateFoodsControllerCreateMutationOptions(options),
-    queryClient,
-  )
-}
-export const templateFoodsControllerFindOne = (
-  id: number,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
-) => {
-  return customInstance<TemplateFoodEntity>(
-    { url: `/templates/foods/${id}`, method: 'GET', signal },
-    options,
-  )
-}
 
-export const getTemplateFoodsControllerFindOneQueryKey = (id: number) => {
-  return [`/templates/foods/${id}`] as const
-}
 
-export const getTemplateFoodsControllerFindOneQueryOptions = <
-  TData = Awaited<ReturnType<typeof templateFoodsControllerFindOne>>,
-  TError = ErrorType<unknown>,
->(
-  id: number,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof templateFoodsControllerFindOne>>,
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof templateFoodsControllerCreate>>, {data: CreateTemplateFoodDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  templateFoodsControllerCreate(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TemplateFoodsControllerCreateMutationResult = NonNullable<Awaited<ReturnType<typeof templateFoodsControllerCreate>>>
+    export type TemplateFoodsControllerCreateMutationBody = CreateTemplateFoodDto
+    export type TemplateFoodsControllerCreateMutationError = ErrorType<unknown>
+
+    export const useTemplateFoodsControllerCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof templateFoodsControllerCreate>>, TError,{data: CreateTemplateFoodDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof templateFoodsControllerCreate>>,
         TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
+        {data: CreateTemplateFoodDto},
+        TContext
+      > => {
+      return useMutation(getTemplateFoodsControllerCreateMutationOptions(options), queryClient);
+    }
+    export const templateFoodsControllerFindOne = (
+    id: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getTemplateFoodsControllerFindOneQueryKey(id)
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof templateFoodsControllerFindOne>>
-  > = ({ signal }) => templateFoodsControllerFindOne(id, requestOptions, signal)
+      return customInstance<TemplateFoodEntity>(
+      {url: `/templates/foods/${id}`, method: 'GET', signal
+    },
+      options);
+    }
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!id,
-    ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof templateFoodsControllerFindOne>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+
+
+export const getTemplateFoodsControllerFindOneQueryKey = (id: number,) => {
+    return [
+    `/templates/foods/${id}`
+    ] as const;
+    }
+
+
+export const getTemplateFoodsControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof templateFoodsControllerFindOne>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof templateFoodsControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getTemplateFoodsControllerFindOneQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof templateFoodsControllerFindOne>>> = ({ signal }) => templateFoodsControllerFindOne(id, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof templateFoodsControllerFindOne>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type TemplateFoodsControllerFindOneQueryResult = NonNullable<
-  Awaited<ReturnType<typeof templateFoodsControllerFindOne>>
->
+export type TemplateFoodsControllerFindOneQueryResult = NonNullable<Awaited<ReturnType<typeof templateFoodsControllerFindOne>>>
 export type TemplateFoodsControllerFindOneQueryError = ErrorType<unknown>
 
-export function useTemplateFoodsControllerFindOne<
-  TData = Awaited<ReturnType<typeof templateFoodsControllerFindOne>>,
-  TError = ErrorType<unknown>,
->(
-  id: number,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof templateFoodsControllerFindOne>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+
+export function useTemplateFoodsControllerFindOne<TData = Awaited<ReturnType<typeof templateFoodsControllerFindOne>>, TError = ErrorType<unknown>>(
+ id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof templateFoodsControllerFindOne>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof templateFoodsControllerFindOne>>,
           TError,
           Awaited<ReturnType<typeof templateFoodsControllerFindOne>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useTemplateFoodsControllerFindOne<
-  TData = Awaited<ReturnType<typeof templateFoodsControllerFindOne>>,
-  TError = ErrorType<unknown>,
->(
-  id: number,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof templateFoodsControllerFindOne>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useTemplateFoodsControllerFindOne<TData = Awaited<ReturnType<typeof templateFoodsControllerFindOne>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof templateFoodsControllerFindOne>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof templateFoodsControllerFindOne>>,
           TError,
           Awaited<ReturnType<typeof templateFoodsControllerFindOne>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useTemplateFoodsControllerFindOne<
-  TData = Awaited<ReturnType<typeof templateFoodsControllerFindOne>>,
-  TError = ErrorType<unknown>,
->(
-  id: number,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof templateFoodsControllerFindOne>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useTemplateFoodsControllerFindOne<TData = Awaited<ReturnType<typeof templateFoodsControllerFindOne>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof templateFoodsControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useTemplateFoodsControllerFindOne<TData = Awaited<ReturnType<typeof templateFoodsControllerFindOne>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof templateFoodsControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getTemplateFoodsControllerFindOneQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export function useTemplateFoodsControllerFindOne<
-  TData = Awaited<ReturnType<typeof templateFoodsControllerFindOne>>,
-  TError = ErrorType<unknown>,
->(
-  id: number,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof templateFoodsControllerFindOne>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
-  const queryOptions = getTemplateFoodsControllerFindOneQueryOptions(
-    id,
-    options,
-  )
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-  return { ...query, queryKey: queryOptions.queryKey }
-}
 
 export const templateFoodsControllerUpdate = (
-  id: number,
-  updateTemplateFoodDto: UpdateTemplateFoodDto,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+    id: number,
+    updateTemplateFoodDto: UpdateTemplateFoodDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<TemplateFoodEntity>(
-    {
-      url: `/templates/foods/${id}`,
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      data: updateTemplateFoodDto,
-      signal,
+
+
+      return customInstance<TemplateFoodEntity>(
+      {url: `/templates/foods/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateTemplateFoodDto, signal
     },
-    options,
-  )
-}
+      options);
+    }
 
-export const getTemplateFoodsControllerUpdateMutationOptions = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof templateFoodsControllerUpdate>>,
-    TError,
-    { id: number; data: UpdateTemplateFoodDto },
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof templateFoodsControllerUpdate>>,
-  TError,
-  { id: number; data: UpdateTemplateFoodDto },
-  TContext
-> => {
-  const mutationKey = ['templateFoodsControllerUpdate']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof templateFoodsControllerUpdate>>,
-    { id: number; data: UpdateTemplateFoodDto }
-  > = (props) => {
-    const { id, data } = props ?? {}
 
-    return templateFoodsControllerUpdate(id, data, requestOptions)
-  }
+export const getTemplateFoodsControllerUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof templateFoodsControllerUpdate>>, TError,{id: number;data: UpdateTemplateFoodDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof templateFoodsControllerUpdate>>, TError,{id: number;data: UpdateTemplateFoodDto}, TContext> => {
 
-  return { mutationFn, ...mutationOptions }
-}
+const mutationKey = ['templateFoodsControllerUpdate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type TemplateFoodsControllerUpdateMutationResult = NonNullable<
-  Awaited<ReturnType<typeof templateFoodsControllerUpdate>>
->
-export type TemplateFoodsControllerUpdateMutationBody = UpdateTemplateFoodDto
-export type TemplateFoodsControllerUpdateMutationError = ErrorType<unknown>
 
-export const useTemplateFoodsControllerUpdate = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof templateFoodsControllerUpdate>>,
-      TError,
-      { id: number; data: UpdateTemplateFoodDto },
-      TContext
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof templateFoodsControllerUpdate>>,
-  TError,
-  { id: number; data: UpdateTemplateFoodDto },
-  TContext
-> => {
-  return useMutation(
-    getTemplateFoodsControllerUpdateMutationOptions(options),
-    queryClient,
-  )
-}
-export const templateFoodsControllerRemove = (
-  id: number,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof templateFoodsControllerUpdate>>, {id: number;data: UpdateTemplateFoodDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  templateFoodsControllerUpdate(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TemplateFoodsControllerUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof templateFoodsControllerUpdate>>>
+    export type TemplateFoodsControllerUpdateMutationBody = UpdateTemplateFoodDto
+    export type TemplateFoodsControllerUpdateMutationError = ErrorType<unknown>
+
+    export const useTemplateFoodsControllerUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof templateFoodsControllerUpdate>>, TError,{id: number;data: UpdateTemplateFoodDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof templateFoodsControllerUpdate>>,
+        TError,
+        {id: number;data: UpdateTemplateFoodDto},
+        TContext
+      > => {
+      return useMutation(getTemplateFoodsControllerUpdateMutationOptions(options), queryClient);
+    }
+    export const templateFoodsControllerRemove = (
+    id: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<void>(
-    { url: `/templates/foods/${id}`, method: 'DELETE', signal },
-    options,
-  )
-}
 
-export const getTemplateFoodsControllerRemoveMutationOptions = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof templateFoodsControllerRemove>>,
-    TError,
-    { id: number },
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof templateFoodsControllerRemove>>,
-  TError,
-  { id: number },
-  TContext
-> => {
-  const mutationKey = ['templateFoodsControllerRemove']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof templateFoodsControllerRemove>>,
-    { id: number }
-  > = (props) => {
-    const { id } = props ?? {}
+      return customInstance<void>(
+      {url: `/templates/foods/${id}`, method: 'DELETE', signal
+    },
+      options);
+    }
 
-    return templateFoodsControllerRemove(id, requestOptions)
-  }
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type TemplateFoodsControllerRemoveMutationResult = NonNullable<
-  Awaited<ReturnType<typeof templateFoodsControllerRemove>>
->
+export const getTemplateFoodsControllerRemoveMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof templateFoodsControllerRemove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof templateFoodsControllerRemove>>, TError,{id: number}, TContext> => {
 
-export type TemplateFoodsControllerRemoveMutationError = ErrorType<unknown>
+const mutationKey = ['templateFoodsControllerRemove'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export const useTemplateFoodsControllerRemove = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof templateFoodsControllerRemove>>,
-      TError,
-      { id: number },
-      TContext
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof templateFoodsControllerRemove>>,
-  TError,
-  { id: number },
-  TContext
-> => {
-  return useMutation(
-    getTemplateFoodsControllerRemoveMutationOptions(options),
-    queryClient,
-  )
-}
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof templateFoodsControllerRemove>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  templateFoodsControllerRemove(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TemplateFoodsControllerRemoveMutationResult = NonNullable<Awaited<ReturnType<typeof templateFoodsControllerRemove>>>
+
+    export type TemplateFoodsControllerRemoveMutationError = ErrorType<unknown>
+
+    export const useTemplateFoodsControllerRemove = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof templateFoodsControllerRemove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof templateFoodsControllerRemove>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getTemplateFoodsControllerRemoveMutationOptions(options), queryClient);
+    }

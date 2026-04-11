@@ -5,6 +5,7 @@ import {
   Body,
   Patch,
   Param,
+  Delete,
   UseGuards,
   Req,
   ParseIntPipe,
@@ -59,5 +60,11 @@ export class PlansController {
     @Body() dto: UpdatePlanDto,
   ) {
     return this.plansService.update(req.user.id, id, dto);
+  }
+
+  @Delete(':id')
+  @ApiOkResponse({ type: PlanEntity })
+  remove(@Req() req: JwtRequest, @Param('id', ParseIntPipe) id: number) {
+    return this.plansService.remove(req.user.id, id);
   }
 }

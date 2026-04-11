@@ -4,15 +4,15 @@
  * NutriSense API
  * OpenAPI spec version: 1.0
  */
-import type { PlanEntity } from './planEntity'
+import type { PlanEntity } from './planEntity';
 
 export interface DailyStatsEntity {
-  date: string
+  date: string;
   /** The active plan for this specific date */
-  plan: PlanEntity
+  plan: PlanEntity;
   /** Sum of all meals for this date */
-  actual_calories: number
-  actual_protein: number
-  actual_fats: number
-  actual_carbs: number
+  actual_calories: number;
+  actual_protein: number;
+  actual_fats: number;
+  actual_carbs: number;
 }

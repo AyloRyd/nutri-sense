@@ -7,10 +7,10 @@
 
 export interface UpdateMeasurementDto {
   /** Weight in kg */
-  weight?: number
+  weight?: number;
   /** Height in cm */
-  height?: number
+  height?: number;
   /** Activity level */
-  activity?: number
-  date?: string
+  activity?: number;
+  date?: string;
 }

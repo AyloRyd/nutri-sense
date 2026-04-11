@@ -5,9 +5,10 @@
  * OpenAPI spec version: 1.0
  */
 
-export type UserEntitySex = (typeof UserEntitySex)[keyof typeof UserEntitySex]
+export type UserEntitySex = typeof UserEntitySex[keyof typeof UserEntitySex];
+
 
 export const UserEntitySex = {
   male: 'male',
   female: 'female',
-} as const
+} as const;

@@ -6,13 +6,13 @@
  */
 
 export interface MeasurementEntity {
-  id: number
-  user_id: number
-  date: string
+  id: number;
+  user_id: number;
+  date: string;
   /** Weight in kg */
-  weight: number
+  weight: number;
   /** Height in cm */
-  height: number
+  height: number;
   /** Activity level */
-  activity: number
+  activity: number;
 }

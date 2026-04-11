@@ -5,10 +5,10 @@
  * OpenAPI spec version: 1.0
  */
 
-export type UpdateUserDtoSex =
-  (typeof UpdateUserDtoSex)[keyof typeof UpdateUserDtoSex]
+export type UpdateUserDtoSex = typeof UpdateUserDtoSex[keyof typeof UpdateUserDtoSex];
+
 
 export const UpdateUserDtoSex = {
   male: 'male',
   female: 'female',
-} as const
+} as const;

@@ -4,7 +4,10 @@
  * NutriSense API
  * OpenAPI spec version: 1.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query'
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -17,564 +20,358 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
-} from '@tanstack/react-query'
+  UseQueryResult
+} from '@tanstack/react-query';
 
 import type {
   CreateMeasurementDto,
   MeasurementEntity,
-  UpdateMeasurementDto,
-} from '../../model'
+  UpdateMeasurementDto
+} from '../../model';
 
-import { customInstance } from '../../../lib/axios'
-import type { ErrorType } from '../../../lib/axios'
+import { customInstance } from '../../../lib/axios';
+import type { ErrorType } from '../../../lib/axios';
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 export const measurementsControllerFindAll = (
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<MeasurementEntity[]>(
-    { url: `/measurements`, method: 'GET', signal },
-    options,
-  )
-}
+
+
+      return customInstance<MeasurementEntity[]>(
+      {url: `/measurements`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
 
 export const getMeasurementsControllerFindAllQueryKey = () => {
-  return [`/measurements`] as const
+    return [
+    `/measurements`
+    ] as const;
+    }
+
+
+export const getMeasurementsControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof measurementsControllerFindAll>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof measurementsControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getMeasurementsControllerFindAllQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof measurementsControllerFindAll>>> = ({ signal }) => measurementsControllerFindAll(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof measurementsControllerFindAll>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getMeasurementsControllerFindAllQueryOptions = <
-  TData = Awaited<ReturnType<typeof measurementsControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof measurementsControllerFindAll>>,
-      TError,
-      TData
-    >
-  >
-  request?: SecondParameter<typeof customInstance>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
-
-  const queryKey =
-    queryOptions?.queryKey ?? getMeasurementsControllerFindAllQueryKey()
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof measurementsControllerFindAll>>
-  > = ({ signal }) => measurementsControllerFindAll(requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof measurementsControllerFindAll>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type MeasurementsControllerFindAllQueryResult = NonNullable<
-  Awaited<ReturnType<typeof measurementsControllerFindAll>>
->
+export type MeasurementsControllerFindAllQueryResult = NonNullable<Awaited<ReturnType<typeof measurementsControllerFindAll>>>
 export type MeasurementsControllerFindAllQueryError = ErrorType<unknown>
 
-export function useMeasurementsControllerFindAll<
-  TData = Awaited<ReturnType<typeof measurementsControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof measurementsControllerFindAll>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+
+export function useMeasurementsControllerFindAll<TData = Awaited<ReturnType<typeof measurementsControllerFindAll>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof measurementsControllerFindAll>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof measurementsControllerFindAll>>,
           TError,
           Awaited<ReturnType<typeof measurementsControllerFindAll>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useMeasurementsControllerFindAll<
-  TData = Awaited<ReturnType<typeof measurementsControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof measurementsControllerFindAll>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useMeasurementsControllerFindAll<TData = Awaited<ReturnType<typeof measurementsControllerFindAll>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof measurementsControllerFindAll>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof measurementsControllerFindAll>>,
           TError,
           Awaited<ReturnType<typeof measurementsControllerFindAll>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useMeasurementsControllerFindAll<
-  TData = Awaited<ReturnType<typeof measurementsControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof measurementsControllerFindAll>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useMeasurementsControllerFindAll<TData = Awaited<ReturnType<typeof measurementsControllerFindAll>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof measurementsControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useMeasurementsControllerFindAll<
-  TData = Awaited<ReturnType<typeof measurementsControllerFindAll>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof measurementsControllerFindAll>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
+export function useMeasurementsControllerFindAll<TData = Awaited<ReturnType<typeof measurementsControllerFindAll>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof measurementsControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getMeasurementsControllerFindAllQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return { ...query, queryKey: queryOptions.queryKey }
+  return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
 
 export const measurementsControllerCreate = (
-  createMeasurementDto: CreateMeasurementDto,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+    createMeasurementDto: CreateMeasurementDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<MeasurementEntity>(
-    {
-      url: `/measurements`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: createMeasurementDto,
-      signal,
+
+
+      return customInstance<MeasurementEntity>(
+      {url: `/measurements`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createMeasurementDto, signal
     },
-    options,
-  )
-}
+      options);
+    }
 
-export const getMeasurementsControllerCreateMutationOptions = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof measurementsControllerCreate>>,
-    TError,
-    { data: CreateMeasurementDto },
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof measurementsControllerCreate>>,
-  TError,
-  { data: CreateMeasurementDto },
-  TContext
-> => {
-  const mutationKey = ['measurementsControllerCreate']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof measurementsControllerCreate>>,
-    { data: CreateMeasurementDto }
-  > = (props) => {
-    const { data } = props ?? {}
 
-    return measurementsControllerCreate(data, requestOptions)
-  }
+export const getMeasurementsControllerCreateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof measurementsControllerCreate>>, TError,{data: CreateMeasurementDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof measurementsControllerCreate>>, TError,{data: CreateMeasurementDto}, TContext> => {
 
-  return { mutationFn, ...mutationOptions }
-}
+const mutationKey = ['measurementsControllerCreate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type MeasurementsControllerCreateMutationResult = NonNullable<
-  Awaited<ReturnType<typeof measurementsControllerCreate>>
->
-export type MeasurementsControllerCreateMutationBody = CreateMeasurementDto
-export type MeasurementsControllerCreateMutationError = ErrorType<unknown>
 
-export const useMeasurementsControllerCreate = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof measurementsControllerCreate>>,
-      TError,
-      { data: CreateMeasurementDto },
-      TContext
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof measurementsControllerCreate>>,
-  TError,
-  { data: CreateMeasurementDto },
-  TContext
-> => {
-  return useMutation(
-    getMeasurementsControllerCreateMutationOptions(options),
-    queryClient,
-  )
-}
-export const measurementsControllerFindCurrent = (
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof measurementsControllerCreate>>, {data: CreateMeasurementDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  measurementsControllerCreate(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type MeasurementsControllerCreateMutationResult = NonNullable<Awaited<ReturnType<typeof measurementsControllerCreate>>>
+    export type MeasurementsControllerCreateMutationBody = CreateMeasurementDto
+    export type MeasurementsControllerCreateMutationError = ErrorType<unknown>
+
+    export const useMeasurementsControllerCreate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof measurementsControllerCreate>>, TError,{data: CreateMeasurementDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof measurementsControllerCreate>>,
+        TError,
+        {data: CreateMeasurementDto},
+        TContext
+      > => {
+      return useMutation(getMeasurementsControllerCreateMutationOptions(options), queryClient);
+    }
+    export const measurementsControllerFindCurrent = (
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<MeasurementEntity>(
-    { url: `/measurements/current`, method: 'GET', signal },
-    options,
-  )
-}
+
+
+      return customInstance<MeasurementEntity>(
+      {url: `/measurements/current`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
 
 export const getMeasurementsControllerFindCurrentQueryKey = () => {
-  return [`/measurements/current`] as const
+    return [
+    `/measurements/current`
+    ] as const;
+    }
+
+
+export const getMeasurementsControllerFindCurrentQueryOptions = <TData = Awaited<ReturnType<typeof measurementsControllerFindCurrent>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof measurementsControllerFindCurrent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getMeasurementsControllerFindCurrentQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof measurementsControllerFindCurrent>>> = ({ signal }) => measurementsControllerFindCurrent(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof measurementsControllerFindCurrent>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getMeasurementsControllerFindCurrentQueryOptions = <
-  TData = Awaited<ReturnType<typeof measurementsControllerFindCurrent>>,
-  TError = ErrorType<unknown>,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof measurementsControllerFindCurrent>>,
-      TError,
-      TData
-    >
-  >
-  request?: SecondParameter<typeof customInstance>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
-
-  const queryKey =
-    queryOptions?.queryKey ?? getMeasurementsControllerFindCurrentQueryKey()
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof measurementsControllerFindCurrent>>
-  > = ({ signal }) => measurementsControllerFindCurrent(requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof measurementsControllerFindCurrent>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type MeasurementsControllerFindCurrentQueryResult = NonNullable<
-  Awaited<ReturnType<typeof measurementsControllerFindCurrent>>
->
+export type MeasurementsControllerFindCurrentQueryResult = NonNullable<Awaited<ReturnType<typeof measurementsControllerFindCurrent>>>
 export type MeasurementsControllerFindCurrentQueryError = ErrorType<unknown>
 
-export function useMeasurementsControllerFindCurrent<
-  TData = Awaited<ReturnType<typeof measurementsControllerFindCurrent>>,
-  TError = ErrorType<unknown>,
->(
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof measurementsControllerFindCurrent>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+
+export function useMeasurementsControllerFindCurrent<TData = Awaited<ReturnType<typeof measurementsControllerFindCurrent>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof measurementsControllerFindCurrent>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof measurementsControllerFindCurrent>>,
           TError,
           Awaited<ReturnType<typeof measurementsControllerFindCurrent>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useMeasurementsControllerFindCurrent<
-  TData = Awaited<ReturnType<typeof measurementsControllerFindCurrent>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof measurementsControllerFindCurrent>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useMeasurementsControllerFindCurrent<TData = Awaited<ReturnType<typeof measurementsControllerFindCurrent>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof measurementsControllerFindCurrent>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof measurementsControllerFindCurrent>>,
           TError,
           Awaited<ReturnType<typeof measurementsControllerFindCurrent>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useMeasurementsControllerFindCurrent<
-  TData = Awaited<ReturnType<typeof measurementsControllerFindCurrent>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof measurementsControllerFindCurrent>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useMeasurementsControllerFindCurrent<TData = Awaited<ReturnType<typeof measurementsControllerFindCurrent>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof measurementsControllerFindCurrent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useMeasurementsControllerFindCurrent<
-  TData = Awaited<ReturnType<typeof measurementsControllerFindCurrent>>,
-  TError = ErrorType<unknown>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof measurementsControllerFindCurrent>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
+export function useMeasurementsControllerFindCurrent<TData = Awaited<ReturnType<typeof measurementsControllerFindCurrent>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof measurementsControllerFindCurrent>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getMeasurementsControllerFindCurrentQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return { ...query, queryKey: queryOptions.queryKey }
+  return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
 
 export const measurementsControllerUpdate = (
-  id: number,
-  updateMeasurementDto: UpdateMeasurementDto,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+    id: number,
+    updateMeasurementDto: UpdateMeasurementDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<MeasurementEntity>(
-    {
-      url: `/measurements/${id}`,
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      data: updateMeasurementDto,
-      signal,
+
+
+      return customInstance<MeasurementEntity>(
+      {url: `/measurements/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateMeasurementDto, signal
     },
-    options,
-  )
-}
+      options);
+    }
 
-export const getMeasurementsControllerUpdateMutationOptions = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof measurementsControllerUpdate>>,
-    TError,
-    { id: number; data: UpdateMeasurementDto },
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof measurementsControllerUpdate>>,
-  TError,
-  { id: number; data: UpdateMeasurementDto },
-  TContext
-> => {
-  const mutationKey = ['measurementsControllerUpdate']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof measurementsControllerUpdate>>,
-    { id: number; data: UpdateMeasurementDto }
-  > = (props) => {
-    const { id, data } = props ?? {}
 
-    return measurementsControllerUpdate(id, data, requestOptions)
-  }
+export const getMeasurementsControllerUpdateMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof measurementsControllerUpdate>>, TError,{id: number;data: UpdateMeasurementDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof measurementsControllerUpdate>>, TError,{id: number;data: UpdateMeasurementDto}, TContext> => {
 
-  return { mutationFn, ...mutationOptions }
-}
+const mutationKey = ['measurementsControllerUpdate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export type MeasurementsControllerUpdateMutationResult = NonNullable<
-  Awaited<ReturnType<typeof measurementsControllerUpdate>>
->
-export type MeasurementsControllerUpdateMutationBody = UpdateMeasurementDto
-export type MeasurementsControllerUpdateMutationError = ErrorType<unknown>
 
-export const useMeasurementsControllerUpdate = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof measurementsControllerUpdate>>,
-      TError,
-      { id: number; data: UpdateMeasurementDto },
-      TContext
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof measurementsControllerUpdate>>,
-  TError,
-  { id: number; data: UpdateMeasurementDto },
-  TContext
-> => {
-  return useMutation(
-    getMeasurementsControllerUpdateMutationOptions(options),
-    queryClient,
-  )
-}
-export const measurementsControllerRemove = (
-  id: number,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof measurementsControllerUpdate>>, {id: number;data: UpdateMeasurementDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  measurementsControllerUpdate(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type MeasurementsControllerUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof measurementsControllerUpdate>>>
+    export type MeasurementsControllerUpdateMutationBody = UpdateMeasurementDto
+    export type MeasurementsControllerUpdateMutationError = ErrorType<unknown>
+
+    export const useMeasurementsControllerUpdate = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof measurementsControllerUpdate>>, TError,{id: number;data: UpdateMeasurementDto}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof measurementsControllerUpdate>>,
+        TError,
+        {id: number;data: UpdateMeasurementDto},
+        TContext
+      > => {
+      return useMutation(getMeasurementsControllerUpdateMutationOptions(options), queryClient);
+    }
+    export const measurementsControllerRemove = (
+    id: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<void>(
-    { url: `/measurements/${id}`, method: 'DELETE', signal },
-    options,
-  )
-}
 
-export const getMeasurementsControllerRemoveMutationOptions = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof measurementsControllerRemove>>,
-    TError,
-    { id: number },
-    TContext
-  >
-  request?: SecondParameter<typeof customInstance>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof measurementsControllerRemove>>,
-  TError,
-  { id: number },
-  TContext
-> => {
-  const mutationKey = ['measurementsControllerRemove']
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof measurementsControllerRemove>>,
-    { id: number }
-  > = (props) => {
-    const { id } = props ?? {}
+      return customInstance<void>(
+      {url: `/measurements/${id}`, method: 'DELETE', signal
+    },
+      options);
+    }
 
-    return measurementsControllerRemove(id, requestOptions)
-  }
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type MeasurementsControllerRemoveMutationResult = NonNullable<
-  Awaited<ReturnType<typeof measurementsControllerRemove>>
->
+export const getMeasurementsControllerRemoveMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof measurementsControllerRemove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof measurementsControllerRemove>>, TError,{id: number}, TContext> => {
 
-export type MeasurementsControllerRemoveMutationError = ErrorType<unknown>
+const mutationKey = ['measurementsControllerRemove'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
-export const useMeasurementsControllerRemove = <
-  TError = ErrorType<unknown>,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof measurementsControllerRemove>>,
-      TError,
-      { id: number },
-      TContext
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof measurementsControllerRemove>>,
-  TError,
-  { id: number },
-  TContext
-> => {
-  return useMutation(
-    getMeasurementsControllerRemoveMutationOptions(options),
-    queryClient,
-  )
-}
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof measurementsControllerRemove>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  measurementsControllerRemove(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type MeasurementsControllerRemoveMutationResult = NonNullable<Awaited<ReturnType<typeof measurementsControllerRemove>>>
+
+    export type MeasurementsControllerRemoveMutationError = ErrorType<unknown>
+
+    export const useMeasurementsControllerRemove = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof measurementsControllerRemove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof measurementsControllerRemove>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getMeasurementsControllerRemoveMutationOptions(options), queryClient);
+    }

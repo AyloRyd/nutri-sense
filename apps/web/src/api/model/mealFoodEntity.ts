@@ -6,17 +6,17 @@
  */
 
 export interface MealFoodEntity {
-  id: number
-  meal_id: number
-  name: string
+  id: number;
+  meal_id: number;
+  name: string;
   /** Weight in grams */
-  weight: number
+  weight: number;
   /** Calculated calories for the specific weight */
-  calories: number
+  calories: number;
   /** Calculated protein for the specific weight */
-  protein: number
+  protein: number;
   /** Calculated fats for the specific weight */
-  fats: number
+  fats: number;
   /** Calculated carbs for the specific weight */
-  carbs: number
+  carbs: number;
 }

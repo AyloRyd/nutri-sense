@@ -4,14 +4,14 @@
  * NutriSense API
  * OpenAPI spec version: 1.0
  */
-import type { UserEntitySex } from './userEntitySex'
+import type { UserEntitySex } from './userEntitySex';
 
 export interface UserEntity {
-  id: number
-  email: string
-  username: string
-  avatar_url?: string
-  sex?: UserEntitySex
-  date_of_birth?: string
-  device_serial_id?: string
+  id: number;
+  email: string;
+  username: string;
+  avatar_url?: string;
+  sex?: UserEntitySex;
+  date_of_birth?: string;
+  device_serial_id?: string;
 }

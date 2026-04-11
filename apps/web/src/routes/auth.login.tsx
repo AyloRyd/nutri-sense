@@ -15,7 +15,7 @@ export const Route = createFileRoute('/auth/login')({
 function Login() {
   const navigate = useNavigate()
   const loginMutation = useAuthControllerLogin()
-  
+
   const [showPassword, setShowPassword] = useState(false)
   const [globalError, setGlobalError] = useState<string | null>(null)
 
@@ -36,7 +36,10 @@ function Login() {
         }
       } catch (err: any) {
         console.error(err)
-        const errorMessage = err?.response?.data?.message || err?.message || 'Failed to authenticate sequence.'
+        const errorMessage =
+          err?.response?.data?.message ||
+          err?.message ||
+          'Failed to authenticate sequence.'
         setGlobalError(errorMessage)
       }
     },
@@ -83,7 +86,10 @@ function Login() {
             <form.Field
               name="email"
               validators={{
-                onChange: z.string().min(1, 'Email is required.').email('Invalid email address format.'),
+                onChange: z
+                  .string()
+                  .min(1, 'Email is required.')
+                  .email('Invalid email address format.'),
               }}
               children={(field) => (
                 <>
@@ -93,7 +99,15 @@ function Login() {
                   >
                     <span>Email</span>
                     {field.state.meta.errors.length > 0 && (
-                      <span className="text-red-500 normal-case">{field.state.meta.errors.join(', ')}</span>
+                      <span className="text-red-500 normal-case">
+                        {
+                          field.state.meta.errors
+                            .map((e: any) =>
+                              typeof e === 'string' ? e : e.message,
+                            )
+                            .filter(Boolean)[0]
+                        }
+                      </span>
                     )}
                   </Label>
                   <Input
@@ -123,7 +137,15 @@ function Login() {
                   >
                     <span>Password</span>
                     {field.state.meta.errors.length > 0 && (
-                      <span className="text-red-500 normal-case">{field.state.meta.errors.join(', ')}</span>
+                      <span className="text-red-500 normal-case">
+                        {
+                          field.state.meta.errors
+                            .map((e: any) =>
+                              typeof e === 'string' ? e : e.message,
+                            )
+                            .filter(Boolean)[0]
+                        }
+                      </span>
                     )}
                   </Label>
                   <div className="relative">
@@ -157,7 +179,9 @@ function Login() {
                 disabled={!canSubmit || loginMutation.isPending || isSubmitting}
                 className="w-full brutal-shadow brutal-border bg-primary text-black hover:bg-white hover:text-black uppercase font-bold tracking-widest mt-4 h-12 rounded-none transition-none"
               >
-                {loginMutation.isPending || isSubmitting ? 'Authenticating...' : 'Submit_'}
+                {loginMutation.isPending || isSubmitting
+                  ? 'Authenticating...'
+                  : 'Submit_'}
               </Button>
             )}
           />

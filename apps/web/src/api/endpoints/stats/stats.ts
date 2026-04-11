@@ -4,7 +4,9 @@
  * NutriSense API
  * OpenAPI spec version: 1.0
  */
-import { useQuery } from '@tanstack/react-query'
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -14,172 +16,104 @@ import type {
   QueryKey,
   UndefinedInitialDataOptions,
   UseQueryOptions,
-  UseQueryResult,
-} from '@tanstack/react-query'
+  UseQueryResult
+} from '@tanstack/react-query';
 
 import type {
   DailyStatsEntity,
-  StatsControllerGetStatsParams,
-} from '../../model'
+  StatsControllerGetStatsParams
+} from '../../model';
 
-import { customInstance } from '../../../lib/axios'
-import type { ErrorType } from '../../../lib/axios'
+import { customInstance } from '../../../lib/axios';
+import type { ErrorType } from '../../../lib/axios';
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
 
 export const statsControllerGetStats = (
-  params: StatsControllerGetStatsParams,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal,
+    params: StatsControllerGetStatsParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
-  return customInstance<DailyStatsEntity[]>(
-    { url: `/stats`, method: 'GET', params, signal },
-    options,
-  )
+
+
+      return customInstance<DailyStatsEntity[]>(
+      {url: `/stats`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getStatsControllerGetStatsQueryKey = (params?: StatsControllerGetStatsParams,) => {
+    return [
+    `/stats`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getStatsControllerGetStatsQueryOptions = <TData = Awaited<ReturnType<typeof statsControllerGetStats>>, TError = ErrorType<unknown>>(params: StatsControllerGetStatsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof statsControllerGetStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getStatsControllerGetStatsQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof statsControllerGetStats>>> = ({ signal }) => statsControllerGetStats(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof statsControllerGetStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getStatsControllerGetStatsQueryKey = (
-  params?: StatsControllerGetStatsParams,
-) => {
-  return [`/stats`, ...(params ? [params] : [])] as const
-}
-
-export const getStatsControllerGetStatsQueryOptions = <
-  TData = Awaited<ReturnType<typeof statsControllerGetStats>>,
-  TError = ErrorType<unknown>,
->(
-  params: StatsControllerGetStatsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof statsControllerGetStats>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
-
-  const queryKey =
-    queryOptions?.queryKey ?? getStatsControllerGetStatsQueryKey(params)
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof statsControllerGetStats>>
-  > = ({ signal }) => statsControllerGetStats(params, requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof statsControllerGetStats>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type StatsControllerGetStatsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof statsControllerGetStats>>
->
+export type StatsControllerGetStatsQueryResult = NonNullable<Awaited<ReturnType<typeof statsControllerGetStats>>>
 export type StatsControllerGetStatsQueryError = ErrorType<unknown>
 
-export function useStatsControllerGetStats<
-  TData = Awaited<ReturnType<typeof statsControllerGetStats>>,
-  TError = ErrorType<unknown>,
->(
-  params: StatsControllerGetStatsParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof statsControllerGetStats>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+
+export function useStatsControllerGetStats<TData = Awaited<ReturnType<typeof statsControllerGetStats>>, TError = ErrorType<unknown>>(
+ params: StatsControllerGetStatsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof statsControllerGetStats>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof statsControllerGetStats>>,
           TError,
           Awaited<ReturnType<typeof statsControllerGetStats>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useStatsControllerGetStats<
-  TData = Awaited<ReturnType<typeof statsControllerGetStats>>,
-  TError = ErrorType<unknown>,
->(
-  params: StatsControllerGetStatsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof statsControllerGetStats>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useStatsControllerGetStats<TData = Awaited<ReturnType<typeof statsControllerGetStats>>, TError = ErrorType<unknown>>(
+ params: StatsControllerGetStatsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof statsControllerGetStats>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof statsControllerGetStats>>,
           TError,
           Awaited<ReturnType<typeof statsControllerGetStats>>
-        >,
-        'initialData'
-      >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useStatsControllerGetStats<
-  TData = Awaited<ReturnType<typeof statsControllerGetStats>>,
-  TError = ErrorType<unknown>,
->(
-  params: StatsControllerGetStatsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof statsControllerGetStats>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useStatsControllerGetStats<TData = Awaited<ReturnType<typeof statsControllerGetStats>>, TError = ErrorType<unknown>>(
+ params: StatsControllerGetStatsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof statsControllerGetStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useStatsControllerGetStats<TData = Awaited<ReturnType<typeof statsControllerGetStats>>, TError = ErrorType<unknown>>(
+ params: StatsControllerGetStatsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof statsControllerGetStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getStatsControllerGetStatsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
 }
 
-export function useStatsControllerGetStats<
-  TData = Awaited<ReturnType<typeof statsControllerGetStats>>,
-  TError = ErrorType<unknown>,
->(
-  params: StatsControllerGetStatsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof statsControllerGetStats>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof customInstance>
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
-  const queryOptions = getStatsControllerGetStatsQueryOptions(params, options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-  return { ...query, queryKey: queryOptions.queryKey }
-}
+

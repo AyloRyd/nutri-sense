@@ -21,6 +21,7 @@ export class PlansService {
 
   async findActiveByDate(userId: number, dateStr: string) {
     const queryDate = new Date(dateStr);
+    queryDate.setHours(23, 59, 59, 999);
 
     const plan = await this.prisma.plan.findFirst({
       where: {
@@ -107,6 +108,20 @@ export class PlansService {
         plan: goalToUse,
         ...macros,
       },
+    });
+  }
+
+  async remove(userId: number, planId: number) {
+    const existingPlan = await this.prisma.plan.findFirst({
+      where: { id: planId, user_id: userId },
+    });
+
+    if (!existingPlan) {
+      throw new NotFoundException(`Plan #${planId} not found`);
+    }
+
+    return this.prisma.plan.delete({
+      where: { id: planId },
     });
   }
 

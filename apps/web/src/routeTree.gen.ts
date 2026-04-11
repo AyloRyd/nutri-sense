@@ -13,7 +13,14 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRegisterRouteImport } from './routes/auth.register'
 import { Route as AuthLoginRouteImport } from './routes/auth.login'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated.settings'
+import { Route as AuthenticatedPlansRouteImport } from './routes/_authenticated.plans'
+import { Route as AuthenticatedMeasurementsRouteImport } from './routes/_authenticated.measurements'
+import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated.library'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
+import { Route as AuthenticatedDiaryIndexRouteImport } from './routes/_authenticated.diary.index'
+import { Route as AuthenticatedDiaryDateRouteImport } from './routes/_authenticated.diary.$date'
+import { Route as AuthenticatedDiaryMealMealIdRouteImport } from './routes/_authenticated.diary.meal.$mealId'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -34,44 +41,131 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedPlansRoute = AuthenticatedPlansRouteImport.update({
+  id: '/plans',
+  path: '/plans',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedMeasurementsRoute =
+  AuthenticatedMeasurementsRouteImport.update({
+    id: '/measurements',
+    path: '/measurements',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedLibraryRoute = AuthenticatedLibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedDiaryIndexRoute = AuthenticatedDiaryIndexRouteImport.update({
+  id: '/diary/',
+  path: '/diary/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedDiaryDateRoute = AuthenticatedDiaryDateRouteImport.update({
+  id: '/diary/$date',
+  path: '/diary/$date',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedDiaryMealMealIdRoute =
+  AuthenticatedDiaryMealMealIdRouteImport.update({
+    id: '/diary/meal/$mealId',
+    path: '/diary/meal/$mealId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/library': typeof AuthenticatedLibraryRoute
+  '/measurements': typeof AuthenticatedMeasurementsRoute
+  '/plans': typeof AuthenticatedPlansRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/diary/$date': typeof AuthenticatedDiaryDateRoute
+  '/diary/': typeof AuthenticatedDiaryIndexRoute
+  '/diary/meal/$mealId': typeof AuthenticatedDiaryMealMealIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/library': typeof AuthenticatedLibraryRoute
+  '/measurements': typeof AuthenticatedMeasurementsRoute
+  '/plans': typeof AuthenticatedPlansRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/diary/$date': typeof AuthenticatedDiaryDateRoute
+  '/diary': typeof AuthenticatedDiaryIndexRoute
+  '/diary/meal/$mealId': typeof AuthenticatedDiaryMealMealIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/library': typeof AuthenticatedLibraryRoute
+  '/_authenticated/measurements': typeof AuthenticatedMeasurementsRoute
+  '/_authenticated/plans': typeof AuthenticatedPlansRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/_authenticated/diary/$date': typeof AuthenticatedDiaryDateRoute
+  '/_authenticated/diary/': typeof AuthenticatedDiaryIndexRoute
+  '/_authenticated/diary/meal/$mealId': typeof AuthenticatedDiaryMealMealIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/auth/login' | '/auth/register'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/library'
+    | '/measurements'
+    | '/plans'
+    | '/settings'
+    | '/auth/login'
+    | '/auth/register'
+    | '/diary/$date'
+    | '/diary/'
+    | '/diary/meal/$mealId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/auth/login' | '/auth/register'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/library'
+    | '/measurements'
+    | '/plans'
+    | '/settings'
+    | '/auth/login'
+    | '/auth/register'
+    | '/diary/$date'
+    | '/diary'
+    | '/diary/meal/$mealId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/_authenticated/dashboard'
+    | '/_authenticated/library'
+    | '/_authenticated/measurements'
+    | '/_authenticated/plans'
+    | '/_authenticated/settings'
     | '/auth/login'
     | '/auth/register'
+    | '/_authenticated/diary/$date'
+    | '/_authenticated/diary/'
+    | '/_authenticated/diary/meal/$mealId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -111,6 +205,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/plans': {
+      id: '/_authenticated/plans'
+      path: '/plans'
+      fullPath: '/plans'
+      preLoaderRoute: typeof AuthenticatedPlansRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/measurements': {
+      id: '/_authenticated/measurements'
+      path: '/measurements'
+      fullPath: '/measurements'
+      preLoaderRoute: typeof AuthenticatedMeasurementsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/library': {
+      id: '/_authenticated/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof AuthenticatedLibraryRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -118,15 +240,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/diary/': {
+      id: '/_authenticated/diary/'
+      path: '/diary'
+      fullPath: '/diary/'
+      preLoaderRoute: typeof AuthenticatedDiaryIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/diary/$date': {
+      id: '/_authenticated/diary/$date'
+      path: '/diary/$date'
+      fullPath: '/diary/$date'
+      preLoaderRoute: typeof AuthenticatedDiaryDateRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/diary/meal/$mealId': {
+      id: '/_authenticated/diary/meal/$mealId'
+      path: '/diary/meal/$mealId'
+      fullPath: '/diary/meal/$mealId'
+      preLoaderRoute: typeof AuthenticatedDiaryMealMealIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRoute
+  AuthenticatedMeasurementsRoute: typeof AuthenticatedMeasurementsRoute
+  AuthenticatedPlansRoute: typeof AuthenticatedPlansRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedDiaryDateRoute: typeof AuthenticatedDiaryDateRoute
+  AuthenticatedDiaryIndexRoute: typeof AuthenticatedDiaryIndexRoute
+  AuthenticatedDiaryMealMealIdRoute: typeof AuthenticatedDiaryMealMealIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedLibraryRoute: AuthenticatedLibraryRoute,
+  AuthenticatedMeasurementsRoute: AuthenticatedMeasurementsRoute,
+  AuthenticatedPlansRoute: AuthenticatedPlansRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedDiaryDateRoute: AuthenticatedDiaryDateRoute,
+  AuthenticatedDiaryIndexRoute: AuthenticatedDiaryIndexRoute,
+  AuthenticatedDiaryMealMealIdRoute: AuthenticatedDiaryMealMealIdRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

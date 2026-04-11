@@ -27,7 +27,7 @@ export class StatsService {
           d.toISOString(),
         );
       } catch {
-        throw new NotFoundException(`No active plan found for date ${dateStr}`);
+        continue;
       }
 
       const meals = await this.mealsService.findAll(userId, {

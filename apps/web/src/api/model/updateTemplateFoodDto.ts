@@ -6,13 +6,13 @@
  */
 
 export interface UpdateTemplateFoodDto {
-  name?: string
+  name?: string;
   /** Calories per 100g or unit */
-  calories?: number
+  calories?: number;
   /** Protein per 100g or unit */
-  protein?: number
+  protein?: number;
   /** Fats per 100g or unit */
-  fats?: number
+  fats?: number;
   /** Carbs per 100g or unit */
-  carbs?: number
+  carbs?: number;
 }

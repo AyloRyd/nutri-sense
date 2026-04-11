@@ -15,7 +15,7 @@ export const Route = createFileRoute('/auth/register')({
 function Register() {
   const navigate = useNavigate()
   const registerMutation = useAuthControllerRegister()
-  
+
   const [showPassword, setShowPassword] = useState(false)
   const [globalError, setGlobalError] = useState<string | null>(null)
 
@@ -37,7 +37,10 @@ function Register() {
         }
       } catch (err: any) {
         console.error(err)
-        const errorMessage = err?.response?.data?.message || err?.message || 'Failed to register sequence.'
+        const errorMessage =
+          err?.response?.data?.message ||
+          err?.message ||
+          'Failed to register sequence.'
         setGlobalError(errorMessage)
       }
     },
@@ -84,7 +87,9 @@ function Register() {
             <form.Field
               name="username"
               validators={{
-                onChange: z.string().min(3, 'Username must be at least 3 characters.'),
+                onChange: z
+                  .string()
+                  .min(3, 'Username must be at least 3 characters.'),
               }}
               children={(field) => (
                 <>
@@ -94,7 +99,15 @@ function Register() {
                   >
                     <span>Username</span>
                     {field.state.meta.errors.length > 0 && (
-                      <span className="text-red-500 normal-case">{field.state.meta.errors.join(', ')}</span>
+                      <span className="text-red-500 normal-case">
+                        {
+                          field.state.meta.errors
+                            .map((e: any) =>
+                              typeof e === 'string' ? e : e.message,
+                            )
+                            .filter(Boolean)[0]
+                        }
+                      </span>
                     )}
                   </Label>
                   <Input
@@ -114,7 +127,10 @@ function Register() {
             <form.Field
               name="email"
               validators={{
-                onChange: z.string().min(1, 'Email is required.').email('Invalid email address format.'),
+                onChange: z
+                  .string()
+                  .min(1, 'Email is required.')
+                  .email('Invalid email address format.'),
               }}
               children={(field) => (
                 <>
@@ -124,7 +140,15 @@ function Register() {
                   >
                     <span>Email</span>
                     {field.state.meta.errors.length > 0 && (
-                      <span className="text-red-500 normal-case">{field.state.meta.errors.join(', ')}</span>
+                      <span className="text-red-500 normal-case">
+                        {
+                          field.state.meta.errors
+                            .map((e: any) =>
+                              typeof e === 'string' ? e : e.message,
+                            )
+                            .filter(Boolean)[0]
+                        }
+                      </span>
                     )}
                   </Label>
                   <Input
@@ -144,7 +168,9 @@ function Register() {
             <form.Field
               name="password"
               validators={{
-                onChange: z.string().min(8, 'Password must be at least 8 characters.'),
+                onChange: z
+                  .string()
+                  .min(8, 'Password must be at least 8 characters.'),
               }}
               children={(field) => (
                 <>
@@ -154,7 +180,15 @@ function Register() {
                   >
                     <span>Password</span>
                     {field.state.meta.errors.length > 0 && (
-                      <span className="text-red-500 normal-case">{field.state.meta.errors.join(', ')}</span>
+                      <span className="text-red-500 normal-case">
+                        {
+                          field.state.meta.errors
+                            .map((e: any) =>
+                              typeof e === 'string' ? e : e.message,
+                            )
+                            .filter(Boolean)[0]
+                        }
+                      </span>
                     )}
                   </Label>
                   <div className="relative">
@@ -185,10 +219,14 @@ function Register() {
             children={([canSubmit, isSubmitting]) => (
               <Button
                 type="submit"
-                disabled={!canSubmit || registerMutation.isPending || isSubmitting}
+                disabled={
+                  !canSubmit || registerMutation.isPending || isSubmitting
+                }
                 className="w-full brutal-shadow brutal-border bg-primary text-black hover:bg-white hover:text-black uppercase font-bold tracking-widest mt-4 h-12 rounded-none transition-none"
               >
-                {registerMutation.isPending || isSubmitting ? 'Processing...' : 'Register_'}
+                {registerMutation.isPending || isSubmitting
+                  ? 'Processing...'
+                  : 'Register_'}
               </Button>
             )}
           />
