@@ -11,7 +11,11 @@ This is a monorepo powered with Turborepo. Repository includes REST API, fronten
 
 ## Frontend
 
-Coming soon...
+- TypeScript
+- React
+- TanStack Router
+- Tailwind CSS
+- Shadcn UI
 
 ## Mobile
 
