@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { MealsService } from 'src/meals/meals.service';
 import { PlansService } from 'src/plans/plans.service';
 import { GetStatsFilterDto } from './dto/get-stats-filter.dto';
