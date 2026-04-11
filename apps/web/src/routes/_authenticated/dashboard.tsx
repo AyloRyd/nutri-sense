@@ -1,14 +1,18 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 
 import { getUsersControllerGetMeQueryOptions } from '../../api/endpoints/users/users'
 import { getPlansControllerFindByDateQueryOptions } from '../../api/endpoints/plans/plans'
-import { getMeasurementsControllerFindCurrentQueryOptions } from '../../api/endpoints/measurements/measurements'
 import { getIotControllerGetStatusQueryOptions } from '../../api/endpoints/iot-scales/iot-scales'
 import { getMealsControllerFindAllQueryOptions } from '../../api/endpoints/meals/meals'
 
-import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '../../components/ui/card'
 import { Progress } from '../../components/ui/progress'
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
@@ -18,11 +22,6 @@ export const Route = createFileRoute('/_authenticated/dashboard')({
       queryClient.ensureQueryData(getUsersControllerGetMeQueryOptions({})),
       queryClient
         .ensureQueryData(getPlansControllerFindByDateQueryOptions(today, {}))
-        .catch(() => null),
-      queryClient
-        .ensureQueryData(
-          getMeasurementsControllerFindCurrentQueryOptions({}) as any,
-        )
         .catch(() => null),
       queryClient
         .ensureQueryData(getIotControllerGetStatusQueryOptions({}) as any)
@@ -47,9 +46,6 @@ function Dashboard() {
   const { data: plan } = useQuery(
     getPlansControllerFindByDateQueryOptions(today, {}),
   )
-  const { data: currentMeasurement } = useQuery(
-    getMeasurementsControllerFindCurrentQueryOptions({}) as any,
-  )
   const { data: scaleStatus } = useQuery(
     getIotControllerGetStatusQueryOptions({}) as any,
   )
@@ -70,7 +66,7 @@ function Dashboard() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div>
+      <div className="text-center">
         <h1 className="text-3xl font-black font-mono tracking-tighter uppercase text-white">
           System.<span className="text-primary">Dashboard</span>
         </h1>
@@ -79,125 +75,132 @@ function Dashboard() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <Card className="brutal-border brutal-shadow rounded-none bg-black">
-          <CardHeader className="border-b-2 border-white pb-4 relative">
-            <CardTitle className="text-sm font-black font-mono tracking-widest uppercase text-white">
-              Daily_Target_Progress
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-6 flex flex-col gap-6">
-            <div className="flex flex-col gap-2">
-              <div className="flex justify-between font-mono text-xs uppercase text-primary font-bold">
-                <span>Calories</span>
-                <span>
-                  {actualCalories.toFixed(0)} / {pCals} kcal
-                </span>
+      <div className="flex flex-col gap-8 max-w-2xl mx-auto w-full">
+        <Link
+          to="/diary/$date"
+          params={{ date: today }}
+          className="group block transition-transform hover:scale-[1.01]"
+        >
+          <Card className="brutal-border brutal-shadow rounded-none bg-black overflow-hidden">
+            <CardHeader className="border-b-2 border-white pb-6 relative bg-neutral-900/50">
+              <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
+              <div className="flex justify-between items-end pt-4">
+                <div>
+                  <CardTitle className="text-sm font-black font-mono tracking-widest uppercase text-muted-foreground mb-1">
+                    Daily Target Progress
+                  </CardTitle>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-4xl font-black font-mono text-white leading-none">
+                      {actualCalories.toFixed(0)}
+                    </span>
+                    <span className="text-xs font-mono text-muted-foreground uppercase">
+                      / {pCals} KCal
+                    </span>
+                  </div>
+                </div>
+                <div className="bg-primary text-black px-3 py-1 font-mono text-xs font-black uppercase tracking-tighter">
+                  {meals?.length || 0} Meals Logged
+                </div>
               </div>
-              <Progress
-                value={Math.min((actualCalories / pCals) * 100, 100)}
-                className="h-4 rounded-none bg-neutral-900 border border-white"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="flex justify-between font-mono text-xs uppercase text-white">
-                <span>Protein</span>
-                <span>
-                  {actualProtein.toFixed(0)} / {pProt} g
-                </span>
+            </CardHeader>
+            <CardContent className="p-8 flex flex-col gap-8">
+              {/* Main Progress */}
+              <div className="flex flex-col gap-3">
+                <Progress
+                  value={Math.min((actualCalories / pCals) * 100, 100)}
+                  className="h-6 rounded-none bg-neutral-900 border-2 border-white"
+                />
               </div>
-              <Progress
-                value={Math.min((actualProtein / pProt) * 100, 100)}
-                className="h-2 rounded-none bg-neutral-900"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="flex justify-between font-mono text-xs uppercase text-white">
-                <span>Fats</span>
-                <span>
-                  {actualFats.toFixed(0)} / {pFat} g
-                </span>
-              </div>
-              <Progress
-                value={Math.min((actualFats / pFat) * 100, 100)}
-                className="h-2 rounded-none bg-neutral-900"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="flex justify-between font-mono text-xs uppercase text-white">
-                <span>Carbs</span>
-                <span>
-                  {actualCarbs.toFixed(0)} / {pCarb} g
-                </span>
-              </div>
-              <Progress
-                value={Math.min((actualCarbs / pCarb) * 100, 100)}
-                className="h-2 rounded-none bg-neutral-900"
-              />
-            </div>
-          </CardContent>
-        </Card>
 
-        <div className="flex flex-col gap-8">
-          <Card className="brutal-border brutal-shadow rounded-none bg-black">
-            <CardHeader className="border-b-2 border-white pb-4 relative">
+              {/* Individual Macros */}
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-2">
+                  <div className="flex justify-between font-mono text-xs uppercase text-white font-bold">
+                    <span>Protein</span>
+                    <span>
+                      {actualProtein.toFixed(0)}{' '}
+                      <span className="text-muted-foreground">/ {pProt} g</span>
+                    </span>
+                  </div>
+                  <Progress
+                    value={Math.min((actualProtein / pProt) * 100, 100)}
+                    className="h-2 rounded-none bg-neutral-900 border border-white/20"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="flex justify-between font-mono text-xs uppercase text-white font-bold">
+                    <span>Fats</span>
+                    <span>
+                      {actualFats.toFixed(0)}{' '}
+                      <span className="text-muted-foreground">/ {pFat} g</span>
+                    </span>
+                  </div>
+                  <Progress
+                    value={Math.min((actualFats / pFat) * 100, 100)}
+                    className="h-2 rounded-none bg-neutral-900 border border-white/20"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="flex justify-between font-mono text-xs uppercase text-white font-bold">
+                    <span>Carbs</span>
+                    <span>
+                      {actualCarbs.toFixed(0)}{' '}
+                      <span className="text-muted-foreground">/ {pCarb} g</span>
+                    </span>
+                  </div>
+                  <Progress
+                    value={Math.min((actualCarbs / pCarb) * 100, 100)}
+                    className="h-2 rounded-none bg-neutral-900 border border-white/20"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-white/10 flex justify-center">
+                <span className="text-[10px] font-mono uppercase text-primary animate-pulse tracking-widest font-black">
+                  Click to Expand Diary
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link
+          to="/settings"
+          className="block transition-transform hover:scale-[1.01]"
+        >
+          <Card className="brutal-border brutal-shadow rounded-none bg-black h-full overflow-hidden">
+            <CardHeader className="border-b-2 border-white py-4 relative">
+              <div className="absolute top-0 left-0 w-full h-1 bg-white/20" />
               <CardTitle className="text-sm font-black font-mono tracking-widest uppercase text-white">
-                Network.IoT_Scale
+                Network IoT Scale
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 flex flex-col gap-4">
-              <div className="flex justify-between items-center bg-[#0a0a0a] border border-white p-4">
+              <div className="flex justify-between items-center bg-neutral-900/50 border-2 border-white/10 p-4">
                 <span className="font-mono text-xs text-muted-foreground uppercase">
-                  Status
+                  Connectivity Status
                 </span>
                 {(scaleStatus as any)?.isLinked ? (
-                  <span className="font-mono text-xs font-bold text-primary uppercase animate-pulse">
-                    ● Linked
+                  <span className="font-mono text-xs font-bold text-primary uppercase flex items-center gap-2">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                    </span>
+                    Linked
                   </span>
                 ) : (
-                  <span className="font-mono text-xs font-bold text-red-500 uppercase">
-                    ○ Disconnected
+                  <span className="font-mono text-xs font-bold text-red-500 uppercase flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-red-500"></span>
+                    Disconnected
                   </span>
                 )}
               </div>
-
-              <div className="flex justify-between items-center bg-[#0a0a0a] border border-white p-4">
-                <span className="font-mono text-xs text-muted-foreground uppercase">
-                  Latest Weight
-                </span>
-                <span className="font-mono text-lg font-black text-white uppercase">
-                  {(currentMeasurement as any)?.weight || '--'} kg
-                </span>
-              </div>
+              <p className="text-[10px] font-mono uppercase text-muted-foreground text-center mt-2 tracking-tighter">
+                Access settings to pair or manage hardware sensors
+              </p>
             </CardContent>
           </Card>
-
-          <Card className="brutal-border brutal-shadow rounded-none bg-black">
-            <CardHeader className="border-b-2 border-white pb-4 relative">
-              <CardTitle className="text-sm font-black font-mono tracking-widest uppercase text-white">
-                Quick_Summary
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-6 grid grid-cols-2 gap-4">
-              <div className="flex flex-col">
-                <span className="text-muted-foreground text-xs font-mono uppercase border-b border-primary/30 pb-1 mb-1">
-                  Meals Today
-                </span>
-                <span className="text-2xl font-bold font-mono text-white">
-                  {meals?.length || 0}
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-muted-foreground text-xs font-mono uppercase border-b border-primary/30 pb-1 mb-1">
-                  BodyFat %
-                </span>
-                <span className="text-2xl font-bold font-mono text-white">
-                  {(currentMeasurement as any)?.bodyFat || '--'}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        </Link>
       </div>
     </div>
   )

@@ -4,15 +4,15 @@
  * NutriSense API
  * OpenAPI spec version: 1.0
  */
-import type { PlanEntityPlan } from './planEntityPlan';
+import type { PlanEntityPlan } from './planEntityPlan'
 
 export interface PlanEntity {
-  id: number;
-  user_id: number;
-  start_date: string;
-  plan: PlanEntityPlan;
-  day_calories: number;
-  day_protein: number;
-  day_fats: number;
-  day_carbs: number;
+  id: number
+  user_id: number
+  start_date: string
+  plan: PlanEntityPlan
+  day_calories: number
+  day_protein: number
+  day_fats: number
+  day_carbs: number
 }

@@ -6,13 +6,13 @@
  */
 
 export interface ProductResponseDto {
-  name: string;
+  name: string
   /** Kcal per 100g */
-  calories: number;
+  calories: number
   /** Protein per 100g */
-  protein: number;
+  protein: number
   /** Fats per 100g */
-  fats: number;
+  fats: number
   /** Carbs per 100g */
-  carbs: number;
+  carbs: number
 }

@@ -6,15 +6,15 @@
  */
 
 export interface UpdateMealFoodDto {
-  name?: string;
+  name?: string
   /** Weight in grams */
-  weight?: number;
+  weight?: number
   /** Calories per 100g */
-  calories?: number;
+  calories?: number
   /** Protein per 100g */
-  protein?: number;
+  protein?: number
   /** Fats per 100g */
-  fats?: number;
+  fats?: number
   /** Carbs per 100g */
-  carbs?: number;
+  carbs?: number
 }

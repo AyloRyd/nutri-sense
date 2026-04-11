@@ -8,11 +8,11 @@
 /**
  * Required for auto-calculation
  */
-export type CreatePlanDtoGoal = typeof CreatePlanDtoGoal[keyof typeof CreatePlanDtoGoal];
-
+export type CreatePlanDtoGoal =
+  (typeof CreatePlanDtoGoal)[keyof typeof CreatePlanDtoGoal]
 
 export const CreatePlanDtoGoal = {
   maintain: 'maintain',
   gain: 'gain',
   lose: 'lose',
-} as const;
+} as const

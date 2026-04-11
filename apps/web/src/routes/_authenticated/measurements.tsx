@@ -42,7 +42,7 @@ function Measurements() {
   )
   const createMeasurementMutation = useMeasurementsControllerCreate()
   const deleteMeasurementMutation = useMeasurementsControllerRemove()
-  
+
   const handleDeleteMeasurement = async (id: number) => {
     if (confirm('Are you sure you want to delete this log entry?')) {
       await deleteMeasurementMutation.mutateAsync({ id })

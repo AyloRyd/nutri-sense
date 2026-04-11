@@ -4,10 +4,7 @@
  * NutriSense API
  * OpenAPI spec version: 1.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -20,360 +17,588 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from '@tanstack/react-query'
 
 import type {
   CreateMealDto,
   MealEntity,
   MealsControllerFindAllParams,
-  UpdateMealDto
-} from '../../model';
+  UpdateMealDto,
+} from '../../model'
 
-import { customInstance } from '../../../lib/axios';
-import type { ErrorType } from '../../../lib/axios';
+import { customInstance } from '../../../lib/axios'
+import type { ErrorType } from '../../../lib/axios'
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export const mealsControllerFindAll = (
-    params: MealsControllerFindAllParams,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  params: MealsControllerFindAllParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-
-
-      return customInstance<MealEntity[]>(
-      {url: `/meals`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-
-
-
-
-export const getMealsControllerFindAllQueryKey = (params?: MealsControllerFindAllParams,) => {
-    return [
-    `/meals`, ...(params ? [params] : [])
-    ] as const;
-    }
-
-
-export const getMealsControllerFindAllQueryOptions = <TData = Awaited<ReturnType<typeof mealsControllerFindAll>>, TError = ErrorType<unknown>>(params: MealsControllerFindAllParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof mealsControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getMealsControllerFindAllQueryKey(params);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof mealsControllerFindAll>>> = ({ signal }) => mealsControllerFindAll(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof mealsControllerFindAll>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return customInstance<MealEntity[]>(
+    { url: `/meals`, method: 'GET', params, signal },
+    options,
+  )
 }
 
-export type MealsControllerFindAllQueryResult = NonNullable<Awaited<ReturnType<typeof mealsControllerFindAll>>>
+export const getMealsControllerFindAllQueryKey = (
+  params?: MealsControllerFindAllParams,
+) => {
+  return [`/meals`, ...(params ? [params] : [])] as const
+}
+
+export const getMealsControllerFindAllQueryOptions = <
+  TData = Awaited<ReturnType<typeof mealsControllerFindAll>>,
+  TError = ErrorType<unknown>,
+>(
+  params: MealsControllerFindAllParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof mealsControllerFindAll>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getMealsControllerFindAllQueryKey(params)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof mealsControllerFindAll>>
+  > = ({ signal }) => mealsControllerFindAll(params, requestOptions, signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof mealsControllerFindAll>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type MealsControllerFindAllQueryResult = NonNullable<
+  Awaited<ReturnType<typeof mealsControllerFindAll>>
+>
 export type MealsControllerFindAllQueryError = ErrorType<unknown>
 
-
-export function useMealsControllerFindAll<TData = Awaited<ReturnType<typeof mealsControllerFindAll>>, TError = ErrorType<unknown>>(
- params: MealsControllerFindAllParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof mealsControllerFindAll>>, TError, TData>> & Pick<
+export function useMealsControllerFindAll<
+  TData = Awaited<ReturnType<typeof mealsControllerFindAll>>,
+  TError = ErrorType<unknown>,
+>(
+  params: MealsControllerFindAllParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof mealsControllerFindAll>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof mealsControllerFindAll>>,
           TError,
           Awaited<ReturnType<typeof mealsControllerFindAll>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useMealsControllerFindAll<TData = Awaited<ReturnType<typeof mealsControllerFindAll>>, TError = ErrorType<unknown>>(
- params: MealsControllerFindAllParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof mealsControllerFindAll>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useMealsControllerFindAll<
+  TData = Awaited<ReturnType<typeof mealsControllerFindAll>>,
+  TError = ErrorType<unknown>,
+>(
+  params: MealsControllerFindAllParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof mealsControllerFindAll>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof mealsControllerFindAll>>,
           TError,
           Awaited<ReturnType<typeof mealsControllerFindAll>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useMealsControllerFindAll<TData = Awaited<ReturnType<typeof mealsControllerFindAll>>, TError = ErrorType<unknown>>(
- params: MealsControllerFindAllParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof mealsControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useMealsControllerFindAll<TData = Awaited<ReturnType<typeof mealsControllerFindAll>>, TError = ErrorType<unknown>>(
- params: MealsControllerFindAllParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof mealsControllerFindAll>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getMealsControllerFindAllQueryOptions(params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return { ...query, queryKey: queryOptions.queryKey };
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useMealsControllerFindAll<
+  TData = Awaited<ReturnType<typeof mealsControllerFindAll>>,
+  TError = ErrorType<unknown>,
+>(
+  params: MealsControllerFindAllParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof mealsControllerFindAll>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
 }
 
+export function useMealsControllerFindAll<
+  TData = Awaited<ReturnType<typeof mealsControllerFindAll>>,
+  TError = ErrorType<unknown>,
+>(
+  params: MealsControllerFindAllParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof mealsControllerFindAll>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getMealsControllerFindAllQueryOptions(params, options)
 
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
+  return { ...query, queryKey: queryOptions.queryKey }
+}
 
 export const mealsControllerCreate = (
-    createMealDto: CreateMealDto,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  createMealDto: CreateMealDto,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-
-
-      return customInstance<MealEntity>(
-      {url: `/meals`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createMealDto, signal
+  return customInstance<MealEntity>(
+    {
+      url: `/meals`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: createMealDto,
+      signal,
     },
-      options);
-    }
-
-
-
-export const getMealsControllerCreateMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof mealsControllerCreate>>, TError,{data: CreateMealDto}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof mealsControllerCreate>>, TError,{data: CreateMealDto}, TContext> => {
-
-const mutationKey = ['mealsControllerCreate'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof mealsControllerCreate>>, {data: CreateMealDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  mealsControllerCreate(data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type MealsControllerCreateMutationResult = NonNullable<Awaited<ReturnType<typeof mealsControllerCreate>>>
-    export type MealsControllerCreateMutationBody = CreateMealDto
-    export type MealsControllerCreateMutationError = ErrorType<unknown>
-
-    export const useMealsControllerCreate = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof mealsControllerCreate>>, TError,{data: CreateMealDto}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof mealsControllerCreate>>,
-        TError,
-        {data: CreateMealDto},
-        TContext
-      > => {
-      return useMutation(getMealsControllerCreateMutationOptions(options), queryClient);
-    }
-    export const mealsControllerFindOne = (
-    id: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
-) => {
-
-
-      return customInstance<MealEntity>(
-      {url: `/meals/${id}`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
-
-export const getMealsControllerFindOneQueryKey = (id: number,) => {
-    return [
-    `/meals/${id}`
-    ] as const;
-    }
-
-
-export const getMealsControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof mealsControllerFindOne>>, TError = ErrorType<unknown>>(id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof mealsControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getMealsControllerFindOneQueryKey(id);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof mealsControllerFindOne>>> = ({ signal }) => mealsControllerFindOne(id, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof mealsControllerFindOne>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+    options,
+  )
 }
 
-export type MealsControllerFindOneQueryResult = NonNullable<Awaited<ReturnType<typeof mealsControllerFindOne>>>
+export const getMealsControllerCreateMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof mealsControllerCreate>>,
+    TError,
+    { data: CreateMealDto },
+    TContext
+  >
+  request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof mealsControllerCreate>>,
+  TError,
+  { data: CreateMealDto },
+  TContext
+> => {
+  const mutationKey = ['mealsControllerCreate']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof mealsControllerCreate>>,
+    { data: CreateMealDto }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return mealsControllerCreate(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type MealsControllerCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof mealsControllerCreate>>
+>
+export type MealsControllerCreateMutationBody = CreateMealDto
+export type MealsControllerCreateMutationError = ErrorType<unknown>
+
+export const useMealsControllerCreate = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof mealsControllerCreate>>,
+      TError,
+      { data: CreateMealDto },
+      TContext
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof mealsControllerCreate>>,
+  TError,
+  { data: CreateMealDto },
+  TContext
+> => {
+  return useMutation(
+    getMealsControllerCreateMutationOptions(options),
+    queryClient,
+  )
+}
+export const mealsControllerFindOne = (
+  id: number,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
+) => {
+  return customInstance<MealEntity>(
+    { url: `/meals/${id}`, method: 'GET', signal },
+    options,
+  )
+}
+
+export const getMealsControllerFindOneQueryKey = (id: number) => {
+  return [`/meals/${id}`] as const
+}
+
+export const getMealsControllerFindOneQueryOptions = <
+  TData = Awaited<ReturnType<typeof mealsControllerFindOne>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof mealsControllerFindOne>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getMealsControllerFindOneQueryKey(id)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof mealsControllerFindOne>>
+  > = ({ signal }) => mealsControllerFindOne(id, requestOptions, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof mealsControllerFindOne>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type MealsControllerFindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof mealsControllerFindOne>>
+>
 export type MealsControllerFindOneQueryError = ErrorType<unknown>
 
-
-export function useMealsControllerFindOne<TData = Awaited<ReturnType<typeof mealsControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof mealsControllerFindOne>>, TError, TData>> & Pick<
+export function useMealsControllerFindOne<
+  TData = Awaited<ReturnType<typeof mealsControllerFindOne>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof mealsControllerFindOne>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof mealsControllerFindOne>>,
           TError,
           Awaited<ReturnType<typeof mealsControllerFindOne>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useMealsControllerFindOne<TData = Awaited<ReturnType<typeof mealsControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof mealsControllerFindOne>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useMealsControllerFindOne<
+  TData = Awaited<ReturnType<typeof mealsControllerFindOne>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof mealsControllerFindOne>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof mealsControllerFindOne>>,
           TError,
           Awaited<ReturnType<typeof mealsControllerFindOne>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useMealsControllerFindOne<TData = Awaited<ReturnType<typeof mealsControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof mealsControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useMealsControllerFindOne<TData = Awaited<ReturnType<typeof mealsControllerFindOne>>, TError = ErrorType<unknown>>(
- id: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof mealsControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getMealsControllerFindOneQueryOptions(id,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return { ...query, queryKey: queryOptions.queryKey };
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useMealsControllerFindOne<
+  TData = Awaited<ReturnType<typeof mealsControllerFindOne>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof mealsControllerFindOne>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
 }
 
+export function useMealsControllerFindOne<
+  TData = Awaited<ReturnType<typeof mealsControllerFindOne>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof mealsControllerFindOne>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getMealsControllerFindOneQueryOptions(id, options)
 
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
+  return { ...query, queryKey: queryOptions.queryKey }
+}
 
 export const mealsControllerUpdate = (
-    id: number,
-    updateMealDto: UpdateMealDto,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  id: number,
+  updateMealDto: UpdateMealDto,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-
-
-      return customInstance<MealEntity>(
-      {url: `/meals/${id}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: updateMealDto, signal
+  return customInstance<MealEntity>(
+    {
+      url: `/meals/${id}`,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      data: updateMealDto,
+      signal,
     },
-      options);
-    }
+    options,
+  )
+}
 
+export const getMealsControllerUpdateMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof mealsControllerUpdate>>,
+    TError,
+    { id: number; data: UpdateMealDto },
+    TContext
+  >
+  request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof mealsControllerUpdate>>,
+  TError,
+  { id: number; data: UpdateMealDto },
+  TContext
+> => {
+  const mutationKey = ['mealsControllerUpdate']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof mealsControllerUpdate>>,
+    { id: number; data: UpdateMealDto }
+  > = (props) => {
+    const { id, data } = props ?? {}
 
-export const getMealsControllerUpdateMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof mealsControllerUpdate>>, TError,{id: number;data: UpdateMealDto}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof mealsControllerUpdate>>, TError,{id: number;data: UpdateMealDto}, TContext> => {
+    return mealsControllerUpdate(id, data, requestOptions)
+  }
 
-const mutationKey = ['mealsControllerUpdate'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+  return { mutationFn, ...mutationOptions }
+}
 
+export type MealsControllerUpdateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof mealsControllerUpdate>>
+>
+export type MealsControllerUpdateMutationBody = UpdateMealDto
+export type MealsControllerUpdateMutationError = ErrorType<unknown>
 
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof mealsControllerUpdate>>, {id: number;data: UpdateMealDto}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  mealsControllerUpdate(id,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type MealsControllerUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof mealsControllerUpdate>>>
-    export type MealsControllerUpdateMutationBody = UpdateMealDto
-    export type MealsControllerUpdateMutationError = ErrorType<unknown>
-
-    export const useMealsControllerUpdate = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof mealsControllerUpdate>>, TError,{id: number;data: UpdateMealDto}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof mealsControllerUpdate>>,
-        TError,
-        {id: number;data: UpdateMealDto},
-        TContext
-      > => {
-      return useMutation(getMealsControllerUpdateMutationOptions(options), queryClient);
-    }
-    export const mealsControllerRemove = (
-    id: number,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+export const useMealsControllerUpdate = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof mealsControllerUpdate>>,
+      TError,
+      { id: number; data: UpdateMealDto },
+      TContext
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof mealsControllerUpdate>>,
+  TError,
+  { id: number; data: UpdateMealDto },
+  TContext
+> => {
+  return useMutation(
+    getMealsControllerUpdateMutationOptions(options),
+    queryClient,
+  )
+}
+export const mealsControllerRemove = (
+  id: number,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
+  return customInstance<void>(
+    { url: `/meals/${id}`, method: 'DELETE', signal },
+    options,
+  )
+}
 
+export const getMealsControllerRemoveMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof mealsControllerRemove>>,
+    TError,
+    { id: number },
+    TContext
+  >
+  request?: SecondParameter<typeof customInstance>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof mealsControllerRemove>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  const mutationKey = ['mealsControllerRemove']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
 
-      return customInstance<void>(
-      {url: `/meals/${id}`, method: 'DELETE', signal
-    },
-      options);
-    }
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof mealsControllerRemove>>,
+    { id: number }
+  > = (props) => {
+    const { id } = props ?? {}
 
+    return mealsControllerRemove(id, requestOptions)
+  }
 
+  return { mutationFn, ...mutationOptions }
+}
 
-export const getMealsControllerRemoveMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof mealsControllerRemove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof mealsControllerRemove>>, TError,{id: number}, TContext> => {
+export type MealsControllerRemoveMutationResult = NonNullable<
+  Awaited<ReturnType<typeof mealsControllerRemove>>
+>
 
-const mutationKey = ['mealsControllerRemove'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+export type MealsControllerRemoveMutationError = ErrorType<unknown>
 
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof mealsControllerRemove>>, {id: number}> = (props) => {
-          const {id} = props ?? {};
-
-          return  mealsControllerRemove(id,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type MealsControllerRemoveMutationResult = NonNullable<Awaited<ReturnType<typeof mealsControllerRemove>>>
-
-    export type MealsControllerRemoveMutationError = ErrorType<unknown>
-
-    export const useMealsControllerRemove = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof mealsControllerRemove>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof mealsControllerRemove>>,
-        TError,
-        {id: number},
-        TContext
-      > => {
-      return useMutation(getMealsControllerRemoveMutationOptions(options), queryClient);
-    }
+export const useMealsControllerRemove = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof mealsControllerRemove>>,
+      TError,
+      { id: number },
+      TContext
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof mealsControllerRemove>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  return useMutation(
+    getMealsControllerRemoveMutationOptions(options),
+    queryClient,
+  )
+}

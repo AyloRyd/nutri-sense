@@ -4,10 +4,10 @@
  * NutriSense API
  * OpenAPI spec version: 1.0
  */
-import type { CreateMealFoodDto } from './createMealFoodDto';
+import type { CreateMealFoodDto } from './createMealFoodDto'
 
 export interface UpdateMealDto {
-  name?: string;
-  date?: string;
-  mealFoods?: CreateMealFoodDto[];
+  name?: string
+  date?: string
+  mealFoods?: CreateMealFoodDto[]
 }

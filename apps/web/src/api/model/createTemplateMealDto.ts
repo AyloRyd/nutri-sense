@@ -4,9 +4,9 @@
  * NutriSense API
  * OpenAPI spec version: 1.0
  */
-import type { CreateTemplateMealFoodDto } from './createTemplateMealFoodDto';
+import type { CreateTemplateMealFoodDto } from './createTemplateMealFoodDto'
 
 export interface CreateTemplateMealDto {
-  name: string;
-  templateMealFoods: CreateTemplateMealFoodDto[];
+  name: string
+  templateMealFoods: CreateTemplateMealFoodDto[]
 }

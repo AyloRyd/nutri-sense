@@ -4,9 +4,7 @@
  * NutriSense API
  * OpenAPI spec version: 1.0
  */
-import {
-  useQuery
-} from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query'
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -16,102 +14,179 @@ import type {
   QueryKey,
   UndefinedInitialDataOptions,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from '@tanstack/react-query'
 
-import type {
-  ProductResponseDto
-} from '../../model';
+import type { ProductResponseDto } from '../../model'
 
-import { customInstance } from '../../../lib/axios';
-import type { ErrorType } from '../../../lib/axios';
+import { customInstance } from '../../../lib/axios'
+import type { ErrorType } from '../../../lib/axios'
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 export const openfoodfactsControllerGetProduct = (
-    barcode: string,
- options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+  barcode: string,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal,
 ) => {
-
-
-      return customInstance<ProductResponseDto>(
-      {url: `/openfoodfacts/product/${barcode}`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
-
-export const getOpenfoodfactsControllerGetProductQueryKey = (barcode: string,) => {
-    return [
-    `/openfoodfacts/product/${barcode}`
-    ] as const;
-    }
-
-
-export const getOpenfoodfactsControllerGetProductQueryOptions = <TData = Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>, TError = ErrorType<unknown>>(barcode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getOpenfoodfactsControllerGetProductQueryKey(barcode);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>> = ({ signal }) => openfoodfactsControllerGetProduct(barcode, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, enabled: !!(barcode), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return customInstance<ProductResponseDto>(
+    { url: `/openfoodfacts/product/${barcode}`, method: 'GET', signal },
+    options,
+  )
 }
 
-export type OpenfoodfactsControllerGetProductQueryResult = NonNullable<Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>>
+export const getOpenfoodfactsControllerGetProductQueryKey = (
+  barcode: string,
+) => {
+  return [`/openfoodfacts/product/${barcode}`] as const
+}
+
+export const getOpenfoodfactsControllerGetProductQueryOptions = <
+  TData = Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>,
+  TError = ErrorType<unknown>,
+>(
+  barcode: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getOpenfoodfactsControllerGetProductQueryKey(barcode)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>
+  > = ({ signal }) =>
+    openfoodfactsControllerGetProduct(barcode, requestOptions, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!barcode,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type OpenfoodfactsControllerGetProductQueryResult = NonNullable<
+  Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>
+>
 export type OpenfoodfactsControllerGetProductQueryError = ErrorType<unknown>
 
-
-export function useOpenfoodfactsControllerGetProduct<TData = Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>, TError = ErrorType<unknown>>(
- barcode: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>, TError, TData>> & Pick<
+export function useOpenfoodfactsControllerGetProduct<
+  TData = Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>,
+  TError = ErrorType<unknown>,
+>(
+  barcode: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>,
           TError,
           Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenfoodfactsControllerGetProduct<TData = Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>, TError = ErrorType<unknown>>(
- barcode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>, TError, TData>> & Pick<
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useOpenfoodfactsControllerGetProduct<
+  TData = Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>,
+  TError = ErrorType<unknown>,
+>(
+  barcode: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>,
           TError,
           Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useOpenfoodfactsControllerGetProduct<TData = Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>, TError = ErrorType<unknown>>(
- barcode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useOpenfoodfactsControllerGetProduct<TData = Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>, TError = ErrorType<unknown>>(
- barcode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getOpenfoodfactsControllerGetProductQueryOptions(barcode,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return { ...query, queryKey: queryOptions.queryKey };
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useOpenfoodfactsControllerGetProduct<
+  TData = Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>,
+  TError = ErrorType<unknown>,
+>(
+  barcode: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
 }
 
+export function useOpenfoodfactsControllerGetProduct<
+  TData = Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>,
+  TError = ErrorType<unknown>,
+>(
+  barcode: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof openfoodfactsControllerGetProduct>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customInstance>
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getOpenfoodfactsControllerGetProductQueryOptions(
+    barcode,
+    options,
+  )
 
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-
+  return { ...query, queryKey: queryOptions.queryKey }
+}

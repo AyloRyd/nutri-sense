@@ -27,21 +27,18 @@ export function FormDialog({
 }: FormDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      {trigger && (
-        React.isValidElement(trigger) ? (
+      {trigger &&
+        (React.isValidElement(trigger) ? (
           <DialogTrigger render={trigger as React.ReactElement} />
         ) : (
           <DialogTrigger>{trigger}</DialogTrigger>
-        )
-      )}
+        ))}
       <DialogContent className="sm:max-w-[425px] overflow-y-auto max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        <div className="py-2">
-          {children}
-        </div>
+        <div className="py-2">{children}</div>
       </DialogContent>
     </Dialog>
   )

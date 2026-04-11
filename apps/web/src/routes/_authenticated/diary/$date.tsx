@@ -9,10 +9,14 @@ import {
   getMealsControllerFindAllQueryOptions,
   useMealsControllerCreate,
 } from '../../../api/endpoints/meals/meals'
+import { useTemplateMealsControllerFindAll } from '../../../api/endpoints/template-meals/template-meals'
 import {
-  useTemplateMealsControllerFindAll,
-} from '../../../api/endpoints/template-meals/template-meals'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card'
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '../../../components/ui/card'
 import { Button } from '../../../components/ui/button'
 import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
@@ -20,7 +24,12 @@ import { FormDialog } from '../../../components/shared/FormDialog'
 
 export const Route = createFileRoute('/_authenticated/diary/$date')({
   loader: ({ context: { queryClient }, params }) =>
-    queryClient.ensureQueryData(getMealsControllerFindAllQueryOptions({ start: params.date, end: params.date })),
+    queryClient.ensureQueryData(
+      getMealsControllerFindAllQueryOptions({
+        start: params.date,
+        end: params.date,
+      }),
+    ),
   component: DiaryDate,
 })
 
@@ -28,7 +37,9 @@ function DiaryDate() {
   const { date } = Route.useParams()
   const navigate = useNavigate()
 
-  const { data: meals, refetch } = useQuery(getMealsControllerFindAllQueryOptions({ start: date, end: date }))
+  const { data: meals, refetch } = useQuery(
+    getMealsControllerFindAllQueryOptions({ start: date, end: date }),
+  )
   const { data: templates } = useTemplateMealsControllerFindAll()
   const createMealMutation = useMealsControllerCreate()
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -38,7 +49,7 @@ function DiaryDate() {
     defaultValues: {
       name: 'Breakfast',
       date: date,
-      mealFoods: [] as any[]
+      mealFoods: [] as any[],
     },
     onSubmit: async ({ value }) => {
       try {
@@ -46,38 +57,62 @@ function DiaryDate() {
         refetch()
         setDialogOpen(false)
         setMode('blank')
-        navigate({ to: '/diary/meal/$mealId', params: { mealId: newMeal.id.toString() } })
+        navigate({
+          to: '/diary/meal/$mealId',
+          params: { mealId: newMeal.id.toString() },
+        })
       } catch (err) {
         console.error('Failed to create meal', err)
       }
     },
   })
 
-  const totals = meals?.reduce((acc, curr) => ({
-    calories: acc.calories + curr.calories,
-    protein: acc.protein + curr.protein,
-    fats: acc.fats + curr.fats,
-    carbs: acc.carbs + curr.carbs,
-  }), { calories: 0, protein: 0, fats: 0, carbs: 0 }) || { calories: 0, protein: 0, fats: 0, carbs: 0 }
+  const totals = meals?.reduce(
+    (acc, curr) => ({
+      calories: acc.calories + curr.calories,
+      protein: acc.protein + curr.protein,
+      fats: acc.fats + curr.fats,
+      carbs: acc.carbs + curr.carbs,
+    }),
+    { calories: 0, protein: 0, fats: 0, carbs: 0 },
+  ) || { calories: 0, protein: 0, fats: 0, carbs: 0 }
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col md:flex-row md:justify-between md:items-end border-b-2 border-white pb-4 gap-4">
         <div>
-          <Link to="/diary" className="text-muted-foreground hover:text-white uppercase font-mono text-xs flex items-center mb-2">
+          <Link
+            to="/diary"
+            className="text-muted-foreground hover:text-white uppercase font-mono text-xs flex items-center mb-2"
+          >
             <ArrowLeft className="w-3 h-3 mr-1" />
             RETURN TO CALENDAR
           </Link>
-          <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">Log_{date}</h1>
-          <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest mt-1">Daily Meal Summary</p>
+          <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
+            Log_{date}
+          </h1>
+          <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest mt-1">
+            Daily Meal Summary
+          </p>
         </div>
-        
+
         <FormDialog
           open={dialogOpen}
-          onOpenChange={(open) => { setDialogOpen(open); if (!open) { setMode('blank'); form.reset() } }}
+          onOpenChange={(open) => {
+            setDialogOpen(open)
+            if (!open) {
+              setMode('blank')
+              form.reset()
+            }
+          }}
           title="INITIALIZE NEW MEAL"
           description={`Log a new meal for ${date}`}
-          trigger={<Button className="brutal-border hover:bg-primary w-full md:w-auto font-mono uppercase font-bold rounded-none"><PlusIcon className="w-4 h-4 mr-2"/>New Meal_</Button>}
+          trigger={
+            <Button className="brutal-border hover:bg-primary w-full md:w-auto font-mono uppercase font-bold rounded-none">
+              <PlusIcon className="w-4 h-4 mr-2" />
+              New Meal_
+            </Button>
+          }
         >
           {/* Mode toggle */}
           <div className="grid grid-cols-2 mt-4 border border-white rounded-none overflow-hidden">
@@ -100,27 +135,36 @@ function DiaryDate() {
           {/* Template selector — only shown in template mode */}
           {mode === 'template' && (
             <div className="mt-4 flex flex-col gap-2">
-              <Label className="font-mono uppercase text-xs">Select Template</Label>
+              <Label className="font-mono uppercase text-xs">
+                Select Template
+              </Label>
               <select
                 className="brutal-border rounded-none bg-black text-white h-10 w-full font-mono px-3"
                 defaultValue=""
                 onChange={(e) => {
-                  const selectedTemp = templates?.find(t => t.id.toString() === e.target.value)
+                  const selectedTemp = templates?.find(
+                    (t) => t.id.toString() === e.target.value,
+                  )
                   if (selectedTemp) {
                     form.setFieldValue('name', selectedTemp.name)
-                    form.setFieldValue('mealFoods', selectedTemp.template_meal_foods.map(f => ({
-                      name: f.name,
-                      weight: f.weight,
-                      calories: f.calories,
-                      protein: f.protein,
-                      fats: f.fats,
-                      carbs: f.carbs,
-                    })))
+                    form.setFieldValue(
+                      'mealFoods',
+                      selectedTemp.template_meal_foods.map((f) => ({
+                        name: f.name,
+                        weight: f.weight,
+                        calories: f.calories,
+                        protein: f.protein,
+                        fats: f.fats,
+                        carbs: f.carbs,
+                      })),
+                    )
                   }
                 }}
               >
-                <option value="" disabled>-- Choose a template --</option>
-                {templates?.map(temp => (
+                <option value="" disabled>
+                  -- Choose a template --
+                </option>
+                {templates?.map((temp) => (
                   <option key={temp.id} value={temp.id}>
                     {temp.name} ({Math.round(temp.calories)} kcal)
                   </option>
@@ -155,7 +199,7 @@ function DiaryDate() {
                 </div>
               )}
             />
-            
+
             <form.Subscribe
               selector={(state) => [state.canSubmit, state.isSubmitting]}
               children={([canSubmit, isSubmitting]) => (
@@ -164,7 +208,11 @@ function DiaryDate() {
                   disabled={!canSubmit || isSubmitting}
                   className="w-full mt-2 brutal-border bg-primary text-black uppercase font-bold tracking-widest rounded-none h-12"
                 >
-                  {isSubmitting ? 'PROCESSING...' : mode === 'template' ? 'CREATE FROM TEMPLATE' : 'CREATE MEAL & ADD FOODS'}
+                  {isSubmitting
+                    ? 'PROCESSING...'
+                    : mode === 'template'
+                      ? 'CREATE FROM TEMPLATE'
+                      : 'CREATE MEAL & ADD FOODS'}
                 </Button>
               )}
             />
@@ -174,20 +222,36 @@ function DiaryDate() {
 
       <div className="grid grid-cols-4 gap-4 bg-muted/5 p-4 brutal-border">
         <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">Total KCal</span>
-          <span className="font-bold text-xl text-primary font-mono">{Math.round(totals.calories)}</span>
+          <span className="text-muted-foreground text-xs font-mono uppercase">
+            Total KCal
+          </span>
+          <span className="font-bold text-xl text-primary font-mono">
+            {Math.round(totals.calories)}
+          </span>
         </div>
         <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">Protein</span>
-          <span className="font-bold text-lg font-mono">{Math.round(totals.protein)}g</span>
+          <span className="text-muted-foreground text-xs font-mono uppercase">
+            Protein
+          </span>
+          <span className="font-bold text-lg font-mono">
+            {Math.round(totals.protein)}g
+          </span>
         </div>
         <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">Fats</span>
-          <span className="font-bold text-lg font-mono">{Math.round(totals.fats)}g</span>
+          <span className="text-muted-foreground text-xs font-mono uppercase">
+            Fats
+          </span>
+          <span className="font-bold text-lg font-mono">
+            {Math.round(totals.fats)}g
+          </span>
         </div>
         <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">Carbs</span>
-          <span className="font-bold text-lg font-mono">{Math.round(totals.carbs)}g</span>
+          <span className="text-muted-foreground text-xs font-mono uppercase">
+            Carbs
+          </span>
+          <span className="font-bold text-lg font-mono">
+            {Math.round(totals.carbs)}g
+          </span>
         </div>
       </div>
 
@@ -198,14 +262,25 @@ function DiaryDate() {
           </div>
         )}
         {meals?.map((meal) => (
-          <Card key={meal.id} className="brutal-border brutal-shadow rounded-none bg-black hover:bg-neutral-900 transition-colors h-full flex flex-col cursor-pointer" onClick={() => navigate({ to: '/diary/meal/$mealId', params: { mealId: meal.id.toString() } })}>
+          <Card
+            key={meal.id}
+            className="brutal-border brutal-shadow rounded-none bg-black hover:bg-neutral-900 transition-colors h-full flex flex-col cursor-pointer"
+            onClick={() =>
+              navigate({
+                to: '/diary/meal/$mealId',
+                params: { mealId: meal.id.toString() },
+              })
+            }
+          >
             <CardHeader className="border-b border-(--border) pb-4 relative">
               <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
               <div className="flex justify-between items-start pt-2">
                 <CardTitle className="text-xl font-bold font-mono tracking-tighter uppercase text-white truncate pr-2">
                   {meal.name}
                 </CardTitle>
-                <div className="text-primary font-mono text-xl font-black">{Math.round(meal.calories)}</div>
+                <div className="text-primary font-mono text-xl font-black">
+                  {Math.round(meal.calories)}
+                </div>
               </div>
               <CardDescription className="font-mono text-[10px] uppercase text-muted-foreground">
                 {meal.meal_foods.length} items logged

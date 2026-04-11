@@ -20,12 +20,21 @@ import { useTemplateFoodsControllerFindAll } from '../../../../api/endpoints/tem
 import { Button } from '../../../../components/ui/button'
 import { Input } from '../../../../components/ui/input'
 import { Label } from '../../../../components/ui/label'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../../components/ui/tabs'
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '../../../../components/ui/tabs'
 import { FormDialog } from '../../../../components/shared/FormDialog'
 
-export const Route = createFileRoute('/_authenticated/library/template-meal/$id')({
+export const Route = createFileRoute(
+  '/_authenticated/library/template-meal/$id',
+)({
   loader: ({ context: { queryClient }, params }) =>
-    queryClient.ensureQueryData(getTemplateMealsControllerFindOneQueryOptions(Number(params.id))),
+    queryClient.ensureQueryData(
+      getTemplateMealsControllerFindOneQueryOptions(Number(params.id)),
+    ),
   component: TemplateMealDetails,
 })
 
@@ -43,7 +52,9 @@ function TemplateMealDetails() {
   const { id } = Route.useParams()
   const navigate = useNavigate()
 
-  const { data: meal, refetch } = useQuery(getTemplateMealsControllerFindOneQueryOptions(Number(id)))
+  const { data: meal, refetch } = useQuery(
+    getTemplateMealsControllerFindOneQueryOptions(Number(id)),
+  )
   const createFoodMutation = useTemplateMealFoodsControllerCreate()
   const updateFoodMutation = useTemplateMealFoodsControllerUpdate()
   const removeFoodMutation = useTemplateMealFoodsControllerRemove()
@@ -57,7 +68,14 @@ function TemplateMealDetails() {
   const [barcodeError, setBarcodeError] = useState('')
 
   const form = useForm({
-    defaultValues: { name: '', weight: 100, calories: 0, protein: 0, fats: 0, carbs: 0 },
+    defaultValues: {
+      name: '',
+      weight: 100,
+      calories: 0,
+      protein: 0,
+      fats: 0,
+      carbs: 0,
+    },
     onSubmit: async ({ value }) => {
       try {
         if (editingFood) {
@@ -67,7 +85,10 @@ function TemplateMealDetails() {
             data: value,
           })
         } else {
-          await createFoodMutation.mutateAsync({ templateMealId: Number(id), data: value })
+          await createFoodMutation.mutateAsync({
+            templateMealId: Number(id),
+            data: value,
+          })
         }
         refetch()
         setDialogOpen(false)
@@ -123,7 +144,10 @@ function TemplateMealDetails() {
   }
 
   const handleRemoveFood = async (foodId: number) => {
-    await removeFoodMutation.mutateAsync({ templateMealId: Number(id), id: foodId })
+    await removeFoodMutation.mutateAsync({
+      templateMealId: Number(id),
+      id: foodId,
+    })
     refetch()
   }
 
@@ -134,17 +158,29 @@ function TemplateMealDetails() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-end border-b-2 border-white pb-4 gap-4">
         <div>
-          <Link to="/library" className="text-muted-foreground hover:text-white uppercase font-mono text-xs flex items-center mb-2">
+          <Link
+            to="/library"
+            className="text-muted-foreground hover:text-white uppercase font-mono text-xs flex items-center mb-2"
+          >
             <ArrowLeft className="w-3 h-3 mr-1" />
             RETURN TO LIBRARY
           </Link>
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">{mealAny.name}</h1>
-            <Button variant="outline" size="sm" onClick={handleDeleteMeal} className="brutal-border hover:bg-destructive hover:text-white rounded-none">
+            <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
+              {mealAny.name}
+            </h1>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleDeleteMeal}
+              className="brutal-border hover:bg-destructive hover:text-white rounded-none"
+            >
               <Trash2 className="w-4 h-4" />
             </Button>
           </div>
-          <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest mt-1">Template Meal</p>
+          <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest mt-1">
+            Template Meal
+          </p>
         </div>
 
         <Button
@@ -159,20 +195,36 @@ function TemplateMealDetails() {
       {/* Macro summary */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-muted/5 p-4 brutal-border">
         <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">Total KCal</span>
-          <span className="font-bold text-xl text-primary font-mono">{Math.round(mealAny.calories)}</span>
+          <span className="text-muted-foreground text-xs font-mono uppercase">
+            Total KCal
+          </span>
+          <span className="font-bold text-xl text-primary font-mono">
+            {Math.round(mealAny.calories)}
+          </span>
         </div>
         <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">Protein</span>
-          <span className="font-bold text-lg font-mono">{Math.round(mealAny.protein)}g</span>
+          <span className="text-muted-foreground text-xs font-mono uppercase">
+            Protein
+          </span>
+          <span className="font-bold text-lg font-mono">
+            {Math.round(mealAny.protein)}g
+          </span>
         </div>
         <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">Fats</span>
-          <span className="font-bold text-lg font-mono">{Math.round(mealAny.fats)}g</span>
+          <span className="text-muted-foreground text-xs font-mono uppercase">
+            Fats
+          </span>
+          <span className="font-bold text-lg font-mono">
+            {Math.round(mealAny.fats)}g
+          </span>
         </div>
         <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">Carbs</span>
-          <span className="font-bold text-lg font-mono">{Math.round(mealAny.carbs)}g</span>
+          <span className="text-muted-foreground text-xs font-mono uppercase">
+            Carbs
+          </span>
+          <span className="font-bold text-lg font-mono">
+            {Math.round(mealAny.carbs)}g
+          </span>
         </div>
       </div>
 
@@ -187,20 +239,26 @@ function TemplateMealDetails() {
           <div
             key={food.id}
             className="flex justify-between items-start p-4 bg-black brutal-border hover:bg-neutral-900 transition-colors cursor-pointer"
-            onClick={() => openDialog({
-              id: food.id,
-              name: food.name,
-              weight: food.weight,
-              calories: food.calories,
-              protein: food.protein,
-              fats: food.fats,
-              carbs: food.carbs,
-            })}
+            onClick={() =>
+              openDialog({
+                id: food.id,
+                name: food.name,
+                weight: food.weight,
+                calories: food.calories,
+                protein: food.protein,
+                fats: food.fats,
+                carbs: food.carbs,
+              })
+            }
           >
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-center gap-2">
-                <span className="font-mono font-bold uppercase text-white truncate">{food.name}</span>
-                <span className="font-mono font-black text-primary shrink-0">{Math.round(food.calories)} KCAL</span>
+                <span className="font-mono font-bold uppercase text-white truncate">
+                  {food.name}
+                </span>
+                <span className="font-mono font-black text-primary shrink-0">
+                  {Math.round(food.calories)} KCAL
+                </span>
               </div>
               <div className="font-mono text-xs text-muted-foreground mt-1 flex gap-3 uppercase flex-wrap">
                 <span>w:{food.weight}g</span>
@@ -210,7 +268,10 @@ function TemplateMealDetails() {
               </div>
             </div>
             <button
-              onClick={(e) => { e.stopPropagation(); handleRemoveFood(food.id) }}
+              onClick={(e) => {
+                e.stopPropagation()
+                handleRemoveFood(food.id)
+              }}
               className="ml-4 p-2 text-muted-foreground hover:text-red-500 transition-colors shrink-0 mt-0.5"
             >
               <Trash2 size={18} />
@@ -224,21 +285,50 @@ function TemplateMealDetails() {
         open={dialogOpen}
         onOpenChange={(open) => {
           setDialogOpen(open)
-          if (!open) { setEditingFood(null); form.reset(); setBarcodeError(''); setBarcode('') }
+          if (!open) {
+            setEditingFood(null)
+            form.reset()
+            setBarcodeError('')
+            setBarcode('')
+          }
         }}
         title={editingFood ? 'EDIT FOOD ITEM' : 'ADD FOOD ITEM'}
-        description={editingFood ? 'Update ingredient details' : 'Log a new ingredient or product'}
+        description={
+          editingFood
+            ? 'Update ingredient details'
+            : 'Log a new ingredient or product'
+        }
       >
         {/* Barcode / template helpers — only for creating */}
         {!editingFood && (
           <Tabs defaultValue="manual" className="mt-4 flex-col">
             <TabsList className="grid w-full grid-cols-3 rounded-none bg-black border border-white p-0 h-10">
-              <TabsTrigger value="manual" className="rounded-none font-mono uppercase data-[state=active]:bg-white data-[state=active]:text-black text-[10px]">Manual</TabsTrigger>
-              <TabsTrigger value="barcode" className="rounded-none font-mono uppercase data-[state=active]:bg-white data-[state=active]:text-black text-[10px]">Barcode</TabsTrigger>
-              <TabsTrigger value="template" className="rounded-none font-mono uppercase data-[state=active]:bg-white data-[state=active]:text-black text-[10px]">Template</TabsTrigger>
+              <TabsTrigger
+                value="manual"
+                className="rounded-none font-mono uppercase data-[state=active]:bg-white data-[state=active]:text-black text-[10px]"
+              >
+                Manual
+              </TabsTrigger>
+              <TabsTrigger
+                value="barcode"
+                className="rounded-none font-mono uppercase data-[state=active]:bg-white data-[state=active]:text-black text-[10px]"
+              >
+                Barcode
+              </TabsTrigger>
+              <TabsTrigger
+                value="template"
+                className="rounded-none font-mono uppercase data-[state=active]:bg-white data-[state=active]:text-black text-[10px]"
+              >
+                Template
+              </TabsTrigger>
             </TabsList>
-            <TabsContent value="barcode" className="pt-4 flex flex-col gap-3 border-b border-(--border) pb-5">
-              <Label className="font-mono uppercase text-xs">Scan or Enter Barcode</Label>
+            <TabsContent
+              value="barcode"
+              className="pt-4 flex flex-col gap-3 border-b border-(--border) pb-5"
+            >
+              <Label className="font-mono uppercase text-xs">
+                Scan or Enter Barcode
+              </Label>
               <div className="flex gap-2">
                 <Input
                   className="brutal-border rounded-none bg-black text-white h-10 flex-1 font-mono"
@@ -246,19 +336,36 @@ function TemplateMealDetails() {
                   value={barcode}
                   onChange={(e) => setBarcode(e.target.value)}
                 />
-                <Button onClick={handleBarcodeSearch} disabled={isSearchingBarcode} className="brutal-border rounded-none bg-primary text-black">
+                <Button
+                  onClick={handleBarcodeSearch}
+                  disabled={isSearchingBarcode}
+                  className="brutal-border rounded-none bg-primary text-black"
+                >
                   {isSearchingBarcode ? '...' : <Search className="w-4 h-4" />}
                 </Button>
               </div>
-              {barcodeError && <p className="text-red-500 font-mono text-xs uppercase">{barcodeError}</p>}
-              <p className="text-muted-foreground font-mono text-[10px] uppercase text-center">Data from OpenFoodFacts populates the form below.</p>
+              {barcodeError && (
+                <p className="text-red-500 font-mono text-xs uppercase">
+                  {barcodeError}
+                </p>
+              )}
+              <p className="text-muted-foreground font-mono text-[10px] uppercase text-center">
+                Data from OpenFoodFacts populates the form below.
+              </p>
             </TabsContent>
-            <TabsContent value="template" className="pt-4 flex flex-col gap-3 border-b border-(--border) pb-5">
-              <Label className="font-mono uppercase text-xs">Select Template Food</Label>
+            <TabsContent
+              value="template"
+              className="pt-4 flex flex-col gap-3 border-b border-(--border) pb-5"
+            >
+              <Label className="font-mono uppercase text-xs">
+                Select Template Food
+              </Label>
               <select
                 className="brutal-border rounded-none bg-black text-white h-10 w-full font-mono px-3"
                 onChange={(e) => {
-                  const tf = templateFoods?.find(t => t.id.toString() === e.target.value)
+                  const tf = templateFoods?.find(
+                    (t) => t.id.toString() === e.target.value,
+                  )
                   if (tf) {
                     form.setFieldValue('name', tf.name)
                     form.setFieldValue('calories', tf.calories || 0)
@@ -270,11 +377,15 @@ function TemplateMealDetails() {
                 }}
               >
                 <option value="">-- Choose a template --</option>
-                {templateFoods?.map(tf => (
-                  <option key={tf.id} value={tf.id}>{tf.name} ({Math.round(tf.calories)} kcal/100g)</option>
+                {templateFoods?.map((tf) => (
+                  <option key={tf.id} value={tf.id}>
+                    {tf.name} ({Math.round(tf.calories)} kcal/100g)
+                  </option>
                 ))}
               </select>
-              <p className="text-muted-foreground font-mono text-[10px] uppercase text-center">Values normalized to 100g.</p>
+              <p className="text-muted-foreground font-mono text-[10px] uppercase text-center">
+                Values normalized to 100g.
+              </p>
             </TabsContent>
             <TabsContent value="manual" className="pt-1" />
           </Tabs>
@@ -282,7 +393,11 @@ function TemplateMealDetails() {
 
         {/* Shared form fields */}
         <form
-          onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); form.handleSubmit() }}
+          onSubmit={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            form.handleSubmit()
+          }}
           className="flex flex-col gap-4 font-mono uppercase text-xs mt-4"
         >
           <form.Field name="name" validators={{ onChange: z.string().min(1) }}>
@@ -300,7 +415,10 @@ function TemplateMealDetails() {
           </form.Field>
 
           <div className="grid grid-cols-2 gap-4">
-            <form.Field name="weight" validators={{ onChange: z.number().min(1) }}>
+            <form.Field
+              name="weight"
+              validators={{ onChange: z.number().min(1) }}
+            >
               {(field) => (
                 <div className="flex flex-col gap-1">
                   <Label>Weight (g)</Label>
@@ -308,12 +426,17 @@ function TemplateMealDetails() {
                     type="number"
                     className="brutal-border rounded-none bg-black text-white h-10"
                     value={field.state.value || ''}
-                    onChange={(e) => field.handleChange(parseFloat(e.target.value))}
+                    onChange={(e) =>
+                      field.handleChange(parseFloat(e.target.value))
+                    }
                   />
                 </div>
               )}
             </form.Field>
-            <form.Field name="calories" validators={{ onChange: z.number().min(0) }}>
+            <form.Field
+              name="calories"
+              validators={{ onChange: z.number().min(0) }}
+            >
               {(field) => (
                 <div className="flex flex-col gap-1 text-primary">
                   <Label>KCAL (per 100g)</Label>
@@ -321,7 +444,9 @@ function TemplateMealDetails() {
                     type="number"
                     className="brutal-border rounded-none bg-black text-white h-10 border-primary"
                     value={field.state.value || ''}
-                    onChange={(e) => field.handleChange(parseFloat(e.target.value))}
+                    onChange={(e) =>
+                      field.handleChange(parseFloat(e.target.value))
+                    }
                   />
                 </div>
               )}
@@ -330,7 +455,11 @@ function TemplateMealDetails() {
 
           <div className="grid grid-cols-3 gap-4">
             {(['protein', 'fats', 'carbs'] as const).map((macro) => (
-              <form.Field key={macro} name={macro} validators={{ onChange: z.number().min(0) }}>
+              <form.Field
+                key={macro}
+                name={macro}
+                validators={{ onChange: z.number().min(0) }}
+              >
                 {(field) => (
                   <div className="flex flex-col gap-1">
                     <Label>{macro} /100g</Label>
@@ -339,7 +468,9 @@ function TemplateMealDetails() {
                       step="0.1"
                       className="brutal-border rounded-none bg-black text-white h-10"
                       value={field.state.value || ''}
-                      onChange={(e) => field.handleChange(parseFloat(e.target.value))}
+                      onChange={(e) =>
+                        field.handleChange(parseFloat(e.target.value))
+                      }
                     />
                   </div>
                 )}
@@ -347,14 +478,20 @@ function TemplateMealDetails() {
             ))}
           </div>
 
-          <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+          <form.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
+          >
             {([canSubmit, isSubmitting]) => (
               <Button
                 type="submit"
                 disabled={!canSubmit || isSubmitting}
                 className="w-full mt-2 brutal-border bg-primary text-black uppercase font-bold tracking-widest rounded-none h-12"
               >
-                {isSubmitting ? 'SAVING...' : editingFood ? 'SAVE CHANGES' : 'ADD FOOD ITEM'}
+                {isSubmitting
+                  ? 'SAVING...'
+                  : editingFood
+                    ? 'SAVE CHANGES'
+                    : 'ADD FOOD ITEM'}
               </Button>
             )}
           </form.Subscribe>

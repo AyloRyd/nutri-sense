@@ -6,15 +6,15 @@
  */
 
 export interface TemplateFoodEntity {
-  id: number;
-  user_id: number;
-  name: string;
+  id: number
+  user_id: number
+  name: string
   /** Per 100g or unit */
-  calories: number;
+  calories: number
   /** Per 100g or unit */
-  protein: number;
+  protein: number
   /** Per 100g or unit */
-  fats: number;
+  fats: number
   /** Per 100g or unit */
-  carbs: number;
+  carbs: number
 }

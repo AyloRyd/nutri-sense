@@ -7,5 +7,5 @@
 
 export interface LinkDeviceDto {
   /** The unique serial number of the IoT scale */
-  serial_number: string;
+  serial_number: string
 }

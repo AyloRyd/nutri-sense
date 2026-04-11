@@ -4,20 +4,20 @@
  * NutriSense API
  * OpenAPI spec version: 1.0
  */
-import type { MealFoodEntity } from './mealFoodEntity';
+import type { MealFoodEntity } from './mealFoodEntity'
 
 export interface MealEntity {
-  id: number;
-  user_id: number;
-  name: string;
-  date: string;
+  id: number
+  user_id: number
+  name: string
+  date: string
   /** Sum of meal foods calories */
-  calories: number;
+  calories: number
   /** Sum of meal foods protein */
-  protein: number;
+  protein: number
   /** Sum of meal foods fats */
-  fats: number;
+  fats: number
   /** Sum of meal foods carbs */
-  carbs: number;
-  meal_foods: MealFoodEntity[];
+  carbs: number
+  meal_foods: MealFoodEntity[]
 }

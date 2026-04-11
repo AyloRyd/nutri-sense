@@ -16,7 +16,6 @@ import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedPlansRouteImport } from './routes/_authenticated/plans'
 import { Route as AuthenticatedMeasurementsRouteImport } from './routes/_authenticated/measurements'
-import { Route as AuthenticatedLibraryRouteImport } from './routes/_authenticated/library'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedLibraryIndexRouteImport } from './routes/_authenticated/library/index'
 import { Route as AuthenticatedDiaryIndexRouteImport } from './routes/_authenticated/diary/index'
@@ -59,11 +58,6 @@ const AuthenticatedMeasurementsRoute =
     path: '/measurements',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedLibraryRoute = AuthenticatedLibraryRouteImport.update({
-  id: '/library',
-  path: '/library',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -71,9 +65,9 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
 } as any)
 const AuthenticatedLibraryIndexRoute =
   AuthenticatedLibraryIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthenticatedLibraryRoute,
+    id: '/library/',
+    path: '/library/',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedDiaryIndexRoute = AuthenticatedDiaryIndexRouteImport.update({
   id: '/diary/',
@@ -87,9 +81,9 @@ const AuthenticatedDiaryDateRoute = AuthenticatedDiaryDateRouteImport.update({
 } as any)
 const AuthenticatedLibraryTemplateMealIdRoute =
   AuthenticatedLibraryTemplateMealIdRouteImport.update({
-    id: '/template-meal/$id',
-    path: '/template-meal/$id',
-    getParentRoute: () => AuthenticatedLibraryRoute,
+    id: '/library/template-meal/$id',
+    path: '/library/template-meal/$id',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedDiaryMealMealIdRoute =
   AuthenticatedDiaryMealMealIdRouteImport.update({
@@ -101,7 +95,6 @@ const AuthenticatedDiaryMealMealIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/library': typeof AuthenticatedLibraryRouteWithChildren
   '/measurements': typeof AuthenticatedMeasurementsRoute
   '/plans': typeof AuthenticatedPlansRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -132,7 +125,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
-  '/_authenticated/library': typeof AuthenticatedLibraryRouteWithChildren
   '/_authenticated/measurements': typeof AuthenticatedMeasurementsRoute
   '/_authenticated/plans': typeof AuthenticatedPlansRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
@@ -149,7 +141,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
-    | '/library'
     | '/measurements'
     | '/plans'
     | '/settings'
@@ -179,7 +170,6 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/_authenticated/dashboard'
-    | '/_authenticated/library'
     | '/_authenticated/measurements'
     | '/_authenticated/plans'
     | '/_authenticated/settings'
@@ -250,13 +240,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMeasurementsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/library': {
-      id: '/_authenticated/library'
-      path: '/library'
-      fullPath: '/library'
-      preLoaderRoute: typeof AuthenticatedLibraryRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -266,10 +249,10 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/library/': {
       id: '/_authenticated/library/'
-      path: '/'
+      path: '/library'
       fullPath: '/library/'
       preLoaderRoute: typeof AuthenticatedLibraryIndexRouteImport
-      parentRoute: typeof AuthenticatedLibraryRoute
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/diary/': {
       id: '/_authenticated/diary/'
@@ -287,10 +270,10 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/library/template-meal/$id': {
       id: '/_authenticated/library/template-meal/$id'
-      path: '/template-meal/$id'
+      path: '/library/template-meal/$id'
       fullPath: '/library/template-meal/$id'
       preLoaderRoute: typeof AuthenticatedLibraryTemplateMealIdRouteImport
-      parentRoute: typeof AuthenticatedLibraryRoute
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/diary/meal/$mealId': {
       id: '/_authenticated/diary/meal/$mealId'
@@ -302,40 +285,29 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AuthenticatedLibraryRouteChildren {
-  AuthenticatedLibraryIndexRoute: typeof AuthenticatedLibraryIndexRoute
-  AuthenticatedLibraryTemplateMealIdRoute: typeof AuthenticatedLibraryTemplateMealIdRoute
-}
-
-const AuthenticatedLibraryRouteChildren: AuthenticatedLibraryRouteChildren = {
-  AuthenticatedLibraryIndexRoute: AuthenticatedLibraryIndexRoute,
-  AuthenticatedLibraryTemplateMealIdRoute:
-    AuthenticatedLibraryTemplateMealIdRoute,
-}
-
-const AuthenticatedLibraryRouteWithChildren =
-  AuthenticatedLibraryRoute._addFileChildren(AuthenticatedLibraryRouteChildren)
-
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedLibraryRoute: typeof AuthenticatedLibraryRouteWithChildren
   AuthenticatedMeasurementsRoute: typeof AuthenticatedMeasurementsRoute
   AuthenticatedPlansRoute: typeof AuthenticatedPlansRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedDiaryDateRoute: typeof AuthenticatedDiaryDateRoute
   AuthenticatedDiaryIndexRoute: typeof AuthenticatedDiaryIndexRoute
+  AuthenticatedLibraryIndexRoute: typeof AuthenticatedLibraryIndexRoute
   AuthenticatedDiaryMealMealIdRoute: typeof AuthenticatedDiaryMealMealIdRoute
+  AuthenticatedLibraryTemplateMealIdRoute: typeof AuthenticatedLibraryTemplateMealIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  AuthenticatedLibraryRoute: AuthenticatedLibraryRouteWithChildren,
   AuthenticatedMeasurementsRoute: AuthenticatedMeasurementsRoute,
   AuthenticatedPlansRoute: AuthenticatedPlansRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedDiaryDateRoute: AuthenticatedDiaryDateRoute,
   AuthenticatedDiaryIndexRoute: AuthenticatedDiaryIndexRoute,
+  AuthenticatedLibraryIndexRoute: AuthenticatedLibraryIndexRoute,
   AuthenticatedDiaryMealMealIdRoute: AuthenticatedDiaryMealMealIdRoute,
+  AuthenticatedLibraryTemplateMealIdRoute:
+    AuthenticatedLibraryTemplateMealIdRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

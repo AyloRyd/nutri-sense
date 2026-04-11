@@ -68,7 +68,9 @@ function MealDetails() {
 
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingFood, setEditingFood] = useState<EditingFood>(null)
-  const [inputMode, setInputMode] = useState<'manual' | 'barcode' | 'template'>('manual')
+  const [inputMode, setInputMode] = useState<'manual' | 'barcode' | 'template'>(
+    'manual',
+  )
   const [barcode, setBarcode] = useState('')
   const [isSearchingBarcode, setIsSearchingBarcode] = useState(false)
   const [barcodeError, setBarcodeError] = useState('')
@@ -195,7 +197,9 @@ function MealDetails() {
 
   const modeButtonClass = (active: boolean) =>
     `py-2 font-mono text-xs uppercase tracking-widest transition-colors ${
-      active ? 'bg-white text-black font-bold' : 'bg-black text-muted-foreground hover:text-white'
+      active
+        ? 'bg-white text-black font-bold'
+        : 'bg-black text-muted-foreground hover:text-white'
     }`
 
   return (
@@ -252,20 +256,36 @@ function MealDetails() {
       {/* Macro summary */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-muted/5 p-4 brutal-border mb-2">
         <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">Total KCal</span>
-          <span className="font-bold text-xl text-primary font-mono">{Math.round(meal.calories)}</span>
+          <span className="text-muted-foreground text-xs font-mono uppercase">
+            Total KCal
+          </span>
+          <span className="font-bold text-xl text-primary font-mono">
+            {Math.round(meal.calories)}
+          </span>
         </div>
         <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">Protein</span>
-          <span className="font-bold text-lg font-mono">{Math.round(meal.protein)}g</span>
+          <span className="text-muted-foreground text-xs font-mono uppercase">
+            Protein
+          </span>
+          <span className="font-bold text-lg font-mono">
+            {Math.round(meal.protein)}g
+          </span>
         </div>
         <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">Fats</span>
-          <span className="font-bold text-lg font-mono">{Math.round(meal.fats)}g</span>
+          <span className="text-muted-foreground text-xs font-mono uppercase">
+            Fats
+          </span>
+          <span className="font-bold text-lg font-mono">
+            {Math.round(meal.fats)}g
+          </span>
         </div>
         <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">Carbs</span>
-          <span className="font-bold text-lg font-mono">{Math.round(meal.carbs)}g</span>
+          <span className="text-muted-foreground text-xs font-mono uppercase">
+            Carbs
+          </span>
+          <span className="font-bold text-lg font-mono">
+            {Math.round(meal.carbs)}g
+          </span>
         </div>
       </div>
 
@@ -280,19 +300,23 @@ function MealDetails() {
           <div
             key={food.id}
             className="flex justify-between items-start p-4 bg-black brutal-border hover:bg-neutral-900 transition-colors cursor-pointer"
-            onClick={() => openDialog({
-              id: food.id,
-              name: food.name,
-              weight: food.weight,
-              calories: food.calories,
-              protein: food.protein,
-              fats: food.fats,
-              carbs: food.carbs,
-            })}
+            onClick={() =>
+              openDialog({
+                id: food.id,
+                name: food.name,
+                weight: food.weight,
+                calories: food.calories,
+                protein: food.protein,
+                fats: food.fats,
+                carbs: food.carbs,
+              })
+            }
           >
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-center gap-2">
-                <span className="font-mono font-bold uppercase text-white truncate">{food.name}</span>
+                <span className="font-mono font-bold uppercase text-white truncate">
+                  {food.name}
+                </span>
                 <span className="font-mono font-black text-primary shrink-0">
                   {Math.round(food.calories)} KCAL
                 </span>
@@ -306,14 +330,20 @@ function MealDetails() {
             </div>
             <div className="ml-3 flex items-start gap-1 shrink-0 mt-0.5">
               <button
-                onClick={(e) => { e.stopPropagation(); handleSaveFoodAsTemplate(food) }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleSaveFoodAsTemplate(food)
+                }}
                 className="p-2 text-muted-foreground hover:text-primary transition-colors"
                 title="Save as Template Food"
               >
                 <Bookmark className="w-4 h-4" />
               </button>
               <button
-                onClick={(e) => { e.stopPropagation(); handleRemoveFood(food.id) }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleRemoveFood(food.id)
+                }}
                 className="p-2 text-muted-foreground hover:text-red-500 transition-colors"
               >
                 <Trash2 size={18} />
@@ -328,10 +358,19 @@ function MealDetails() {
         open={dialogOpen}
         onOpenChange={(open) => {
           setDialogOpen(open)
-          if (!open) { setEditingFood(null); form.reset(); setBarcodeError(''); setBarcode('') }
+          if (!open) {
+            setEditingFood(null)
+            form.reset()
+            setBarcodeError('')
+            setBarcode('')
+          }
         }}
         title={editingFood ? 'EDIT FOOD ITEM' : 'ADD FOOD ITEM'}
-        description={editingFood ? 'Update ingredient details' : 'Log a new ingredient or product'}
+        description={
+          editingFood
+            ? 'Update ingredient details'
+            : 'Log a new ingredient or product'
+        }
       >
         {/* Mode tabs — only for new entries */}
         {!editingFood && (
@@ -352,7 +391,9 @@ function MealDetails() {
         {/* Barcode panel */}
         {!editingFood && inputMode === 'barcode' && (
           <div className="mt-4 flex flex-col gap-3">
-            <Label className="font-mono uppercase text-xs">Scan or Enter Barcode</Label>
+            <Label className="font-mono uppercase text-xs">
+              Scan or Enter Barcode
+            </Label>
             <div className="flex gap-2">
               <Input
                 className="brutal-border rounded-none bg-black text-white h-10 flex-1 font-mono"
@@ -370,7 +411,11 @@ function MealDetails() {
                 {isSearchingBarcode ? '...' : <Search className="w-4 h-4" />}
               </Button>
             </div>
-            {barcodeError && <p className="text-red-500 font-mono text-xs uppercase">{barcodeError}</p>}
+            {barcodeError && (
+              <p className="text-red-500 font-mono text-xs uppercase">
+                {barcodeError}
+              </p>
+            )}
             <p className="text-muted-foreground font-mono text-[10px] uppercase">
               Fills the form fields below automatically.
             </p>
@@ -380,12 +425,16 @@ function MealDetails() {
         {/* Template food panel */}
         {!editingFood && inputMode === 'template' && (
           <div className="mt-4 flex flex-col gap-3">
-            <Label className="font-mono uppercase text-xs">Select Template Food</Label>
+            <Label className="font-mono uppercase text-xs">
+              Select Template Food
+            </Label>
             <select
               className="brutal-border rounded-none bg-black text-white h-10 w-full font-mono px-3"
               defaultValue=""
               onChange={(e) => {
-                const tf = templateFoods?.find((t) => t.id.toString() === e.target.value)
+                const tf = templateFoods?.find(
+                  (t) => t.id.toString() === e.target.value,
+                )
                 if (tf) {
                   form.setFieldValue('name', tf.name)
                   form.setFieldValue('calories', tf.calories || 0)
@@ -396,7 +445,9 @@ function MealDetails() {
                 }
               }}
             >
-              <option value="" disabled>-- Choose a template --</option>
+              <option value="" disabled>
+                -- Choose a template --
+              </option>
               {templateFoods?.map((tf) => (
                 <option key={tf.id} value={tf.id}>
                   {tf.name} ({Math.round(tf.calories)} kcal/100g)
@@ -411,7 +462,11 @@ function MealDetails() {
 
         {/* Shared form */}
         <form
-          onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); form.handleSubmit() }}
+          onSubmit={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            form.handleSubmit()
+          }}
           className="flex flex-col gap-4 font-mono uppercase text-xs mt-4"
         >
           <form.Field name="name" validators={{ onChange: z.string().min(1) }}>
@@ -429,7 +484,10 @@ function MealDetails() {
           </form.Field>
 
           <div className="grid grid-cols-2 gap-4">
-            <form.Field name="weight" validators={{ onChange: z.number().min(1) }}>
+            <form.Field
+              name="weight"
+              validators={{ onChange: z.number().min(1) }}
+            >
               {(field) => (
                 <div className="flex flex-col gap-1">
                   <Label>Weight (g)</Label>
@@ -437,12 +495,17 @@ function MealDetails() {
                     type="number"
                     className="brutal-border rounded-none bg-black text-white h-10"
                     value={field.state.value || ''}
-                    onChange={(e) => field.handleChange(parseFloat(e.target.value))}
+                    onChange={(e) =>
+                      field.handleChange(parseFloat(e.target.value))
+                    }
                   />
                 </div>
               )}
             </form.Field>
-            <form.Field name="calories" validators={{ onChange: z.number().min(0) }}>
+            <form.Field
+              name="calories"
+              validators={{ onChange: z.number().min(0) }}
+            >
               {(field) => (
                 <div className="flex flex-col gap-1 text-primary">
                   <Label>KCAL (per 100g)</Label>
@@ -450,7 +513,9 @@ function MealDetails() {
                     type="number"
                     className="brutal-border rounded-none bg-black text-white h-10 border-primary"
                     value={field.state.value || ''}
-                    onChange={(e) => field.handleChange(parseFloat(e.target.value))}
+                    onChange={(e) =>
+                      field.handleChange(parseFloat(e.target.value))
+                    }
                   />
                 </div>
               )}
@@ -459,7 +524,11 @@ function MealDetails() {
 
           <div className="grid grid-cols-3 gap-4">
             {(['protein', 'fats', 'carbs'] as const).map((macro) => (
-              <form.Field key={macro} name={macro} validators={{ onChange: z.number().min(0) }}>
+              <form.Field
+                key={macro}
+                name={macro}
+                validators={{ onChange: z.number().min(0) }}
+              >
                 {(field) => (
                   <div className="flex flex-col gap-1">
                     <Label>{macro} /100g</Label>
@@ -468,7 +537,9 @@ function MealDetails() {
                       step="0.1"
                       className="brutal-border rounded-none bg-black text-white h-10"
                       value={field.state.value || ''}
-                      onChange={(e) => field.handleChange(parseFloat(e.target.value))}
+                      onChange={(e) =>
+                        field.handleChange(parseFloat(e.target.value))
+                      }
                     />
                   </div>
                 )}
@@ -476,14 +547,20 @@ function MealDetails() {
             ))}
           </div>
 
-          <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+          <form.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
+          >
             {([canSubmit, isSubmitting]) => (
               <Button
                 type="submit"
                 disabled={!canSubmit || isSubmitting}
                 className="w-full mt-2 brutal-border bg-primary text-black uppercase font-bold tracking-widest rounded-none h-12"
               >
-                {isSubmitting ? 'SAVING...' : editingFood ? 'SAVE CHANGES' : 'ADD FOOD ITEM'}
+                {isSubmitting
+                  ? 'SAVING...'
+                  : editingFood
+                    ? 'SAVE CHANGES'
+                    : 'ADD FOOD ITEM'}
               </Button>
             )}
           </form.Subscribe>

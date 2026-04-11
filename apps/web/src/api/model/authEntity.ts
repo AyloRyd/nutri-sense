@@ -6,5 +6,5 @@
  */
 
 export interface AuthEntity {
-  access_token: string;
+  access_token: string
 }

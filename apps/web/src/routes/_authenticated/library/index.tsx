@@ -77,7 +77,10 @@ function Library() {
     onSubmit: async ({ value }) => {
       try {
         if (editingMeal) {
-          await updateMealMutation.mutateAsync({ id: editingMeal.id, data: value })
+          await updateMealMutation.mutateAsync({
+            id: editingMeal.id,
+            data: value,
+          })
           refetchMeals()
           setMealDialogOpen(false)
           setEditingMeal(null)
@@ -102,7 +105,10 @@ function Library() {
     onSubmit: async ({ value }) => {
       try {
         if (editingFood) {
-          await updateFoodMutation.mutateAsync({ id: editingFood.id, data: value })
+          await updateFoodMutation.mutateAsync({
+            id: editingFood.id,
+            data: value,
+          })
           refetchFoods()
         } else {
           await createFoodMutation.mutateAsync({ data: value })
@@ -301,10 +307,17 @@ function Library() {
         open={mealDialogOpen}
         onOpenChange={(open) => {
           setMealDialogOpen(open)
-          if (!open) { setEditingMeal(null); mealForm.reset() }
+          if (!open) {
+            setEditingMeal(null)
+            mealForm.reset()
+          }
         }}
         title={editingMeal ? 'EDIT TEMPLATE MEAL' : 'CREATE TEMPLATE MEAL'}
-        description={editingMeal ? 'Rename this template' : 'Initialize a new empty meal template'}
+        description={
+          editingMeal
+            ? 'Rename this template'
+            : 'Initialize a new empty meal template'
+        }
       >
         <form
           onSubmit={(e) => {
@@ -314,7 +327,10 @@ function Library() {
           }}
           className="flex flex-col gap-4 font-mono uppercase text-xs mt-4"
         >
-          <mealForm.Field name="name" validators={{ onChange: z.string().min(1) }}>
+          <mealForm.Field
+            name="name"
+            validators={{ onChange: z.string().min(1) }}
+          >
             {(field) => (
               <div className="flex flex-col gap-1">
                 <Label>Template Name</Label>
@@ -326,14 +342,20 @@ function Library() {
               </div>
             )}
           </mealForm.Field>
-          <mealForm.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+          <mealForm.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
+          >
             {([canSubmit, isSubmitting]) => (
               <Button
                 type="submit"
                 disabled={!canSubmit || isSubmitting}
                 className="w-full mt-4 brutal-border bg-primary text-black uppercase font-bold rounded-none h-12"
               >
-                {isSubmitting ? 'SAVING...' : editingMeal ? 'SAVE CHANGES' : 'CREATE TEMPLATE MEAL'}
+                {isSubmitting
+                  ? 'SAVING...'
+                  : editingMeal
+                    ? 'SAVE CHANGES'
+                    : 'CREATE TEMPLATE MEAL'}
               </Button>
             )}
           </mealForm.Subscribe>
@@ -345,7 +367,10 @@ function Library() {
         open={foodDialogOpen}
         onOpenChange={(open) => {
           setFoodDialogOpen(open)
-          if (!open) { setEditingFood(null); foodForm.reset() }
+          if (!open) {
+            setEditingFood(null)
+            foodForm.reset()
+          }
         }}
         title={editingFood ? 'EDIT TEMPLATE FOOD' : 'CREATE TEMPLATE FOOD'}
         description="Values per 100g"
@@ -358,7 +383,10 @@ function Library() {
           }}
           className="flex flex-col gap-4 font-mono uppercase text-xs mt-4"
         >
-          <foodForm.Field name="name" validators={{ onChange: z.string().min(1) }}>
+          <foodForm.Field
+            name="name"
+            validators={{ onChange: z.string().min(1) }}
+          >
             {(field) => (
               <div className="flex flex-col gap-1">
                 <Label>Food Name</Label>
@@ -370,7 +398,10 @@ function Library() {
               </div>
             )}
           </foodForm.Field>
-          <foodForm.Field name="calories" validators={{ onChange: z.number().min(0) }}>
+          <foodForm.Field
+            name="calories"
+            validators={{ onChange: z.number().min(0) }}
+          >
             {(field) => (
               <div className="flex flex-col gap-1 text-primary">
                 <Label>KCal per 100g</Label>
@@ -378,13 +409,18 @@ function Library() {
                   type="number"
                   className="brutal-border rounded-none bg-black text-white h-10 border-primary"
                   value={field.state.value || ''}
-                  onChange={(e) => field.handleChange(parseFloat(e.target.value))}
+                  onChange={(e) =>
+                    field.handleChange(parseFloat(e.target.value))
+                  }
                 />
               </div>
             )}
           </foodForm.Field>
           <div className="grid grid-cols-3 gap-4">
-            <foodForm.Field name="protein" validators={{ onChange: z.number().min(0) }}>
+            <foodForm.Field
+              name="protein"
+              validators={{ onChange: z.number().min(0) }}
+            >
               {(field) => (
                 <div className="flex flex-col gap-1">
                   <Label>Prot /100g</Label>
@@ -393,12 +429,17 @@ function Library() {
                     step="0.1"
                     className="brutal-border rounded-none bg-black text-white h-10"
                     value={field.state.value || ''}
-                    onChange={(e) => field.handleChange(parseFloat(e.target.value))}
+                    onChange={(e) =>
+                      field.handleChange(parseFloat(e.target.value))
+                    }
                   />
                 </div>
               )}
             </foodForm.Field>
-            <foodForm.Field name="fats" validators={{ onChange: z.number().min(0) }}>
+            <foodForm.Field
+              name="fats"
+              validators={{ onChange: z.number().min(0) }}
+            >
               {(field) => (
                 <div className="flex flex-col gap-1">
                   <Label>Fats /100g</Label>
@@ -407,12 +448,17 @@ function Library() {
                     step="0.1"
                     className="brutal-border rounded-none bg-black text-white h-10"
                     value={field.state.value || ''}
-                    onChange={(e) => field.handleChange(parseFloat(e.target.value))}
+                    onChange={(e) =>
+                      field.handleChange(parseFloat(e.target.value))
+                    }
                   />
                 </div>
               )}
             </foodForm.Field>
-            <foodForm.Field name="carbs" validators={{ onChange: z.number().min(0) }}>
+            <foodForm.Field
+              name="carbs"
+              validators={{ onChange: z.number().min(0) }}
+            >
               {(field) => (
                 <div className="flex flex-col gap-1">
                   <Label>Carbs /100g</Label>
@@ -421,20 +467,28 @@ function Library() {
                     step="0.1"
                     className="brutal-border rounded-none bg-black text-white h-10"
                     value={field.state.value || ''}
-                    onChange={(e) => field.handleChange(parseFloat(e.target.value))}
+                    onChange={(e) =>
+                      field.handleChange(parseFloat(e.target.value))
+                    }
                   />
                 </div>
               )}
             </foodForm.Field>
           </div>
-          <foodForm.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting]}>
+          <foodForm.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
+          >
             {([canSubmit, isSubmitting]) => (
               <Button
                 type="submit"
                 disabled={!canSubmit || isSubmitting}
                 className="w-full mt-4 brutal-border bg-primary text-black uppercase font-bold rounded-none h-12"
               >
-                {isSubmitting ? 'SAVING...' : editingFood ? 'SAVE CHANGES' : 'CREATE TEMPLATE FOOD'}
+                {isSubmitting
+                  ? 'SAVING...'
+                  : editingFood
+                    ? 'SAVE CHANGES'
+                    : 'CREATE TEMPLATE FOOD'}
               </Button>
             )}
           </foodForm.Subscribe>

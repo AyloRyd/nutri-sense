@@ -5,11 +5,11 @@
  * OpenAPI spec version: 1.0
  */
 
-export type PlanEntityPlan = typeof PlanEntityPlan[keyof typeof PlanEntityPlan];
-
+export type PlanEntityPlan =
+  (typeof PlanEntityPlan)[keyof typeof PlanEntityPlan]
 
 export const PlanEntityPlan = {
   maintain: 'maintain',
   gain: 'gain',
   lose: 'lose',
-} as const;
+} as const

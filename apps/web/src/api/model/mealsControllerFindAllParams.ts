@@ -6,12 +6,12 @@
  */
 
 export type MealsControllerFindAllParams = {
-/**
- * Start date (YYYY-MM-DD)
- */
-start: string;
-/**
- * End date (YYYY-MM-DD)
- */
-end: string;
-};
+  /**
+   * Start date (YYYY-MM-DD)
+   */
+  start: string
+  /**
+   * End date (YYYY-MM-DD)
+   */
+  end: string
+}
