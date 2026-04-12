@@ -8,7 +8,8 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import type { QueryClient } from '@tanstack/react-query'
 import type { ErrorComponentProps } from '@tanstack/react-router'
-import { AlertTriangle, RotateCcw, Home, SearchX } from 'lucide-react'
+import { AlertTriangle, RotateCcw, Home, SearchX, Loader2 } from 'lucide-react'
+import { isAxiosError } from 'axios'
 
 import '../styles.css'
 
@@ -18,8 +19,18 @@ interface RouterContext {
 
 function GlobalErrorBoundary({ error, reset }: ErrorComponentProps) {
   const router = useRouter()
-  const message =
+  let message =
     error instanceof Error ? error.message : 'An unexpected error occurred.'
+
+  let isWakeUpError = false
+  if (
+    isAxiosError(error) &&
+    (!error.response || error.response.status >= 500)
+  ) {
+    isWakeUpError = true
+    message =
+      'Cannot reach the backend. The web service might need 30-60 seconds to wake up from inactivity.'
+  }
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-8">
@@ -43,6 +54,11 @@ function GlobalErrorBoundary({ error, reset }: ErrorComponentProps) {
           <p className="font-mono text-xs text-red-400 uppercase tracking-wider leading-relaxed break-all">
             {message}
           </p>
+          {isWakeUpError && (
+            <p className="font-mono text-xs text-muted-foreground uppercase tracking-wider leading-relaxed mt-4">
+              Please wait a moment and try again.
+            </p>
+          )}
         </div>
 
         <div className="flex gap-3">
@@ -118,10 +134,40 @@ function GlobalNotFound() {
   )
 }
 
+function GlobalPending() {
+  return (
+    <div className="min-h-screen bg-black flex items-center justify-center p-8">
+      <div
+        className="max-w-lg w-full flex flex-col items-center text-center gap-6"
+        style={{ animation: 'fadeIn 0.3s ease' }}
+      >
+        <Loader2 className="text-primary animate-spin" size={48} />
+        <div>
+          <h1 className="font-mono font-black uppercase tracking-widest text-white text-xl mb-2">
+            Loading_
+          </h1>
+          <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+            Please wait...
+          </p>
+          <p className="font-mono text-[10px] text-muted-foreground/60 uppercase tracking-wider mt-4 p-4 border border-white/10 bg-white/5">
+            Note: The backend service might take 30-60 seconds to wake up if it
+            has been inactive.
+          </p>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+      `}</style>
+    </div>
+  )
+}
+
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootComponent,
   errorComponent: GlobalErrorBoundary,
   notFoundComponent: GlobalNotFound,
+  pendingComponent: GlobalPending,
 })
 
 function RootComponent() {
