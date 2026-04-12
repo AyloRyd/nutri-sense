@@ -164,8 +164,9 @@ function Dashboard() {
           </Card>
         </Link>
 
-        <a
-          href="/settings#iot-section"
+        <Link
+          to="/settings"
+          hash="iot-section"
           className="block transition-transform hover:scale-[1.01]"
         >
           <Card className="brutal-border brutal-shadow rounded-none bg-black h-full overflow-hidden">
@@ -200,7 +201,7 @@ function Dashboard() {
               </p>
             </CardContent>
           </Card>
-        </a>
+        </Link>
       </div>
     </div>
   )
