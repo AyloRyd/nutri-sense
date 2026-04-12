@@ -203,41 +203,25 @@ function Measurements() {
           </CardTitle>
         </CardHeader>
         <CardContent className="h-80 w-full mt-4">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={sortedData}>
-              <XAxis
-                dataKey="displayDate"
-                stroke="#888"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis
-                stroke="#888"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-                domain={['auto', 'auto']}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: 'black',
-                  border: '2px solid #39FF14',
-                  borderRadius: '0',
-                }}
-                itemStyle={{ color: '#39FF14' }}
-                labelStyle={{ color: 'white', fontFamily: 'monospace' }}
-              />
-              <Line
-                type="step"
-                dataKey="weight"
-                stroke="#39FF14"
-                strokeWidth={3}
-                dot={{ r: 4, fill: 'black', stroke: '#39FF14', strokeWidth: 2 }}
-                activeDot={{ r: 6, fill: '#39FF14' }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          {sortedData.length === 0 ? (
+            <div className="h-full flex flex-col items-center justify-center text-center text-muted-foreground font-mono uppercase border-2 border-dashed border-muted">
+              <p className="text-sm">NO DATA TO PLOT.</p>
+              <p className="text-[10px] opacity-60 mt-1">Log your first entry to see the trend line.</p>
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={sortedData}>
+                <XAxis dataKey="displayDate" stroke="#888" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="#888" fontSize={12} tickLine={false} axisLine={false} domain={['auto', 'auto']} />
+                <Tooltip
+                  contentStyle={{ backgroundColor: 'black', border: '2px solid #39FF14', borderRadius: '0' }}
+                  itemStyle={{ color: '#39FF14' }}
+                  labelStyle={{ color: 'white', fontFamily: 'monospace' }}
+                />
+                <Line type="step" dataKey="weight" stroke="#39FF14" strokeWidth={3} dot={{ r: 4, fill: 'black', stroke: '#39FF14', strokeWidth: 2 }} activeDot={{ r: 6, fill: '#39FF14' }} />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
         </CardContent>
       </Card>
 
