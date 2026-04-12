@@ -1,9 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { useState, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
 import { PlusIcon, Trash2 } from 'lucide-react'
+import { formatDate } from '../../lib/date-format'
 import {
   LineChart,
   Line,
@@ -38,6 +40,7 @@ export const Route = createFileRoute('/_authenticated/measurements')({
 })
 
 function Measurements() {
+  const { t, i18n } = useTranslation()
   const { data: measurements, refetch } = useQuery(
     getMeasurementsControllerFindAllQueryOptions(),
   )
@@ -76,30 +79,30 @@ function Measurements() {
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
       .map((m) => ({
         ...m,
-        displayDate: new Date(m.date).toLocaleDateString(),
+        displayDate: formatDate(new Date(m.date), 'MM/dd/yyyy'),
       }))
-  }, [measurements])
+  }, [measurements, i18n.language])
 
   return (
     <div className="flex flex-col gap-6 flex-1">
       <div className="flex justify-between items-end border-b-2 border-white pb-4">
         <div>
           <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
-            Biometrics_Log
+            {t('measurements.title')}
           </h1>
           <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest mt-1">
-            Track physical metrics over time
+            {t('measurements.subtitle')}
           </p>
         </div>
         <FormDialog
           open={dialogOpen}
           onOpenChange={setDialogOpen}
-          title="LOG BIOMETRICS"
-          description="Enter your latest physical measurements"
+          title={t('measurements.dialogTitle')}
+          description={t('measurements.dialogDesc')}
           trigger={
             <Button className="brutal-border hover:bg-primary font-mono uppercase font-bold rounded-none">
               <PlusIcon className="w-4 h-4 mr-2" />
-              New Entry_
+              {t('measurements.newEntry')}
             </Button>
           }
         >
@@ -116,7 +119,7 @@ function Measurements() {
               validators={{ onChange: z.string().min(1) }}
               children={(field) => (
                 <div className="flex flex-col gap-1">
-                  <Label>Date</Label>
+                  <Label>{t('measurements.date')}</Label>
                   <Input
                     type="date"
                     className="brutal-border rounded-none bg-black text-white h-10"
@@ -131,7 +134,7 @@ function Measurements() {
               validators={{ onChange: z.number().min(1) }}
               children={(field) => (
                 <div className="flex flex-col gap-1">
-                  <Label>Weight (kg)</Label>
+                  <Label>{t('measurements.weight')}</Label>
                   <Input
                     type="number"
                     step="0.1"
@@ -149,7 +152,7 @@ function Measurements() {
               validators={{ onChange: z.number().min(1) }}
               children={(field) => (
                 <div className="flex flex-col gap-1">
-                  <Label>Height (cm)</Label>
+                  <Label>{t('measurements.height')}</Label>
                   <Input
                     type="number"
                     className="brutal-border rounded-none bg-black text-white h-10"
@@ -166,7 +169,7 @@ function Measurements() {
               validators={{ onChange: z.number().min(1).max(2.5) }}
               children={(field) => (
                 <div className="flex flex-col gap-1">
-                  <Label>Activity Level (1.2 - 2.5)</Label>
+                  <Label>{t('measurements.activity')}</Label>
                   <Input
                     type="number"
                     step="0.1"
@@ -188,7 +191,9 @@ function Measurements() {
                   disabled={!canSubmit || isSubmitting}
                   className="w-full mt-4 brutal-border bg-primary text-black uppercase font-bold tracking-widest rounded-none h-12"
                 >
-                  {isSubmitting ? 'PROCESSING...' : 'RECORD_ENTRY'}
+                  {isSubmitting
+                    ? t('measurements.processing')
+                    : t('measurements.recordEntry')}
                 </Button>
               )}
             />
@@ -199,15 +204,15 @@ function Measurements() {
       <Card className="brutal-border brutal-shadow rounded-none bg-black pt-6">
         <CardHeader className="pb-0">
           <CardTitle className="text-xl font-bold font-mono tracking-tighter uppercase text-white">
-            Weight_Trend
+            {t('measurements.weightTrend')}
           </CardTitle>
         </CardHeader>
         <CardContent className="h-80 w-full mt-4">
           {sortedData.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center text-muted-foreground font-mono uppercase border-2 border-dashed border-muted">
-              <p className="text-sm">NO DATA TO PLOT.</p>
+              <p className="text-sm">{t('measurements.noDataTitle')}</p>
               <p className="text-[10px] opacity-60 mt-1">
-                Log your first entry to see the trend line.
+                {t('measurements.noDataDesc1')}
               </p>
             </div>
           ) : (
@@ -239,6 +244,7 @@ function Measurements() {
                 <Line
                   type="step"
                   dataKey="weight"
+                  name={t('measurements.weight')}
                   stroke="#39FF14"
                   strokeWidth={3}
                   dot={{
@@ -257,9 +263,9 @@ function Measurements() {
 
       {sortedData.length === 0 ? (
         <div className="flex-1 flex items-center justify-center flex-col text-center text-muted-foreground font-mono uppercase text-sm border-2 border-dashed border-muted mt-4 min-h-[30vh]">
-          <p>NO BIOMETRICS LOGGED YET.</p>
+          <p>{t('measurements.noDataDesc2')}</p>
           <p className="text-[10px] opacity-70 mt-1">
-            Track your weight and height over time.
+            {t('measurements.noDataDesc3')}
           </p>
         </div>
       ) : (
@@ -284,8 +290,8 @@ function Measurements() {
                       </CardDescription>
                     </div>
                     <ConfirmDialog
-                      title="DELETE LOG ENTRY?"
-                      description="Are you sure you want to delete this log entry?"
+                      title={t('measurements.deleteTitle')}
+                      description={t('measurements.deleteDesc')}
                       onConfirm={() => handleDeleteMeasurement(entry.id)}
                       trigger={
                         <button
@@ -303,13 +309,13 @@ function Measurements() {
                   <div className="grid grid-cols-2 gap-4 font-mono text-sm uppercase">
                     <div className="flex flex-col">
                       <span className="text-muted-foreground text-xs">
-                        Height
+                        {t('measurements.heightLabel')}
                       </span>
                       <span className="font-bold">{entry.height} cm</span>
                     </div>
                     <div className="flex flex-col">
                       <span className="text-muted-foreground text-xs">
-                        Activity
+                        {t('measurements.activityLabel')}
                       </span>
                       <span className="font-bold">{entry.activity}</span>
                     </div>

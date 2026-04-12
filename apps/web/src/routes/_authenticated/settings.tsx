@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { CheckCircle, XCircle, Wifi, WifiOff } from 'lucide-react'
 
 import {
@@ -104,6 +105,7 @@ function InlineFeedback({
 }
 
 function Settings() {
+  const { t } = useTranslation()
   const { data: user, refetch: refetchUser } = useQuery(
     getUsersControllerGetMeQueryOptions({}),
   )
@@ -177,9 +179,9 @@ function Settings() {
         },
       })
       refetchUser()
-      profileFeedback.trigger('success', 'Profile updated successfully')
+      profileFeedback.trigger('success', t('settingsPage.msg.profSuccess'))
     } catch {
-      profileFeedback.trigger('error', 'Failed to update profile')
+      profileFeedback.trigger('error', t('settingsPage.msg.profFail'))
     }
   }
 
@@ -191,9 +193,9 @@ function Settings() {
       })
       setOldPassword('')
       setNewPassword('')
-      passwordFeedback.trigger('success', 'Password changed successfully')
+      passwordFeedback.trigger('success', t('settingsPage.msg.passSuccess'))
     } catch {
-      passwordFeedback.trigger('error', 'Incorrect current password')
+      passwordFeedback.trigger('error', t('settingsPage.msg.passFail'))
     }
   }
 
@@ -205,12 +207,9 @@ function Settings() {
       localStorage.setItem('iot_serial_number', serialNumber)
       setSerialNumber('')
       refetchScale()
-      iotFeedback.trigger('success', 'Device linked successfully')
+      iotFeedback.trigger('success', t('settingsPage.msg.linkSuccess'))
     } catch {
-      iotFeedback.trigger(
-        'error',
-        'Failed to link device — check serial number',
-      )
+      iotFeedback.trigger('error', t('settingsPage.msg.linkFail'))
     }
   }
 
@@ -219,9 +218,9 @@ function Settings() {
       await unlinkScaleMutation.mutateAsync()
       localStorage.removeItem('iot_serial_number')
       refetchScale()
-      iotFeedback.trigger('success', 'Device unlinked')
+      iotFeedback.trigger('success', t('settingsPage.msg.unlinkSuccess'))
     } catch {
-      iotFeedback.trigger('error', 'Failed to unlink device')
+      iotFeedback.trigger('error', t('settingsPage.msg.unlinkFail'))
     }
   }
 
@@ -234,10 +233,11 @@ function Settings() {
       {/* Page title */}
       <div className="mb-10">
         <h1 className="text-4xl font-black font-mono uppercase tracking-tighter text-white">
-          System.<span className="text-primary">Config</span>
+          {t('settingsPage.title')}
+          <span className="text-primary">{t('settingsPage.titleSpan')}</span>
         </h1>
         <p className="text-muted-foreground font-mono uppercase text-xs tracking-[0.3em] mt-2">
-          User preferences &amp; hardware integrations
+          {t('settingsPage.subtitle')}
         </p>
       </div>
 
@@ -251,14 +251,14 @@ function Settings() {
       >
         <SectionHeader
           index="01"
-          title="Identity"
-          description="Personal profile &amp; biometric metadata"
+          title={t('settingsPage.identity')}
+          description={t('settingsPage.identityDesc')}
         />
         <form onSubmit={handleUpdateProfile} className="flex flex-col gap-5">
           <div className="border-l-2 border-white/10 pl-5 flex flex-col gap-5">
             <div className="flex flex-col gap-1.5">
               <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                Username
+                {t('settingsPage.username')}
               </Label>
               <Input
                 className="brutal-border rounded-none bg-black text-white h-10 font-mono text-sm"
@@ -269,7 +269,7 @@ function Settings() {
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                  Date of Birth
+                  {t('settingsPage.dob')}
                 </Label>
                 <Input
                   type="date"
@@ -280,19 +280,23 @@ function Settings() {
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                  Biological Sex
+                  {t('settingsPage.bioSex')}
                 </Label>
                 <Select
                   value={sex}
                   onValueChange={(val) => setSex(val as UpdateUserDtoSex)}
                 >
                   <SelectTrigger className="brutal-border rounded-none bg-black text-white h-10 font-mono text-sm uppercase w-full">
-                    <SelectValue placeholder="— Select —" />
+                    <SelectValue placeholder={t('settingsPage.select')} />
                   </SelectTrigger>
                   <SelectContent className="bg-black brutal-border rounded-none font-mono uppercase">
                     <SelectGroup>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="male">
+                        {t('settingsPage.male')}
+                      </SelectItem>
+                      <SelectItem value="female">
+                        {t('settingsPage.female')}
+                      </SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -306,8 +310,8 @@ function Settings() {
               className="brutal-border hover:bg-primary rounded-none font-bold uppercase font-mono tracking-widest text-black bg-white text-xs h-10 px-6"
             >
               {updateProfileMutation.isPending
-                ? 'Updating...'
-                : 'Apply Changes_'}
+                ? t('settingsPage.updating')
+                : t('settingsPage.applyChanges')}
             </Button>
             <InlineFeedback
               state={profileFeedback.state}
@@ -327,15 +331,15 @@ function Settings() {
       >
         <SectionHeader
           index="02"
-          title="Security_Key"
-          description="Change authentication credentials"
+          title={t('settingsPage.securityKey')}
+          description={t('settingsPage.securityDesc')}
         />
         <form onSubmit={handleChangePassword} className="flex flex-col gap-5">
           <div className="border-l-2 border-white/10 pl-5 flex flex-col gap-5">
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                  Current Password
+                  {t('settingsPage.curPass')}
                 </Label>
                 <Input
                   type="password"
@@ -347,7 +351,7 @@ function Settings() {
               </div>
               <div className="flex flex-col gap-1.5">
                 <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                  New Password
+                  {t('settingsPage.newPass')}
                 </Label>
                 <Input
                   type="password"
@@ -368,8 +372,8 @@ function Settings() {
               className="brutal-border rounded-none font-bold uppercase font-mono tracking-widest text-xs h-10 px-6 bg-transparent border-red-500 text-red-500 hover:bg-red-500 hover:text-black"
             >
               {changePasswordMutation.isPending
-                ? 'Changing...'
-                : 'Rotate_Password_'}
+                ? t('settingsPage.changing')
+                : t('settingsPage.rotatePass')}
             </Button>
             <InlineFeedback
               state={passwordFeedback.state}
@@ -389,8 +393,8 @@ function Settings() {
       >
         <SectionHeader
           index="03"
-          title="IoT_Link"
-          description="Smart scale hardware integration"
+          title={t('settingsPage.iotLink')}
+          description={t('settingsPage.iotDesc')}
         />
         <div className="border-l-2 border-white/10 pl-5 flex flex-col gap-5">
           {/* Status row */}
@@ -411,7 +415,7 @@ function Settings() {
               </div>
               <div>
                 <p className="font-mono font-bold uppercase text-sm text-white tracking-widest">
-                  Smart Scale
+                  {t('settingsPage.smartScale')}
                 </p>
                 <p
                   className={`font-mono text-[10px] uppercase tracking-widest ${
@@ -419,8 +423,8 @@ function Settings() {
                   }`}
                 >
                   {isLinked
-                    ? `● LINKED — ${linkedSerial ?? ''}`
-                    : '○ NO DEVICE CONNECTED'}
+                    ? t('settingsPage.linkedStatus', { serial: linkedSerial })
+                    : t('settingsPage.noDevice')}
                 </p>
               </div>
             </div>
@@ -430,7 +434,9 @@ function Settings() {
                 disabled={unlinkScaleMutation.isPending}
                 className="brutal-border bg-transparent border-red-500 text-red-500 hover:bg-red-500 hover:text-black rounded-none uppercase font-mono font-bold tracking-widest text-xs h-9 px-4"
               >
-                {unlinkScaleMutation.isPending ? 'Working...' : 'Unlink_'}
+                {unlinkScaleMutation.isPending
+                  ? t('settingsPage.working')
+                  : t('settingsPage.unlink')}
               </Button>
             )}
           </div>
@@ -439,7 +445,7 @@ function Settings() {
           {!isLinked && (
             <div className="flex flex-col gap-3">
               <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                Device Serial Number
+                {t('settingsPage.devSerial')}
               </Label>
               <div className="flex gap-2">
                 <Input
@@ -457,7 +463,9 @@ function Settings() {
                   disabled={linkScaleMutation.isPending || !serialNumber}
                   className="brutal-border bg-primary text-black hover:bg-white rounded-none uppercase font-mono font-bold tracking-widest text-xs h-10 px-5 shrink-0"
                 >
-                  {linkScaleMutation.isPending ? '...' : 'Link_Device_'}
+                  {linkScaleMutation.isPending
+                    ? '...'
+                    : t('settingsPage.linkDevice')}
                 </Button>
               </div>
             </div>

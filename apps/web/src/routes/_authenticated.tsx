@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet, redirect, Link } from '@tanstack/react-router'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '../components/ui/button'
 import {
   Popover,
@@ -8,6 +9,7 @@ import {
 } from '../components/ui/popover'
 import { Menu } from 'lucide-react'
 import { iotControllerGetStatus } from '../api/endpoints/iot-scales/iot-scales'
+import { LanguageSwitcher } from '../components/language-switcher'
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: () => {
@@ -21,6 +23,8 @@ export const Route = createFileRoute('/_authenticated')({
 })
 
 function AuthenticatedLayout() {
+  const { t } = useTranslation()
+
   // Sync IoT link state: if server says not linked, clear localStorage token
   useEffect(() => {
     iotControllerGetStatus()
@@ -45,41 +49,42 @@ function AuthenticatedLayout() {
             to="/dashboard"
             className="text-muted-foreground hover:text-primary [&.active]:text-primary [&.active]:border-b-2 [&.active]:border-primary pb-1"
           >
-            Dashboard
+            {t('nav.dashboard')}
           </Link>
           <Link
             to="/diary"
             className="text-muted-foreground hover:text-primary [&.active]:text-primary [&.active]:border-b-2 [&.active]:border-primary pb-1"
           >
-            Diary
+            {t('nav.diary')}
           </Link>
           <Link
             to="/library"
             className="text-muted-foreground hover:text-primary [&.active]:text-primary [&.active]:border-b-2 [&.active]:border-primary pb-1"
           >
-            Library
+            {t('nav.library')}
           </Link>
           <Link
             to="/measurements"
             className="text-muted-foreground hover:text-primary [&.active]:text-primary [&.active]:border-b-2 [&.active]:border-primary pb-1"
           >
-            Measurements
+            {t('nav.measurements')}
           </Link>
           <Link
             to="/plans"
             className="text-muted-foreground hover:text-primary [&.active]:text-primary [&.active]:border-b-2 [&.active]:border-primary pb-1"
           >
-            Plans
+            {t('nav.plans')}
           </Link>
           <Link
             to="/settings"
             className="text-muted-foreground hover:text-primary [&.active]:text-primary [&.active]:border-b-2 [&.active]:border-primary pb-1"
           >
-            Settings
+            {t('nav.settings')}
           </Link>
         </nav>
 
         <div className="flex items-center gap-4">
+          <LanguageSwitcher />
           <div className="md:hidden">
             <Popover>
               <PopoverTrigger className="inline-flex items-center justify-center brutal-border hover:bg-primary transition-none rounded-none h-10 w-10 border-2 border-white bg-black text-white outline-none focus-visible:ring-2 focus-visible:ring-primary">
@@ -94,37 +99,37 @@ function AuthenticatedLayout() {
                     to="/dashboard"
                     className="p-4 border-b border-white/20 text-muted-foreground hover:text-primary hover:bg-white/5 [&.active]:text-primary transition-colors"
                   >
-                    Dashboard
+                    {t('nav.dashboard')}
                   </Link>
                   <Link
                     to="/diary"
                     className="p-4 border-b border-white/20 text-muted-foreground hover:text-primary hover:bg-white/5 [&.active]:text-primary transition-colors"
                   >
-                    Diary
+                    {t('nav.diary')}
                   </Link>
                   <Link
                     to="/library"
                     className="p-4 border-b border-white/20 text-muted-foreground hover:text-primary hover:bg-white/5 [&.active]:text-primary transition-colors"
                   >
-                    Library
+                    {t('nav.library')}
                   </Link>
                   <Link
                     to="/measurements"
                     className="p-4 border-b border-white/20 text-muted-foreground hover:text-primary hover:bg-white/5 [&.active]:text-primary transition-colors"
                   >
-                    Measurements
+                    {t('nav.measurements')}
                   </Link>
                   <Link
                     to="/plans"
                     className="p-4 border-b border-white/20 text-muted-foreground hover:text-primary hover:bg-white/5 [&.active]:text-primary transition-colors"
                   >
-                    Plans
+                    {t('nav.plans')}
                   </Link>
                   <Link
                     to="/settings"
                     className="p-4 text-muted-foreground hover:text-primary hover:bg-white/5 [&.active]:text-primary transition-colors"
                   >
-                    Settings
+                    {t('nav.settings')}
                   </Link>
                 </div>
               </PopoverContent>
@@ -139,7 +144,7 @@ function AuthenticatedLayout() {
             }}
             className="brutal-border hover:bg-destructive hover:text-white rounded-none font-bold uppercase font-mono h-10 transition-none"
           >
-            Logout_
+            {t('nav.logout')}
           </Button>
         </div>
       </header>

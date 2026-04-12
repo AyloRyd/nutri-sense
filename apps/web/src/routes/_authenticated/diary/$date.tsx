@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
 import { PlusIcon, ArrowLeft } from 'lucide-react'
@@ -9,6 +10,7 @@ import {
   getMealsControllerFindAllQueryOptions,
   useMealsControllerCreate,
 } from '../../../api/endpoints/meals/meals'
+import { formatDate } from '../../../lib/date-format'
 import { useTemplateMealsControllerFindAll } from '../../../api/endpoints/template-meals/template-meals'
 import {
   Card,
@@ -44,6 +46,7 @@ export const Route = createFileRoute('/_authenticated/diary/$date')({
 function DiaryDate() {
   const { date } = Route.useParams()
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const { data: meals, refetch } = useQuery(
     getMealsControllerFindAllQueryOptions({ start: date, end: date }),
@@ -94,13 +97,13 @@ function DiaryDate() {
             className="text-muted-foreground hover:text-white uppercase font-mono text-xs flex items-center mb-2"
           >
             <ArrowLeft className="w-3 h-3 mr-1" />
-            RETURN TO CALENDAR
+            {t('diaryDate.return')}
           </Link>
           <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
-            Log_{date}
+            {t('diaryDate.log', { date: formatDate(date, 'yyyy-MM-dd') })}
           </h1>
           <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest mt-1">
-            Daily Meal Summary
+            {t('diaryDate.summary')}
           </p>
         </div>
 
@@ -113,12 +116,14 @@ function DiaryDate() {
               form.reset()
             }
           }}
-          title="INITIALIZE NEW MEAL"
-          description={`Log a new meal for ${date}`}
+          title={t('diaryDate.initNew')}
+          description={t('diaryDate.logNew', {
+            date: formatDate(date, 'yyyy-MM-dd'),
+          })}
           trigger={
             <Button className="brutal-border hover:bg-primary w-full md:w-auto font-mono uppercase font-bold rounded-none">
               <PlusIcon className="w-4 h-4 mr-2" />
-              New Meal_
+              {t('diaryDate.newMealBtn')}
             </Button>
           }
         >
@@ -129,14 +134,14 @@ function DiaryDate() {
               onClick={() => setMode('blank')}
               className={`py-2 font-mono text-xs uppercase tracking-widest transition-colors ${mode === 'blank' ? 'bg-white text-black font-bold' : 'bg-black text-muted-foreground hover:text-white'}`}
             >
-              Blank
+              {t('diaryDate.blank')}
             </button>
             <button
               type="button"
               onClick={() => setMode('template')}
               className={`py-2 font-mono text-xs uppercase tracking-widest transition-colors ${mode === 'template' ? 'bg-white text-black font-bold' : 'bg-black text-muted-foreground hover:text-white'}`}
             >
-              From Template
+              {t('diaryDate.fromTemplate')}
             </button>
           </div>
 
@@ -144,12 +149,12 @@ function DiaryDate() {
           {mode === 'template' && (
             <div className="mt-4 flex flex-col gap-2">
               <Label className="font-mono uppercase text-xs">
-                Select Template
+                {t('diaryDate.selectTemplate')}
               </Label>
               <Select
                 onValueChange={(val) => {
                   const selectedTemp = templates?.find(
-                    (t) => t.id.toString() === val,
+                    (tmpl) => tmpl.id.toString() === val,
                   )
                   if (selectedTemp) {
                     form.setFieldValue('name', selectedTemp.name)
@@ -168,7 +173,7 @@ function DiaryDate() {
                 }}
               >
                 <SelectTrigger className="brutal-border rounded-none bg-black text-white h-10 font-mono w-full">
-                  <SelectValue placeholder="-- Choose a template --" />
+                  <SelectValue placeholder={t('diaryDate.chooseTemplate')} />
                 </SelectTrigger>
                 <SelectContent className="bg-black brutal-border rounded-none font-mono">
                   <SelectGroup>
@@ -181,7 +186,7 @@ function DiaryDate() {
                 </SelectContent>
               </Select>
               <p className="font-mono text-[10px] uppercase text-muted-foreground">
-                Selecting a template pre-fills the meal name and foods.
+                {t('diaryDate.prefilText')}
               </p>
             </div>
           )}
@@ -199,10 +204,10 @@ function DiaryDate() {
               validators={{ onChange: z.string().min(1) }}
               children={(field) => (
                 <div className="flex flex-col gap-1">
-                  <Label>Meal Name</Label>
+                  <Label>{t('diaryDate.mealName')}</Label>
                   <Input
                     className="brutal-border rounded-none bg-black text-white h-10"
-                    placeholder="e.g. Breakfast, Lunch, Post-Workout"
+                    placeholder={t('diaryDate.mealNamePlaceholder')}
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
@@ -219,10 +224,10 @@ function DiaryDate() {
                   className="w-full mt-2 brutal-border bg-primary text-black uppercase font-bold tracking-widest rounded-none h-12"
                 >
                   {isSubmitting
-                    ? 'PROCESSING...'
+                    ? t('diaryDate.processing')
                     : mode === 'template'
-                      ? 'CREATE FROM TEMPLATE'
-                      : 'CREATE MEAL & ADD FOODS'}
+                      ? t('diaryDate.createFromTemplate')
+                      : t('diaryDate.createMealAdd')}
                 </Button>
               )}
             />
@@ -233,7 +238,7 @@ function DiaryDate() {
       <div className="grid grid-cols-4 gap-4 bg-muted/5 p-4 brutal-border">
         <div className="flex flex-col">
           <span className="text-muted-foreground text-xs font-mono uppercase">
-            Total KCal
+            {t('diaryDate.totalKcal')}
           </span>
           <span className="font-bold text-xl text-primary font-mono">
             {Math.round(totals.calories)}
@@ -241,7 +246,7 @@ function DiaryDate() {
         </div>
         <div className="flex flex-col">
           <span className="text-muted-foreground text-xs font-mono uppercase">
-            Protein
+            {t('diaryDate.protein')}
           </span>
           <span className="font-bold text-lg font-mono">
             {Math.round(totals.protein)}g
@@ -249,7 +254,7 @@ function DiaryDate() {
         </div>
         <div className="flex flex-col">
           <span className="text-muted-foreground text-xs font-mono uppercase">
-            Fats
+            {t('diaryDate.fats')}
           </span>
           <span className="font-bold text-lg font-mono">
             {Math.round(totals.fats)}g
@@ -257,7 +262,7 @@ function DiaryDate() {
         </div>
         <div className="flex flex-col">
           <span className="text-muted-foreground text-xs font-mono uppercase">
-            Carbs
+            {t('diaryDate.carbs')}
           </span>
           <span className="font-bold text-lg font-mono">
             {Math.round(totals.carbs)}g
@@ -267,7 +272,7 @@ function DiaryDate() {
 
       {meals?.length === 0 ? (
         <div className="flex-1 flex items-center justify-center text-center text-muted-foreground font-mono uppercase text-sm border-2 border-dashed border-muted mt-2">
-          NO MEALS LOGGED FOR THIS DATE.
+          {t('diaryDate.noMeals')}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
@@ -293,7 +298,9 @@ function DiaryDate() {
                   </div>
                 </div>
                 <CardDescription className="font-mono text-[10px] uppercase text-muted-foreground">
-                  {meal.meal_foods.length} items logged
+                  {t('diaryDate.itemsLogged', {
+                    count: meal.meal_foods.length,
+                  })}
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-6 flex flex-col flex-1 gap-4">

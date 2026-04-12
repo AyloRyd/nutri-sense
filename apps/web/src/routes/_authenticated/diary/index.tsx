@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { useState, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   startOfMonth,
   endOfMonth,
@@ -12,6 +13,7 @@ import {
   addMonths,
   subMonths,
 } from 'date-fns'
+import { formatDate } from '../../../lib/date-format'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 import { getStatsControllerGetStatsQueryOptions } from '../../../api/endpoints/stats/stats'
@@ -22,6 +24,7 @@ export const Route = createFileRoute('/_authenticated/diary/')({
 })
 
 function DiaryCalendar() {
+  const { t } = useTranslation()
   const [currentDate, setCurrentDate] = useState(new Date())
   const navigate = useNavigate()
 
@@ -63,19 +66,23 @@ function DiaryCalendar() {
       <div className="mt-8 p-6 bg-black brutal-border brutal-shadow flex flex-col md:flex-row gap-6 justify-between items-center">
         <div>
           <h3 className="font-mono text-xl font-black uppercase text-white tracking-tighter">
-            Month_Summary
+            {t('diary.monthSummary')}
           </h3>
           <p className="font-mono text-xs uppercase text-primary">
-            Based on {summary.daysWithData} logged days
+            {t('diary.basedOnLoggedDays', { count: summary.daysWithData })}
           </p>
         </div>
         <div className="flex gap-8 font-mono text-sm uppercase">
           <div className="flex flex-col">
-            <span className="text-muted-foreground text-xs">Total KCAL</span>
+            <span className="text-muted-foreground text-xs">
+              {t('diary.totalKcal')}
+            </span>
             <span className="font-bold">{summary.cals.toLocaleString()}</span>
           </div>
           <div className="flex flex-col">
-            <span className="text-muted-foreground text-xs">Avg KCAL/Day</span>
+            <span className="text-muted-foreground text-xs">
+              {t('diary.avgKcalDay')}
+            </span>
             <span className="font-bold">
               {summary.daysWithData > 0
                 ? Math.round(
@@ -85,7 +92,9 @@ function DiaryCalendar() {
             </span>
           </div>
           <div className="flex flex-col">
-            <span className="text-muted-foreground text-xs">Total Macros</span>
+            <span className="text-muted-foreground text-xs">
+              {t('diary.totalMacros')}
+            </span>
             <span className="font-bold text-xs mt-1">
               P:{summary.prot} F:{summary.fat} C:{summary.carb}
             </span>
@@ -96,18 +105,20 @@ function DiaryCalendar() {
       <div className="flex justify-between items-end border-b-2 border-white pb-4">
         <div>
           <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
-            Daily_Log
+            {t('diary.dailyLog')}
           </h1>
           <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest mt-1">
-            Calendar Overview
+            {t('diary.calendarOverview')}
           </p>
         </div>
         <div className="flex gap-4 items-center">
           <div className="text-right font-mono uppercase text-xs">
-            <span className="block text-white font-bold">
-              {format(currentDate, 'MMMM yyyy')}
+            <span className="block text-white font-bold capitalize">
+              {formatDate(currentDate, 'LLLL yyyy')}
             </span>
-            <span className="text-muted-foreground">Global view</span>
+            <span className="text-muted-foreground">
+              {t('diary.globalView')}
+            </span>
           </div>
           <div className="flex gap-2">
             <Button
@@ -131,12 +142,12 @@ function DiaryCalendar() {
       </div>
 
       <div className="grid grid-cols-7 gap-1 md:gap-4 flex-1">
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+        {['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].map((dayKey) => (
           <div
-            key={day}
+            key={dayKey}
             className="text-center font-mono uppercase text-xs font-bold text-muted-foreground pb-2"
           >
-            {day}
+            {t(`days.${dayKey}`)}
           </div>
         ))}
         {Array.from({ length: startDateOffset }).map((_, i) => (
@@ -187,7 +198,7 @@ function DiaryCalendar() {
               <span
                 className={`font-mono text-xs sm:text-sm font-bold ${isToday(day) ? 'bg-primary text-black px-1' : ''}`}
               >
-                {format(day, 'd')}
+                {formatDate(day, 'd')}
               </span>
               {dayStat && (
                 <div className="flex flex-col gap-0.5 w-full mt-auto">
@@ -264,7 +275,7 @@ function DiaryCalendar() {
               )}
               {!dayStat && (
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity text-primary font-mono text-[10px] uppercase w-full text-center mt-auto">
-                  + Add Log
+                  {t('diary.addLog')}
                 </div>
               )}
             </div>

@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
 import {
@@ -16,6 +17,7 @@ import {
   getMealsControllerFindOneQueryOptions,
   useMealsControllerRemove,
 } from '../../../../api/endpoints/meals/meals'
+import { formatDate } from '../../../../lib/date-format'
 import {
   useMealFoodsControllerCreate,
   useMealFoodsControllerUpdate,
@@ -42,6 +44,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../../../components/ui/select'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '../../../../components/ui/alert-dialog'
 
 export const Route = createFileRoute('/_authenticated/diary/meal/$mealId')({
   loader: ({ context: { queryClient }, params }) =>
@@ -64,6 +75,7 @@ type EditingFood = {
 function MealDetails() {
   const { mealId } = Route.useParams()
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const { data: meal, refetch } = useQuery(
     getMealsControllerFindOneQueryOptions(Number(mealId)),
@@ -77,6 +89,7 @@ function MealDetails() {
   const { data: templateFoods } = useTemplateFoodsControllerFindAll()
 
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false)
   const [editingFood, setEditingFood] = useState<EditingFood>(null)
   const [inputMode, setInputMode] = useState<'manual' | 'barcode' | 'template'>(
     'manual',
@@ -151,7 +164,7 @@ function MealDetails() {
       form.setFieldValue('fats', product.fats || 0)
       form.setFieldValue('carbs', product.carbs || 0)
     } catch (_err) {
-      setBarcodeError('Product not found or invalid barcode')
+      setBarcodeError(t('foodDialog.scanErr'))
     } finally {
       setIsSearchingBarcode(false)
     }
@@ -197,7 +210,7 @@ function MealDetails() {
         carbs: food.carbs * factor,
       },
     })
-    alert('Template food saved!')
+    setSuccessDialogOpen(true)
   }
 
   const modeButtonClass = (active: boolean) =>
@@ -218,7 +231,7 @@ function MealDetails() {
             className="text-muted-foreground hover:text-white uppercase font-mono text-xs flex items-center mb-2"
           >
             <ArrowLeft className="w-3 h-3 mr-1" />
-            RETURN TO DAY
+            {t('mealDetail.return')}
           </Link>
           <div className="flex items-center gap-3 flex-wrap">
             <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
@@ -226,8 +239,8 @@ function MealDetails() {
             </h1>
             <div className="flex gap-2">
               <ConfirmDialog
-                title="SAVE TEMPLATE?"
-                description="Save this entire meal setup as a reusable template?"
+                title={t('mealDetail.saveTemplate')}
+                description={t('mealDetail.saveTemplateDesc')}
                 onConfirm={handleSaveMealAsTemplate}
                 trigger={
                   <Button
@@ -236,13 +249,13 @@ function MealDetails() {
                     className="brutal-border hover:bg-primary hover:text-white rounded-none"
                   >
                     <Save className="w-4 h-4 mr-2" />
-                    SAVE AS TEMPLATE
+                    {t('mealDetail.saveTemplateBtn')}
                   </Button>
                 }
               />
               <ConfirmDialog
-                title="DELETE MEAL?"
-                description="Are you sure you want to delete this entire meal?"
+                title={t('mealDetail.deleteMeal')}
+                description={t('mealDetail.deleteMealDesc')}
                 onConfirm={handleDeleteMeal}
                 trigger={
                   <Button
@@ -257,7 +270,9 @@ function MealDetails() {
             </div>
           </div>
           <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest mt-1">
-            Date: {meal.date}
+            {t('mealDetail.date', {
+              date: formatDate(meal.date, 'yyyy-MM-dd'),
+            })}
           </p>
         </div>
 
@@ -266,7 +281,7 @@ function MealDetails() {
           onClick={() => openDialog()}
         >
           <PlusIcon className="w-4 h-4 mr-2" />
-          Add Food_
+          {t('mealDetail.addFood')}
         </Button>
       </div>
 
@@ -274,7 +289,7 @@ function MealDetails() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-muted/5 p-4 brutal-border mb-2">
         <div className="flex flex-col">
           <span className="text-muted-foreground text-xs font-mono uppercase">
-            Total KCal
+            {t('mealDetail.totalKcal')}
           </span>
           <span className="font-bold text-xl text-primary font-mono">
             {Math.round(meal.calories)}
@@ -282,7 +297,7 @@ function MealDetails() {
         </div>
         <div className="flex flex-col">
           <span className="text-muted-foreground text-xs font-mono uppercase">
-            Protein
+            {t('mealDetail.protein')}
           </span>
           <span className="font-bold text-lg font-mono">
             {Math.round(meal.protein)}g
@@ -290,7 +305,7 @@ function MealDetails() {
         </div>
         <div className="flex flex-col">
           <span className="text-muted-foreground text-xs font-mono uppercase">
-            Fats
+            {t('mealDetail.fats')}
           </span>
           <span className="font-bold text-lg font-mono">
             {Math.round(meal.fats)}g
@@ -298,7 +313,7 @@ function MealDetails() {
         </div>
         <div className="flex flex-col">
           <span className="text-muted-foreground text-xs font-mono uppercase">
-            Carbs
+            {t('mealDetail.carbs')}
           </span>
           <span className="font-bold text-lg font-mono">
             {Math.round(meal.carbs)}g
@@ -310,7 +325,7 @@ function MealDetails() {
       <div className="flex flex-col gap-2 relative border-l border-white/20 pl-4">
         {meal.meal_foods.length === 0 && (
           <div className="py-8 text-muted-foreground font-mono uppercase text-xs">
-            No foods added yet.
+            {t('mealDetail.noFoods')}
           </div>
         )}
         {meal.meal_foods.map((food) => (
@@ -352,7 +367,7 @@ function MealDetails() {
                   handleSaveFoodAsTemplate(food)
                 }}
                 className="p-2 text-muted-foreground hover:text-primary transition-colors"
-                title="Save as Template Food"
+                title={t('mealDetail.saveTemplateFood')}
               >
                 <Bookmark className="w-4 h-4" />
               </button>
@@ -370,6 +385,27 @@ function MealDetails() {
         ))}
       </div>
 
+      <AlertDialog open={successDialogOpen} onOpenChange={setSuccessDialogOpen}>
+        <AlertDialogContent className="bg-black border-2 border-white rounded-none brutal-shadow">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-mono font-bold uppercase tracking-widest text-primary">
+              {t('mealDetail.templateSaved')}
+            </AlertDialogTitle>
+            <AlertDialogDescription className="font-mono uppercase text-muted-foreground">
+              {t('mealDetail.templateSaved')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction
+              className="brutal-border bg-primary text-black uppercase font-bold tracking-widest rounded-none hover:bg-white"
+              onClick={() => setSuccessDialogOpen(false)}
+            >
+              {t('mealDetail.ok')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {/* Add / Edit food dialog */}
       <FormDialog
         open={dialogOpen}
@@ -382,11 +418,11 @@ function MealDetails() {
             setBarcode('')
           }
         }}
-        title={editingFood ? 'EDIT FOOD ITEM' : 'ADD FOOD ITEM'}
+        title={
+          editingFood ? t('foodDialog.editTitle') : t('foodDialog.addTitle')
+        }
         description={
-          editingFood
-            ? 'Update ingredient details'
-            : 'Log a new ingredient or product'
+          editingFood ? t('foodDialog.editDesc') : t('foodDialog.addDesc')
         }
       >
         {/* Mode tabs — only for new entries */}
@@ -399,7 +435,7 @@ function MealDetails() {
                 onClick={() => setInputMode(m)}
                 className={modeButtonClass(inputMode === m)}
               >
-                {m}
+                {t(`foodDialog.${m}`)}
               </button>
             ))}
           </div>
@@ -409,12 +445,12 @@ function MealDetails() {
         {!editingFood && inputMode === 'barcode' && (
           <div className="mt-4 flex flex-col gap-3">
             <Label className="font-mono uppercase text-xs">
-              Scan or Enter Barcode
+              {t('foodDialog.scanPrompt')}
             </Label>
             <div className="flex gap-2">
               <Input
                 className="brutal-border rounded-none bg-black text-white h-10 flex-1 font-mono"
-                placeholder="e.g. 5449000000996"
+                placeholder={t('foodDialog.scanPlaceholder')}
                 value={barcode}
                 onChange={(e) => setBarcode(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleBarcodeSearch()}
@@ -434,7 +470,7 @@ function MealDetails() {
               </p>
             )}
             <p className="text-muted-foreground font-mono text-[10px] uppercase">
-              Fills the form fields below automatically.
+              {t('foodDialog.scanSuccess')}
             </p>
           </div>
         )}
@@ -443,11 +479,13 @@ function MealDetails() {
         {!editingFood && inputMode === 'template' && (
           <div className="mt-4 flex flex-col gap-3">
             <Label className="font-mono uppercase text-xs">
-              Select Template Food
+              {t('foodDialog.selectTemplate')}
             </Label>
             <Select
               onValueChange={(val) => {
-                const tf = templateFoods?.find((t) => t.id.toString() === val)
+                const tf = templateFoods?.find(
+                  (tmpl) => tmpl.id.toString() === val,
+                )
                 if (tf) {
                   form.setFieldValue('name', tf.name)
                   form.setFieldValue('calories', tf.calories || 0)
@@ -459,7 +497,7 @@ function MealDetails() {
               }}
             >
               <SelectTrigger className="brutal-border rounded-none bg-black text-white h-10 font-mono w-full">
-                <SelectValue placeholder="-- Choose a template --" />
+                <SelectValue placeholder={t('foodDialog.chooseTemplate')} />
               </SelectTrigger>
               <SelectContent className="bg-black brutal-border rounded-none font-mono">
                 <SelectGroup>
@@ -472,7 +510,7 @@ function MealDetails() {
               </SelectContent>
             </Select>
             <p className="text-muted-foreground font-mono text-[10px] uppercase">
-              Values normalized to 100g. Adjust weight below.
+              {t('foodDialog.templateHelp')}
             </p>
           </div>
         )}
@@ -489,10 +527,10 @@ function MealDetails() {
           <form.Field name="name" validators={{ onChange: z.string().min(1) }}>
             {(field) => (
               <div className="flex flex-col gap-1">
-                <Label>Food Name</Label>
+                <Label>{t('foodDialog.foodName')}</Label>
                 <Input
                   className="brutal-border rounded-none bg-black text-white h-10"
-                  placeholder="e.g. Chicken Breast"
+                  placeholder={t('foodDialog.foodNamePlaceholder')}
                   value={field.state.value}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
@@ -507,7 +545,7 @@ function MealDetails() {
             >
               {(field) => (
                 <div className="flex flex-col gap-1">
-                  <Label>Weight (g)</Label>
+                  <Label>{t('foodDialog.weight')}</Label>
                   <div className="flex gap-1">
                     <Input
                       type="number"
@@ -530,7 +568,7 @@ function MealDetails() {
             >
               {(field) => (
                 <div className="flex flex-col gap-1 text-primary">
-                  <Label>KCAL (per 100g)</Label>
+                  <Label>{t('foodDialog.kcal')}</Label>
                   <Input
                     type="number"
                     className="brutal-border rounded-none bg-black text-white h-10 border-primary"
@@ -553,7 +591,7 @@ function MealDetails() {
               >
                 {(field) => (
                   <div className="flex flex-col gap-1">
-                    <Label>{macro} /100g</Label>
+                    <Label>{t(`foodDialog.${macro}`)}</Label>
                     <Input
                       type="number"
                       step="0.1"
@@ -579,10 +617,10 @@ function MealDetails() {
                 className="w-full mt-2 brutal-border bg-primary text-black uppercase font-bold tracking-widest rounded-none h-12"
               >
                 {isSubmitting
-                  ? 'SAVING...'
+                  ? t('foodDialog.saving')
                   : editingFood
-                    ? 'SAVE CHANGES'
-                    : 'ADD FOOD ITEM'}
+                    ? t('foodDialog.saveChanges')
+                    : t('foodDialog.addFoodItem')}
               </Button>
             )}
           </form.Subscribe>

@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
 import { PlusIcon, AlertTriangle, Trash2 } from 'lucide-react'
+import { formatDate } from '../../lib/date-format'
 import {
   getPlansControllerFindAllQueryOptions,
   usePlansControllerCreate,
@@ -39,6 +41,7 @@ export const Route = createFileRoute('/_authenticated/plans')({
 })
 
 function Plans() {
+  const { t } = useTranslation()
   const { data: plans, refetch } = useQuery(
     getPlansControllerFindAllQueryOptions(),
   )
@@ -98,21 +101,21 @@ function Plans() {
       <div className="flex justify-between items-end border-b-2 border-white pb-4">
         <div>
           <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
-            Target_Plans
+            {t('plans.title')}
           </h1>
           <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest mt-1">
-            Manage dietary constraints
+            {t('plans.subtitle')}
           </p>
         </div>
         <FormDialog
           open={dialogOpen}
           onOpenChange={setDialogOpen}
-          title="INITIALIZE NEW PLAN"
-          description="Create a new dietary target constraint schema"
+          title={t('plans.dialogTitle')}
+          description={t('plans.dialogDesc')}
           trigger={
             <Button className="brutal-border hover:bg-primary font-mono uppercase font-bold rounded-none">
               <PlusIcon className="w-4 h-4 mr-2" />
-              New Plan_
+              {t('plans.newPlan')}
             </Button>
           }
         >
@@ -131,13 +134,13 @@ function Plans() {
                 </span>
                 {submitError.includes('missing') && (
                   <span className="text-white mt-2 normal-case">
-                    Action required:{' '}
+                    {t('plans.errorReq')}{' '}
                     <Link
                       to="/settings"
                       className="font-bold underline hover:text-primary transition-colors text-primary"
                       onClick={() => setDialogOpen(false)}
                     >
-                      Update your profile (Sex, Date of Birth) here
+                      {t('plans.errorProfile')}
                     </Link>
                     .
                   </span>
@@ -149,7 +152,7 @@ function Plans() {
               validators={{ onChange: z.string().min(1) }}
               children={(field) => (
                 <div className="flex flex-col gap-1">
-                  <Label>Start Date</Label>
+                  <Label>{t('plans.startDate')}</Label>
                   <Input
                     type="date"
                     className="brutal-border rounded-none bg-black text-white h-10"
@@ -164,19 +167,21 @@ function Plans() {
               validators={{ onChange: z.enum(['maintain', 'gain', 'lose']) }}
               children={(field) => (
                 <div className="flex flex-col gap-1">
-                  <Label>Goal</Label>
+                  <Label>{t('plans.goal')}</Label>
                   <Select
                     value={field.state.value}
                     onValueChange={(val) => field.handleChange(val as any)}
                   >
                     <SelectTrigger className="brutal-border rounded-none bg-black text-white h-10 font-mono uppercase w-full">
-                      <SelectValue placeholder="Select goal" />
+                      <SelectValue placeholder={t('plans.selectGoal')} />
                     </SelectTrigger>
                     <SelectContent className="bg-black brutal-border rounded-none font-mono uppercase">
                       <SelectGroup>
-                        <SelectItem value="maintain">Maintain</SelectItem>
-                        <SelectItem value="lose">Lose Weight</SelectItem>
-                        <SelectItem value="gain">Gain Weight</SelectItem>
+                        <SelectItem value="maintain">
+                          {t('plans.maintain')}
+                        </SelectItem>
+                        <SelectItem value="lose">{t('plans.loseW')}</SelectItem>
+                        <SelectItem value="gain">{t('plans.gainW')}</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -193,7 +198,7 @@ function Plans() {
                 className="w-4 h-4 bg-black border-white brutal-border accent-primary"
               />
               <Label htmlFor="autoCalc" className="cursor-pointer">
-                Enable auto-calculation based on Goal
+                {t('plans.autoCalc')}
               </Label>
             </div>
 
@@ -204,7 +209,7 @@ function Plans() {
                   validators={{ onChange: z.number().min(0) }}
                   children={(field) => (
                     <div className="flex flex-col gap-1">
-                      <Label>Calories</Label>
+                      <Label>{t('plans.calories')}</Label>
                       <Input
                         type="number"
                         className="brutal-border rounded-none bg-black text-white h-10"
@@ -221,7 +226,7 @@ function Plans() {
                   validators={{ onChange: z.number().min(0) }}
                   children={(field) => (
                     <div className="flex flex-col gap-1">
-                      <Label>Protein (g)</Label>
+                      <Label>{t('plans.protein')}</Label>
                       <Input
                         type="number"
                         className="brutal-border rounded-none bg-black text-white h-10"
@@ -238,7 +243,7 @@ function Plans() {
                   validators={{ onChange: z.number().min(0) }}
                   children={(field) => (
                     <div className="flex flex-col gap-1">
-                      <Label>Fats (g)</Label>
+                      <Label>{t('plans.fats')}</Label>
                       <Input
                         type="number"
                         className="brutal-border rounded-none bg-black text-white h-10"
@@ -255,7 +260,7 @@ function Plans() {
                   validators={{ onChange: z.number().min(0) }}
                   children={(field) => (
                     <div className="flex flex-col gap-1">
-                      <Label>Carbs (g)</Label>
+                      <Label>{t('plans.carbs')}</Label>
                       <Input
                         type="number"
                         className="brutal-border rounded-none bg-black text-white h-10"
@@ -277,7 +282,7 @@ function Plans() {
                   disabled={!canSubmit || isSubmitting}
                   className="w-full mt-4 brutal-border bg-primary text-black uppercase font-bold tracking-widest rounded-none h-12"
                 >
-                  {isSubmitting ? 'PROCESSING...' : 'EXECUTE_PLAN'}
+                  {isSubmitting ? t('plans.processing') : t('plans.execute')}
                 </Button>
               )}
             />
@@ -287,9 +292,9 @@ function Plans() {
 
       {plans?.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center text-center text-muted-foreground font-mono uppercase text-sm border-2 border-dashed border-muted min-h-[30vh]">
-          <p>NO PLANS CREATED YET.</p>
+          <p>{t('plans.noPlansCreated')}</p>
           <p className="text-[10px] opacity-70 mt-1">
-            Create constraints to dictate your macro targets.
+            {t('plans.noPlansDesc')}
           </p>
         </div>
       ) : (
@@ -304,15 +309,17 @@ function Plans() {
                 <div className="flex justify-between items-start pt-2">
                   <div>
                     <CardTitle className="text-xl font-bold font-mono tracking-tighter uppercase text-white">
-                      Constraint set #{plan.id}
+                      {t('plans.constraintSet')}
+                      {plan.id}
                     </CardTitle>
                     <CardDescription className="font-mono text-xs uppercase text-primary">
-                      Starts: {new Date(plan.start_date).toLocaleDateString()}
+                      {t('plans.starts')}
+                      {formatDate(new Date(plan.start_date), 'MM/dd/yyyy')}
                     </CardDescription>
                   </div>
                   <ConfirmDialog
-                    title="DELETE PLAN?"
-                    description="Are you sure you want to delete this target plan?"
+                    title={t('plans.deleteTitle')}
+                    description={t('plans.deleteDesc')}
                     onConfirm={() => handleDeletePlan(plan.id)}
                     trigger={
                       <button
@@ -330,28 +337,32 @@ function Plans() {
                 <div className="grid grid-cols-2 gap-4 font-mono text-sm uppercase">
                   <div className="flex flex-col">
                     <span className="text-muted-foreground text-xs">
-                      Calories
+                      {t('plans.calories')}
                     </span>
                     <span className="font-bold">{plan.day_calories}</span>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-muted-foreground text-xs">
-                      Plan Phase
+                      {t('plans.planPhase')}
                     </span>
                     <span className="font-bold">{plan.plan}</span>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-muted-foreground text-xs">
-                      Protein
+                      {t('plans.protein')}
                     </span>
                     <span className="font-bold">{plan.day_protein}g</span>
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-muted-foreground text-xs">Fats</span>
+                    <span className="text-muted-foreground text-xs">
+                      {t('plans.fats')}
+                    </span>
                     <span className="font-bold">{plan.day_fats}g</span>
                   </div>
                   <div className="flex flex-col col-span-2">
-                    <span className="text-muted-foreground text-xs">Carbs</span>
+                    <span className="text-muted-foreground text-xs">
+                      {t('plans.carbs')}
+                    </span>
                     <span className="font-bold">{plan.day_carbs}g</span>
                   </div>
                 </div>

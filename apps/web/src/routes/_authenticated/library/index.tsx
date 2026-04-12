@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
 import { PlusIcon, Trash2 } from 'lucide-react'
@@ -52,6 +53,7 @@ type EditingFood = {
 
 function Library() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const { data: templateMeals, refetch: refetchMeals } = useQuery(
     getTemplateMealsControllerFindAllQueryOptions(),
@@ -153,10 +155,10 @@ function Library() {
       <div className="flex flex-col md:flex-row md:justify-between md:items-end border-b-2 border-white pb-4 gap-4">
         <div>
           <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
-            Library.
+            {t('library.title')}
           </h1>
           <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest mt-1">
-            Manage Templates
+            {t('library.subtitle')}
           </p>
         </div>
       </div>
@@ -167,13 +169,13 @@ function Library() {
             value="meals"
             className="rounded-none font-mono uppercase data-[state=active]:bg-white data-[state=active]:text-black tracking-widest font-bold text-[10px] md:text-xs"
           >
-            Template Meals
+            {t('library.mealsTab')}
           </TabsTrigger>
           <TabsTrigger
             value="foods"
             className="rounded-none font-mono uppercase data-[state=active]:bg-white data-[state=active]:text-black tracking-widest font-bold text-[10px] md:text-xs"
           >
-            Template Foods
+            {t('library.foodsTab')}
           </TabsTrigger>
         </TabsList>
 
@@ -181,22 +183,22 @@ function Library() {
         <TabsContent value="meals" className="pt-8 flex-1 flex flex-col">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
             <h2 className="font-mono text-xl font-bold uppercase text-white">
-              My Meals
+              {t('library.myMeals')}
             </h2>
             <Button
               className="brutal-border hover:bg-primary font-mono uppercase font-bold rounded-none w-full sm:w-auto"
               onClick={() => openMealDialog()}
             >
               <PlusIcon className="w-4 h-4 mr-2" />
-              New Meal
+              {t('library.newMeal')}
             </Button>
           </div>
 
           {templateMeals?.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center text-center text-muted-foreground font-mono uppercase text-sm border-2 border-dashed border-muted">
-              <p>NO MEALS TEMPLATES CREATED YET.</p>
+              <p>{t('library.noMeals')}</p>
               <p className="text-[10px] opacity-70 mt-1">
-                Initialize a new meal to speed up logging.
+                {t('library.noMealsDesc')}
               </p>
             </div>
           ) : (
@@ -220,8 +222,8 @@ function Library() {
                       </CardTitle>
                       <div onClick={(e) => e.stopPropagation()}>
                         <ConfirmDialog
-                          title="DELETE TEMPLATE MEAL?"
-                          description="Are you sure you want to delete this template meal?"
+                          title={t('library.deleteMeal')}
+                          description={t('library.deleteMealDesc')}
                           onConfirm={async () => {
                             await removeMealMutation.mutateAsync({
                               id: meal.id,
@@ -262,22 +264,22 @@ function Library() {
         <TabsContent value="foods" className="pt-8 flex-1 flex flex-col">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
             <h2 className="font-mono text-xl font-bold uppercase text-white">
-              My Foods
+              {t('library.myFoods')}
             </h2>
             <Button
               className="brutal-border hover:bg-primary font-mono uppercase font-bold rounded-none w-full sm:w-auto"
               onClick={() => openFoodDialog()}
             >
               <PlusIcon className="w-4 h-4 mr-2" />
-              New Food
+              {t('library.newFood')}
             </Button>
           </div>
 
           {templateFoods?.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center text-center text-muted-foreground font-mono uppercase text-sm border-2 border-dashed border-muted">
-              <p>NO FOOD TEMPLATES CREATED YET.</p>
+              <p>{t('library.noFoods')}</p>
               <p className="text-[10px] opacity-70 mt-1">
-                Create foods to build custom meals.
+                {t('library.noFoodsDesc')}
               </p>
             </div>
           ) : (
@@ -307,7 +309,7 @@ function Library() {
                       </span>
                     </div>
                     <div className="font-mono text-[10px] text-muted-foreground mt-1 flex gap-4 uppercase">
-                      <span>per 100g</span>
+                      <span>{t('library.per100g')}</span>
                       <span>p:{Math.round(food.protein)}g</span>
                       <span>f:{Math.round(food.fats)}g</span>
                       <span>c:{Math.round(food.carbs)}g</span>
@@ -315,8 +317,8 @@ function Library() {
                   </div>
                   <div onClick={(e) => e.stopPropagation()}>
                     <ConfirmDialog
-                      title="DELETE TEMPLATE FOOD?"
-                      description="Are you sure you want to delete this template food?"
+                      title={t('library.deleteFood')}
+                      description={t('library.deleteFoodDesc')}
                       onConfirm={async () => {
                         await removeFoodMutation.mutateAsync({ id: food.id })
                         refetchFoods()
@@ -345,11 +347,13 @@ function Library() {
             mealForm.reset()
           }
         }}
-        title={editingMeal ? 'EDIT TEMPLATE MEAL' : 'CREATE TEMPLATE MEAL'}
-        description={
+        title={
           editingMeal
-            ? 'Rename this template'
-            : 'Initialize a new empty meal template'
+            ? t('library.editMealTitle')
+            : t('library.createMealTitle')
+        }
+        description={
+          editingMeal ? t('library.editMealDesc') : t('library.createMealDesc')
         }
       >
         <form
@@ -366,7 +370,7 @@ function Library() {
           >
             {(field) => (
               <div className="flex flex-col gap-1">
-                <Label>Template Name</Label>
+                <Label>{t('library.templateName')}</Label>
                 <Input
                   className="brutal-border rounded-none bg-black text-white h-10"
                   value={field.state.value}
@@ -385,10 +389,10 @@ function Library() {
                 className="w-full mt-4 brutal-border bg-primary text-black uppercase font-bold rounded-none h-12"
               >
                 {isSubmitting
-                  ? 'SAVING...'
+                  ? t('library.saving')
                   : editingMeal
-                    ? 'SAVE CHANGES'
-                    : 'CREATE TEMPLATE MEAL'}
+                    ? t('library.saveChanges')
+                    : t('library.createMealTitle')}
               </Button>
             )}
           </mealForm.Subscribe>
@@ -405,8 +409,12 @@ function Library() {
             foodForm.reset()
           }
         }}
-        title={editingFood ? 'EDIT TEMPLATE FOOD' : 'CREATE TEMPLATE FOOD'}
-        description="Values per 100g"
+        title={
+          editingFood
+            ? t('library.editFoodTitle')
+            : t('library.createFoodTitle')
+        }
+        description={t('library.valuesPer100g')}
       >
         <form
           onSubmit={(e) => {
@@ -422,7 +430,7 @@ function Library() {
           >
             {(field) => (
               <div className="flex flex-col gap-1">
-                <Label>Food Name</Label>
+                <Label>{t('library.foodName')}</Label>
                 <Input
                   className="brutal-border rounded-none bg-black text-white h-10"
                   value={field.state.value}
@@ -437,7 +445,7 @@ function Library() {
           >
             {(field) => (
               <div className="flex flex-col gap-1 text-primary">
-                <Label>KCal per 100g</Label>
+                <Label>{t('library.kcalPer100g')}</Label>
                 <Input
                   type="number"
                   className="brutal-border rounded-none bg-black text-white h-10 border-primary"
@@ -456,7 +464,7 @@ function Library() {
             >
               {(field) => (
                 <div className="flex flex-col gap-1">
-                  <Label>Prot /100g</Label>
+                  <Label>{t('library.protPer100g')}</Label>
                   <Input
                     type="number"
                     step="0.1"
@@ -475,7 +483,7 @@ function Library() {
             >
               {(field) => (
                 <div className="flex flex-col gap-1">
-                  <Label>Fats /100g</Label>
+                  <Label>{t('library.fatsPer100g')}</Label>
                   <Input
                     type="number"
                     step="0.1"
@@ -494,7 +502,7 @@ function Library() {
             >
               {(field) => (
                 <div className="flex flex-col gap-1">
-                  <Label>Carbs /100g</Label>
+                  <Label>{t('library.carbsPer100g')}</Label>
                   <Input
                     type="number"
                     step="0.1"
@@ -518,10 +526,10 @@ function Library() {
                 className="w-full mt-4 brutal-border bg-primary text-black uppercase font-bold rounded-none h-12"
               >
                 {isSubmitting
-                  ? 'SAVING...'
+                  ? t('library.saving')
                   : editingFood
-                    ? 'SAVE CHANGES'
-                    : 'CREATE TEMPLATE FOOD'}
+                    ? t('library.saveChanges')
+                    : t('library.createFoodTitle')}
               </Button>
             )}
           </foodForm.Subscribe>
