@@ -212,7 +212,7 @@ function Library() {
                     })
                   }
                 >
-                  <CardHeader className="border-b border-(--border) pb-4 relative">
+                  <CardHeader className="border-b border-(--border) py-2 relative">
                     <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
                     <div className="flex justify-between items-start pt-2">
                       <CardTitle className="text-xl font-bold font-mono tracking-tighter uppercase text-white truncate pr-2">

@@ -33,6 +33,14 @@ import { Input } from '../../../../components/ui/input'
 import { Label } from '../../../../components/ui/label'
 import { FormDialog } from '../../../../components/shared/FormDialog'
 import { ConfirmDialog } from '../../../../components/shared/ConfirmDialog'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../../../components/ui/select'
 
 export const Route = createFileRoute('/_authenticated/diary/meal/$mealId')({
   loader: ({ context: { queryClient }, params }) =>
@@ -436,13 +444,9 @@ function MealDetails() {
             <Label className="font-mono uppercase text-xs">
               Select Template Food
             </Label>
-            <select
-              className="brutal-border rounded-none bg-black text-white h-10 w-full font-mono px-3"
-              defaultValue=""
-              onChange={(e) => {
-                const tf = templateFoods?.find(
-                  (t) => t.id.toString() === e.target.value,
-                )
+            <Select
+              onValueChange={(val) => {
+                const tf = templateFoods?.find((t) => t.id.toString() === val)
                 if (tf) {
                   form.setFieldValue('name', tf.name)
                   form.setFieldValue('calories', tf.calories || 0)
@@ -453,15 +457,19 @@ function MealDetails() {
                 }
               }}
             >
-              <option value="" disabled>
-                -- Choose a template --
-              </option>
-              {templateFoods?.map((tf) => (
-                <option key={tf.id} value={tf.id}>
-                  {tf.name} ({Math.round(tf.calories)} kcal/100g)
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="brutal-border rounded-none bg-black text-white h-10 font-mono w-full">
+                <SelectValue placeholder="-- Choose a template --" />
+              </SelectTrigger>
+              <SelectContent className="bg-black brutal-border rounded-none font-mono">
+                <SelectGroup>
+                  {templateFoods?.map((tf) => (
+                    <SelectItem key={tf.id} value={tf.id.toString()}>
+                      {tf.name} ({Math.round(tf.calories)} kcal/100g)
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
             <p className="text-muted-foreground font-mono text-[10px] uppercase">
               Values normalized to 100g. Adjust weight below.
             </p>

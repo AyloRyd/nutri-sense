@@ -206,19 +206,49 @@ function Measurements() {
           {sortedData.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center text-muted-foreground font-mono uppercase border-2 border-dashed border-muted">
               <p className="text-sm">NO DATA TO PLOT.</p>
-              <p className="text-[10px] opacity-60 mt-1">Log your first entry to see the trend line.</p>
+              <p className="text-[10px] opacity-60 mt-1">
+                Log your first entry to see the trend line.
+              </p>
             </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={sortedData}>
-                <XAxis dataKey="displayDate" stroke="#888" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#888" fontSize={12} tickLine={false} axisLine={false} domain={['auto', 'auto']} />
+                <XAxis
+                  dataKey="displayDate"
+                  stroke="#888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="#888"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  domain={['auto', 'auto']}
+                />
                 <Tooltip
-                  contentStyle={{ backgroundColor: 'black', border: '2px solid #39FF14', borderRadius: '0' }}
+                  contentStyle={{
+                    backgroundColor: 'black',
+                    border: '2px solid #39FF14',
+                    borderRadius: '0',
+                  }}
                   itemStyle={{ color: '#39FF14' }}
                   labelStyle={{ color: 'white', fontFamily: 'monospace' }}
                 />
-                <Line type="step" dataKey="weight" stroke="#39FF14" strokeWidth={3} dot={{ r: 4, fill: 'black', stroke: '#39FF14', strokeWidth: 2 }} activeDot={{ r: 6, fill: '#39FF14' }} />
+                <Line
+                  type="step"
+                  dataKey="weight"
+                  stroke="#39FF14"
+                  strokeWidth={3}
+                  dot={{
+                    r: 4,
+                    fill: 'black',
+                    stroke: '#39FF14',
+                    strokeWidth: 2,
+                  }}
+                  activeDot={{ r: 6, fill: '#39FF14' }}
+                />
               </LineChart>
             </ResponsiveContainer>
           )}
@@ -242,7 +272,7 @@ function Measurements() {
                 key={entry.id}
                 className="brutal-border brutal-shadow rounded-none bg-black hover:bg-neutral-900 transition-colors"
               >
-                <CardHeader className="border-b border-(--border) pb-4 relative">
+                <CardHeader className="border-b border-(--border) py-2 relative">
                   <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
                   <div className="flex justify-between items-start pt-2">
                     <div>

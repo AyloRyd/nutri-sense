@@ -21,6 +21,14 @@ import { Button } from '../../../components/ui/button'
 import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
 import { FormDialog } from '../../../components/shared/FormDialog'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../../components/ui/select'
 
 export const Route = createFileRoute('/_authenticated/diary/$date')({
   loader: ({ context: { queryClient }, params }) =>
@@ -138,12 +146,10 @@ function DiaryDate() {
               <Label className="font-mono uppercase text-xs">
                 Select Template
               </Label>
-              <select
-                className="brutal-border rounded-none bg-black text-white h-10 w-full font-mono px-3"
-                defaultValue=""
-                onChange={(e) => {
+              <Select
+                onValueChange={(val) => {
                   const selectedTemp = templates?.find(
-                    (t) => t.id.toString() === e.target.value,
+                    (t) => t.id.toString() === val,
                   )
                   if (selectedTemp) {
                     form.setFieldValue('name', selectedTemp.name)
@@ -161,15 +167,19 @@ function DiaryDate() {
                   }
                 }}
               >
-                <option value="" disabled>
-                  -- Choose a template --
-                </option>
-                {templates?.map((temp) => (
-                  <option key={temp.id} value={temp.id}>
-                    {temp.name} ({Math.round(temp.calories)} kcal)
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger className="brutal-border rounded-none bg-black text-white h-10 font-mono w-full">
+                  <SelectValue placeholder="-- Choose a template --" />
+                </SelectTrigger>
+                <SelectContent className="bg-black brutal-border rounded-none font-mono">
+                  <SelectGroup>
+                    {templates?.map((temp) => (
+                      <SelectItem key={temp.id} value={temp.id.toString()}>
+                        {temp.name} ({Math.round(temp.calories)} kcal)
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
               <p className="font-mono text-[10px] uppercase text-muted-foreground">
                 Selecting a template pre-fills the meal name and foods.
               </p>

@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react'
+import { AlertDialog as AlertDialogPrimitive } from '@base-ui/react/alert-dialog'
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -10,6 +10,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '../ui/alert-dialog'
+import { Button } from '../ui/button'
+import { cn } from '#/lib/utils'
 
 export function ConfirmDialog({
   trigger,
@@ -42,14 +44,18 @@ export function ConfirmDialog({
           <AlertDialogCancel className="brutal-border rounded-none font-mono uppercase font-bold transition-none hover:bg-neutral-800 bg-black text-white">
             {cancelText}
           </AlertDialogCancel>
-          <AlertDialogAction
+          {/* Use AlertDialogPrimitive.Close so the dialog actually closes on confirm */}
+          <AlertDialogPrimitive.Close
+            className={cn(
+              'brutal-border rounded-none font-mono uppercase font-bold transition-none bg-primary text-black hover:bg-primary/80',
+            )}
+            render={<Button />}
             onClick={() => {
               onConfirm()
             }}
-            className="brutal-border rounded-none font-mono uppercase font-bold transition-none bg-primary text-black hover:bg-primary/80"
           >
             {confirmText}
-          </AlertDialogAction>
+          </AlertDialogPrimitive.Close>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

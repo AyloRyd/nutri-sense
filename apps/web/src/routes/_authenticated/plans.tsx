@@ -22,6 +22,14 @@ import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
 import { FormDialog } from '../../components/shared/FormDialog'
 import { ConfirmDialog } from '../../components/shared/ConfirmDialog'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../components/ui/select'
 import type { CreatePlanDtoGoal } from '../../api/model/createPlanDtoGoal'
 
 export const Route = createFileRoute('/_authenticated/plans')({
@@ -157,15 +165,21 @@ function Plans() {
               children={(field) => (
                 <div className="flex flex-col gap-1">
                   <Label>Goal</Label>
-                  <select
-                    className="brutal-border bg-black text-white p-2 h-10 ring-0 outline-none focus:ring-2 focus:ring-primary"
+                  <Select
                     value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value as any)}
+                    onValueChange={(val) => field.handleChange(val as any)}
                   >
-                    <option value="maintain">MAINTAIN</option>
-                    <option value="lose">LOSE WEIGHT</option>
-                    <option value="gain">GAIN WEIGHT</option>
-                  </select>
+                    <SelectTrigger className="brutal-border rounded-none bg-black text-white h-10 font-mono uppercase w-full">
+                      <SelectValue placeholder="Select goal" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-black brutal-border rounded-none font-mono uppercase">
+                      <SelectGroup>
+                        <SelectItem value="maintain">Maintain</SelectItem>
+                        <SelectItem value="lose">Lose Weight</SelectItem>
+                        <SelectItem value="gain">Gain Weight</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
               )}
             />
@@ -285,7 +299,7 @@ function Plans() {
               key={plan.id}
               className="brutal-border brutal-shadow rounded-none bg-black hover:bg-neutral-900 transition-colors"
             >
-              <CardHeader className="border-b border-(--border) pb-4 relative">
+              <CardHeader className="border-b border-(--border) py-2 relative">
                 <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
                 <div className="flex justify-between items-start pt-2">
                   <div>

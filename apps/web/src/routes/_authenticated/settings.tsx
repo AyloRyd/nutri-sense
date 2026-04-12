@@ -17,6 +17,14 @@ import {
 import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../components/ui/select'
 
 export const Route = createFileRoute('/_authenticated/settings')({
   loader: async ({ context: { queryClient } }) => {
@@ -265,15 +273,20 @@ function Settings() {
                 <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                   Biological Sex
                 </Label>
-                <select
-                  className="brutal-border bg-black text-white h-10 px-3 font-mono text-sm uppercase outline-none focus:ring-2 focus:ring-primary w-full"
+                <Select
                   value={sex}
-                  onChange={(e) => setSex(e.target.value as UpdateUserDtoSex)}
+                  onValueChange={(val) => setSex(val as UpdateUserDtoSex)}
                 >
-                  <option value="">— Select —</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
+                  <SelectTrigger className="brutal-border rounded-none bg-black text-white h-10 font-mono text-sm uppercase w-full">
+                    <SelectValue placeholder="— Select —" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-black brutal-border rounded-none font-mono uppercase">
+                    <SelectGroup>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>
