@@ -34,6 +34,7 @@ import {
   TabsTrigger,
 } from '../../../components/ui/tabs'
 import { FormDialog } from '../../../components/shared/FormDialog'
+import { ConfirmDialog } from '../../../components/shared/ConfirmDialog'
 
 export const Route = createFileRoute('/_authenticated/library/')({
   component: Library,
@@ -148,7 +149,7 @@ function Library() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 flex-1">
       <div className="flex flex-col md:flex-row md:justify-between md:items-end border-b-2 border-white pb-4 gap-4">
         <div>
           <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
@@ -160,7 +161,7 @@ function Library() {
         </div>
       </div>
 
-      <Tabs defaultValue="meals" className="mt-4 w-full flex-col">
+      <Tabs defaultValue="meals" className="mt-4 w-full flex-col flex-1 flex">
         <TabsList className="grid w-full md:w-[400px] grid-cols-2 rounded-none bg-black border border-white p-0 h-11 md:h-12 overflow-hidden">
           <TabsTrigger
             value="meals"
@@ -177,7 +178,7 @@ function Library() {
         </TabsList>
 
         {/* ── MEALS TAB ─────────────────────────────── */}
-        <TabsContent value="meals" className="pt-8">
+        <TabsContent value="meals" className="pt-8 flex-1 flex flex-col">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
             <h2 className="font-mono text-xl font-bold uppercase text-white">
               My Meals
@@ -191,62 +192,74 @@ function Library() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {templateMeals?.map((meal: any) => (
-              <Card
-                key={meal.id}
-                className="brutal-border brutal-shadow rounded-none bg-black hover:bg-neutral-900 transition-colors h-full flex flex-col cursor-pointer"
-                onClick={() =>
-                  navigate({
-                    to: '/library/template-meal/$id',
-                    params: { id: meal.id.toString() },
-                  })
-                }
-              >
-                <CardHeader className="border-b border-(--border) pb-4 relative">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
-                  <div className="flex justify-between items-start pt-2">
-                    <CardTitle className="text-xl font-bold font-mono tracking-tighter uppercase text-white truncate pr-2">
-                      {meal.name}
-                    </CardTitle>
-                    <button
-                      onClick={async (e) => {
-                        e.stopPropagation()
-                        if (
-                          window.confirm(
-                            'Are you sure you want to delete this template meal?',
-                          )
-                        ) {
-                          await removeMealMutation.mutateAsync({ id: meal.id })
-                          refetchMeals()
-                        }
-                      }}
-                      className="text-muted-foreground hover:text-red-500 transition-colors shrink-0 mt-0.5"
-                      title="Delete"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  <div className="flex flex-col gap-2 font-mono text-xs text-muted-foreground uppercase">
-                    <div className="text-primary font-bold text-lg">
-                      {Math.round(meal.calories)} KCAL
+          {templateMeals?.length === 0 ? (
+            <div className="flex-1 flex flex-col items-center justify-center text-center text-muted-foreground font-mono uppercase text-sm border-2 border-dashed border-muted">
+              <p>NO MEALS TEMPLATES CREATED YET.</p>
+              <p className="text-[10px] opacity-70 mt-1">
+                Initialize a new meal to speed up logging.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {templateMeals?.map((meal: any) => (
+                <Card
+                  key={meal.id}
+                  className="brutal-border brutal-shadow rounded-none bg-black hover:bg-neutral-900 transition-colors h-full flex flex-col cursor-pointer"
+                  onClick={() =>
+                    navigate({
+                      to: '/library/template-meal/$id',
+                      params: { id: meal.id.toString() },
+                    })
+                  }
+                >
+                  <CardHeader className="border-b border-(--border) pb-4 relative">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
+                    <div className="flex justify-between items-start pt-2">
+                      <CardTitle className="text-xl font-bold font-mono tracking-tighter uppercase text-white truncate pr-2">
+                        {meal.name}
+                      </CardTitle>
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <ConfirmDialog
+                          title="DELETE TEMPLATE MEAL?"
+                          description="Are you sure you want to delete this template meal?"
+                          onConfirm={async () => {
+                            await removeMealMutation.mutateAsync({
+                              id: meal.id,
+                            })
+                            refetchMeals()
+                          }}
+                          trigger={
+                            <button
+                              className="text-muted-foreground hover:text-red-500 transition-colors shrink-0 mt-0.5"
+                              title="Delete"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          }
+                        />
+                      </div>
                     </div>
-                    <div className="grid grid-cols-3 gap-2 mt-2">
-                      <div>P: {Math.round(meal.protein)}g</div>
-                      <div>F: {Math.round(meal.fats)}g</div>
-                      <div>C: {Math.round(meal.carbs)}g</div>
+                  </CardHeader>
+                  <CardContent className="pt-6">
+                    <div className="flex flex-col gap-2 font-mono text-xs text-muted-foreground uppercase">
+                      <div className="text-primary font-bold text-lg">
+                        {Math.round(meal.calories)} KCAL
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 mt-2">
+                        <div>P: {Math.round(meal.protein)}g</div>
+                        <div>F: {Math.round(meal.fats)}g</div>
+                        <div>C: {Math.round(meal.carbs)}g</div>
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </TabsContent>
 
         {/* ── FOODS TAB ─────────────────────────────── */}
-        <TabsContent value="foods" className="pt-8">
+        <TabsContent value="foods" className="pt-8 flex-1 flex flex-col">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
             <h2 className="font-mono text-xl font-bold uppercase text-white">
               My Foods
@@ -260,57 +273,65 @@ function Library() {
             </Button>
           </div>
 
-          <div className="flex flex-col gap-2 relative border-l border-white/20 pl-4">
-            {templateFoods?.map((food: any) => (
-              <div
-                key={food.id}
-                className="flex justify-between items-start p-4 bg-black brutal-border hover:bg-neutral-900 transition-colors cursor-pointer"
-                onClick={() =>
-                  openFoodDialog({
-                    id: food.id,
-                    name: food.name,
-                    calories: food.calories,
-                    protein: food.protein,
-                    fats: food.fats,
-                    carbs: food.carbs,
-                  })
-                }
-              >
-                <div className="flex-1">
-                  <div className="flex justify-between items-center">
-                    <span className="font-mono font-bold uppercase text-white">
-                      {food.name}
-                    </span>
-                    <span className="font-mono font-black text-primary">
-                      {Math.round(food.calories)} KCAL
-                    </span>
+          {templateFoods?.length === 0 ? (
+            <div className="flex-1 flex flex-col items-center justify-center text-center text-muted-foreground font-mono uppercase text-sm border-2 border-dashed border-muted">
+              <p>NO FOOD TEMPLATES CREATED YET.</p>
+              <p className="text-[10px] opacity-70 mt-1">
+                Create foods to build custom meals.
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2 relative border-l border-white/20 pl-4">
+              {templateFoods?.map((food: any) => (
+                <div
+                  key={food.id}
+                  className="flex justify-between items-start p-4 bg-black brutal-border hover:bg-neutral-900 transition-colors cursor-pointer"
+                  onClick={() =>
+                    openFoodDialog({
+                      id: food.id,
+                      name: food.name,
+                      calories: food.calories,
+                      protein: food.protein,
+                      fats: food.fats,
+                      carbs: food.carbs,
+                    })
+                  }
+                >
+                  <div className="flex-1">
+                    <div className="flex justify-between items-center">
+                      <span className="font-mono font-bold uppercase text-white">
+                        {food.name}
+                      </span>
+                      <span className="font-mono font-black text-primary">
+                        {Math.round(food.calories)} KCAL
+                      </span>
+                    </div>
+                    <div className="font-mono text-[10px] text-muted-foreground mt-1 flex gap-4 uppercase">
+                      <span>per 100g</span>
+                      <span>p:{Math.round(food.protein)}g</span>
+                      <span>f:{Math.round(food.fats)}g</span>
+                      <span>c:{Math.round(food.carbs)}g</span>
+                    </div>
                   </div>
-                  <div className="font-mono text-[10px] text-muted-foreground mt-1 flex gap-4 uppercase">
-                    <span>per 100g</span>
-                    <span>p:{Math.round(food.protein)}g</span>
-                    <span>f:{Math.round(food.fats)}g</span>
-                    <span>c:{Math.round(food.carbs)}g</span>
+                  <div onClick={(e) => e.stopPropagation()}>
+                    <ConfirmDialog
+                      title="DELETE TEMPLATE FOOD?"
+                      description="Are you sure you want to delete this template food?"
+                      onConfirm={async () => {
+                        await removeFoodMutation.mutateAsync({ id: food.id })
+                        refetchFoods()
+                      }}
+                      trigger={
+                        <button className="ml-4 p-2 text-muted-foreground hover:text-red-500 transition-colors mt-0.5">
+                          <Trash2 size={18} />
+                        </button>
+                      }
+                    />
                   </div>
                 </div>
-                <button
-                  onClick={async (e) => {
-                    e.stopPropagation()
-                    if (
-                      window.confirm(
-                        'Are you sure you want to delete this template food?',
-                      )
-                    ) {
-                      await removeFoodMutation.mutateAsync({ id: food.id })
-                      refetchFoods()
-                    }
-                  }}
-                  className="ml-4 p-2 text-muted-foreground hover:text-red-500 transition-colors mt-0.5"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </TabsContent>
       </Tabs>
 

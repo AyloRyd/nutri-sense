@@ -32,6 +32,7 @@ import { Button } from '../../../../components/ui/button'
 import { Input } from '../../../../components/ui/input'
 import { Label } from '../../../../components/ui/label'
 import { FormDialog } from '../../../../components/shared/FormDialog'
+import { ConfirmDialog } from '../../../../components/shared/ConfirmDialog'
 
 export const Route = createFileRoute('/_authenticated/diary/meal/$mealId')({
   loader: ({ context: { queryClient }, params }) =>
@@ -148,10 +149,8 @@ function MealDetails() {
   }
 
   const handleDeleteMeal = async () => {
-    if (confirm('Delete this entire meal?')) {
-      await removeMealMutation.mutateAsync({ id: Number(mealId) })
-      navigate({ to: '/diary/$date', params: { date: meal.date } })
-    }
+    await removeMealMutation.mutateAsync({ id: Number(mealId) })
+    navigate({ to: '/diary/$date', params: { date: meal.date } })
   }
 
   const handleRemoveFood = async (foodId: number) => {
@@ -163,22 +162,19 @@ function MealDetails() {
   }
 
   const handleSaveMealAsTemplate = async () => {
-    if (confirm('Save this meal as a template?')) {
-      await createTemplateMealMutation.mutateAsync({
-        data: {
-          name: meal.name,
-          templateMealFoods: meal.meal_foods.map((f) => ({
-            name: f.name,
-            weight: f.weight,
-            calories: f.calories,
-            protein: f.protein,
-            fats: f.fats,
-            carbs: f.carbs,
-          })),
-        },
-      })
-      alert('Template meal saved!')
-    }
+    await createTemplateMealMutation.mutateAsync({
+      data: {
+        name: meal.name,
+        templateMealFoods: meal.meal_foods.map((f) => ({
+          name: f.name,
+          weight: f.weight,
+          calories: f.calories,
+          protein: f.protein,
+          fats: f.fats,
+          carbs: f.carbs,
+        })),
+      },
+    })
   }
 
   const handleSaveFoodAsTemplate = async (food: any) => {
@@ -220,23 +216,35 @@ function MealDetails() {
               {meal.name}
             </h1>
             <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleSaveMealAsTemplate}
-                className="brutal-border hover:bg-primary hover:text-white rounded-none"
-              >
-                <Save className="w-4 h-4 mr-2" />
-                SAVE AS TEMPLATE
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleDeleteMeal}
-                className="brutal-border hover:bg-destructive hover:text-white rounded-none"
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
+              <ConfirmDialog
+                title="SAVE TEMPLATE?"
+                description="Save this entire meal setup as a reusable template?"
+                onConfirm={handleSaveMealAsTemplate}
+                trigger={
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="brutal-border hover:bg-primary hover:text-white rounded-none"
+                  >
+                    <Save className="w-4 h-4 mr-2" />
+                    SAVE AS TEMPLATE
+                  </Button>
+                }
+              />
+              <ConfirmDialog
+                title="DELETE MEAL?"
+                description="Are you sure you want to delete this entire meal?"
+                onConfirm={handleDeleteMeal}
+                trigger={
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="brutal-border hover:bg-destructive hover:text-white rounded-none"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                }
+              />
             </div>
           </div>
           <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest mt-1">

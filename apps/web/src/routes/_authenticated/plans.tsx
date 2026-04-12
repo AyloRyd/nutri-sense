@@ -21,6 +21,7 @@ import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
 import { FormDialog } from '../../components/shared/FormDialog'
+import { ConfirmDialog } from '../../components/shared/ConfirmDialog'
 import type { CreatePlanDtoGoal } from '../../api/model/createPlanDtoGoal'
 
 export const Route = createFileRoute('/_authenticated/plans')({
@@ -37,10 +38,8 @@ function Plans() {
   const deletePlanMutation = usePlansControllerRemove()
 
   const handleDeletePlan = async (id: number) => {
-    if (confirm('Are you sure you want to delete this plan?')) {
-      await deletePlanMutation.mutateAsync({ id })
-      refetch()
-    }
+    await deletePlanMutation.mutateAsync({ id })
+    refetch()
   }
 
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -87,7 +86,7 @@ function Plans() {
   })
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 flex-1">
       <div className="flex justify-between items-end border-b-2 border-white pb-4">
         <div>
           <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
@@ -272,64 +271,81 @@ function Plans() {
         </FormDialog>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {plans?.map((plan) => (
-          <Card
-            key={plan.id}
-            className="brutal-border brutal-shadow rounded-none bg-black hover:bg-neutral-900 transition-colors"
-          >
-            <CardHeader className="border-b border-(--border) pb-4 relative">
-              <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
-              <div className="flex justify-between items-start pt-2">
-                <div>
-                  <CardTitle className="text-xl font-bold font-mono tracking-tighter uppercase text-white">
-                    Constraint set #{plan.id}
-                  </CardTitle>
-                  <CardDescription className="font-mono text-xs uppercase text-primary">
-                    Starts: {new Date(plan.start_date).toLocaleDateString()}
-                  </CardDescription>
+      {plans?.length === 0 ? (
+        <div className="flex-1 flex flex-col items-center justify-center text-center text-muted-foreground font-mono uppercase text-sm border-2 border-dashed border-muted min-h-[30vh]">
+          <p>NO PLANS CREATED YET.</p>
+          <p className="text-[10px] opacity-70 mt-1">
+            Create constraints to dictate your macro targets.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {plans?.map((plan) => (
+            <Card
+              key={plan.id}
+              className="brutal-border brutal-shadow rounded-none bg-black hover:bg-neutral-900 transition-colors"
+            >
+              <CardHeader className="border-b border-(--border) pb-4 relative">
+                <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
+                <div className="flex justify-between items-start pt-2">
+                  <div>
+                    <CardTitle className="text-xl font-bold font-mono tracking-tighter uppercase text-white">
+                      Constraint set #{plan.id}
+                    </CardTitle>
+                    <CardDescription className="font-mono text-xs uppercase text-primary">
+                      Starts: {new Date(plan.start_date).toLocaleDateString()}
+                    </CardDescription>
+                  </div>
+                  <ConfirmDialog
+                    title="DELETE PLAN?"
+                    description="Are you sure you want to delete this target plan?"
+                    onConfirm={() => handleDeletePlan(plan.id)}
+                    trigger={
+                      <button
+                        disabled={deletePlanMutation.isPending}
+                        className="text-muted-foreground hover:text-red-500 transition-colors mt-0.5"
+                        title="Delete Plan"
+                      >
+                        <Trash2 size={20} />
+                      </button>
+                    }
+                  />
                 </div>
-                <button
-                  onClick={() => handleDeletePlan(plan.id)}
-                  disabled={deletePlanMutation.isPending}
-                  className="text-muted-foreground hover:text-red-500 transition-colors mt-0.5"
-                  title="Delete Plan"
-                >
-                  <Trash2 size={20} />
-                </button>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-6">
-              <div className="grid grid-cols-2 gap-4 font-mono text-sm uppercase">
-                <div className="flex flex-col">
-                  <span className="text-muted-foreground text-xs">
-                    Calories
-                  </span>
-                  <span className="font-bold">{plan.day_calories}</span>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <div className="grid grid-cols-2 gap-4 font-mono text-sm uppercase">
+                  <div className="flex flex-col">
+                    <span className="text-muted-foreground text-xs">
+                      Calories
+                    </span>
+                    <span className="font-bold">{plan.day_calories}</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-muted-foreground text-xs">
+                      Plan Phase
+                    </span>
+                    <span className="font-bold">{plan.plan}</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-muted-foreground text-xs">
+                      Protein
+                    </span>
+                    <span className="font-bold">{plan.day_protein}g</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-muted-foreground text-xs">Fats</span>
+                    <span className="font-bold">{plan.day_fats}g</span>
+                  </div>
+                  <div className="flex flex-col col-span-2">
+                    <span className="text-muted-foreground text-xs">Carbs</span>
+                    <span className="font-bold">{plan.day_carbs}g</span>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-muted-foreground text-xs">
-                    Plan Phase
-                  </span>
-                  <span className="font-bold">{plan.plan}</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-muted-foreground text-xs">Protein</span>
-                  <span className="font-bold">{plan.day_protein}g</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-muted-foreground text-xs">Fats</span>
-                  <span className="font-bold">{plan.day_fats}g</span>
-                </div>
-                <div className="flex flex-col col-span-2">
-                  <span className="text-muted-foreground text-xs">Carbs</span>
-                  <span className="font-bold">{plan.day_carbs}g</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

@@ -109,3 +109,8 @@ a:hover {
   color: #000000;
   text-decoration: none;
 }
+
+button,
+[role='button'] {
+  cursor: pointer;
+}

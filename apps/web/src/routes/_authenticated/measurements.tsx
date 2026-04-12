@@ -29,6 +29,7 @@ import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
 import { FormDialog } from '../../components/shared/FormDialog'
+import { ConfirmDialog } from '../../components/shared/ConfirmDialog'
 
 export const Route = createFileRoute('/_authenticated/measurements')({
   loader: ({ context: { queryClient } }) =>
@@ -44,10 +45,8 @@ function Measurements() {
   const deleteMeasurementMutation = useMeasurementsControllerRemove()
 
   const handleDeleteMeasurement = async (id: number) => {
-    if (confirm('Are you sure you want to delete this log entry?')) {
-      await deleteMeasurementMutation.mutateAsync({ id })
-      refetch()
-    }
+    await deleteMeasurementMutation.mutateAsync({ id })
+    refetch()
   }
 
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -82,7 +81,7 @@ function Measurements() {
   }, [measurements])
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 flex-1">
       <div className="flex justify-between items-end border-b-2 border-white pb-4">
         <div>
           <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
@@ -242,55 +241,70 @@ function Measurements() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-        {sortedData
-          .slice()
-          .reverse()
-          .map((entry) => (
-            <Card
-              key={entry.id}
-              className="brutal-border brutal-shadow rounded-none bg-black hover:bg-neutral-900 transition-colors"
-            >
-              <CardHeader className="border-b border-(--border) pb-4 relative">
-                <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
-                <div className="flex justify-between items-start pt-2">
-                  <div>
-                    <CardTitle className="text-xl font-bold font-mono tracking-tighter uppercase text-white">
-                      {entry.weight} kg
-                    </CardTitle>
-                    <CardDescription className="font-mono text-xs uppercase text-primary">
-                      {entry.displayDate}
-                    </CardDescription>
+      {sortedData.length === 0 ? (
+        <div className="flex-1 flex items-center justify-center flex-col text-center text-muted-foreground font-mono uppercase text-sm border-2 border-dashed border-muted mt-4 min-h-[30vh]">
+          <p>NO BIOMETRICS LOGGED YET.</p>
+          <p className="text-[10px] opacity-70 mt-1">
+            Track your weight and height over time.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+          {sortedData
+            .slice()
+            .reverse()
+            .map((entry) => (
+              <Card
+                key={entry.id}
+                className="brutal-border brutal-shadow rounded-none bg-black hover:bg-neutral-900 transition-colors"
+              >
+                <CardHeader className="border-b border-(--border) pb-4 relative">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
+                  <div className="flex justify-between items-start pt-2">
+                    <div>
+                      <CardTitle className="text-xl font-bold font-mono tracking-tighter uppercase text-white">
+                        {entry.weight} kg
+                      </CardTitle>
+                      <CardDescription className="font-mono text-xs uppercase text-primary">
+                        {entry.displayDate}
+                      </CardDescription>
+                    </div>
+                    <ConfirmDialog
+                      title="DELETE LOG ENTRY?"
+                      description="Are you sure you want to delete this log entry?"
+                      onConfirm={() => handleDeleteMeasurement(entry.id)}
+                      trigger={
+                        <button
+                          disabled={deleteMeasurementMutation.isPending}
+                          className="text-muted-foreground hover:text-red-500 transition-colors mt-0.5"
+                          title="Delete Entry"
+                        >
+                          <Trash2 size={20} />
+                        </button>
+                      }
+                    />
                   </div>
-                  <button
-                    onClick={() => handleDeleteMeasurement(entry.id)}
-                    disabled={deleteMeasurementMutation.isPending}
-                    className="text-muted-foreground hover:text-red-500 transition-colors mt-0.5"
-                    title="Delete Entry"
-                  >
-                    <Trash2 size={20} />
-                  </button>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-6">
-                <div className="grid grid-cols-2 gap-4 font-mono text-sm uppercase">
-                  <div className="flex flex-col">
-                    <span className="text-muted-foreground text-xs">
-                      Height
-                    </span>
-                    <span className="font-bold">{entry.height} cm</span>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <div className="grid grid-cols-2 gap-4 font-mono text-sm uppercase">
+                    <div className="flex flex-col">
+                      <span className="text-muted-foreground text-xs">
+                        Height
+                      </span>
+                      <span className="font-bold">{entry.height} cm</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-muted-foreground text-xs">
+                        Activity
+                      </span>
+                      <span className="font-bold">{entry.activity}</span>
+                    </div>
                   </div>
-                  <div className="flex flex-col">
-                    <span className="text-muted-foreground text-xs">
-                      Activity
-                    </span>
-                    <span className="font-bold">{entry.activity}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-      </div>
+                </CardContent>
+              </Card>
+            ))}
+        </div>
+      )}
     </div>
   )
 }

@@ -27,6 +27,7 @@ import {
   TabsTrigger,
 } from '../../../../components/ui/tabs'
 import { FormDialog } from '../../../../components/shared/FormDialog'
+import { ConfirmDialog } from '../../../../components/shared/ConfirmDialog'
 
 export const Route = createFileRoute(
   '/_authenticated/library/template-meal/$id',
@@ -137,10 +138,8 @@ function TemplateMealDetails() {
   }
 
   const handleDeleteMeal = async () => {
-    if (confirm('Delete this template meal?')) {
-      await removeMealMutation.mutateAsync({ id: Number(id) })
-      navigate({ to: '/library' })
-    }
+    await removeMealMutation.mutateAsync({ id: Number(id) })
+    navigate({ to: '/library' })
   }
 
   const handleRemoveFood = async (foodId: number) => {
@@ -169,14 +168,20 @@ function TemplateMealDetails() {
             <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
               {mealAny.name}
             </h1>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleDeleteMeal}
-              className="brutal-border hover:bg-destructive hover:text-white rounded-none"
-            >
-              <Trash2 className="w-4 h-4" />
-            </Button>
+            <ConfirmDialog
+              title="DELETE TEMPLATE?"
+              description="Are you sure you want to delete this template meal?"
+              onConfirm={handleDeleteMeal}
+              trigger={
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="brutal-border hover:bg-destructive hover:text-white rounded-none"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              }
+            />
           </div>
           <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest mt-1">
             Template Meal
