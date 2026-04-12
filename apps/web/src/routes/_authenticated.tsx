@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, redirect, Link } from '@tanstack/react-router'
+import { useEffect } from 'react'
 import { Button } from '../components/ui/button'
 import {
   Popover,
@@ -6,6 +7,7 @@ import {
   PopoverTrigger,
 } from '../components/ui/popover'
 import { Menu } from 'lucide-react'
+import { iotControllerGetStatus } from '../api/endpoints/iot-scales/iot-scales'
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: () => {
@@ -19,6 +21,19 @@ export const Route = createFileRoute('/_authenticated')({
 })
 
 function AuthenticatedLayout() {
+  // Sync IoT link state: if server says not linked, clear localStorage token
+  useEffect(() => {
+    iotControllerGetStatus()
+      .then((data: any) => {
+        if (!data?.is_linked) {
+          localStorage.removeItem('iot_serial_number')
+        }
+      })
+      .catch(() => {
+        // silently ignore — network errors shouldn't affect UI
+      })
+  }, [])
+
   return (
     <div className="min-h-screen bg-black flex flex-col">
       <header className="border-b-4 border-(--border) px-6 py-4 flex justify-between items-center bg-black sticky top-0 z-50">

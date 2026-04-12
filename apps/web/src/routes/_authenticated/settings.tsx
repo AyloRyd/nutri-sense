@@ -107,9 +107,12 @@ function Settings() {
   const { data: user, refetch: refetchUser } = useQuery(
     getUsersControllerGetMeQueryOptions({}),
   )
-  const { data: scaleStatus, refetch: refetchScale } = useQuery(
-    getIotControllerGetStatusQueryOptions({}) as any,
-  )
+  const { data: scaleStatus, refetch: refetchScale } = useQuery({
+    ...(getIotControllerGetStatusQueryOptions({}) as any),
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+  })
 
   const updateProfileMutation = useUsersControllerUpdate()
   const changePasswordMutation = useAuthControllerChangePassword()
@@ -125,7 +128,9 @@ function Settings() {
   const [sex, setSex] = useState<UpdateUserDtoSex | ''>(user?.sex || '')
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
-  const [serialNumber, setSerialNumber] = useState('')
+  const [serialNumber, setSerialNumber] = useState(
+    () => localStorage.getItem('iot_serial_number') ?? '',
+  )
 
   const profileFeedback = useTransientFeedback()
   const passwordFeedback = useTransientFeedback()
@@ -197,6 +202,7 @@ function Settings() {
       await linkScaleMutation.mutateAsync({
         data: { serial_number: serialNumber },
       })
+      localStorage.setItem('iot_serial_number', serialNumber)
       setSerialNumber('')
       refetchScale()
       iotFeedback.trigger('success', 'Device linked successfully')
@@ -211,6 +217,7 @@ function Settings() {
   const handleUnlinkScale = async () => {
     try {
       await unlinkScaleMutation.mutateAsync()
+      localStorage.removeItem('iot_serial_number')
       refetchScale()
       iotFeedback.trigger('success', 'Device unlinked')
     } catch {
@@ -218,7 +225,9 @@ function Settings() {
     }
   }
 
-  const isLinked = (scaleStatus as any)?.isLinked
+  const scaleData = scaleStatus as any
+  const isLinked = scaleData?.is_linked
+  const linkedSerial = scaleData?.serial_number as string | null
 
   return (
     <div className="flex flex-col max-w-2xl w-full mx-auto mb-24">
@@ -409,7 +418,9 @@ function Settings() {
                     isLinked ? 'text-primary' : 'text-muted-foreground'
                   }`}
                 >
-                  {isLinked ? '● LINKED' : '○ NO DEVICE CONNECTED'}
+                  {isLinked
+                    ? `● LINKED — ${linkedSerial ?? ''}`
+                    : '○ NO DEVICE CONNECTED'}
                 </p>
               </div>
             </div>
@@ -434,9 +445,11 @@ function Settings() {
                 <Input
                   placeholder="e.g. SC-4A2B-9F1D"
                   value={serialNumber}
-                  onChange={(e) =>
-                    setSerialNumber(e.target.value.toUpperCase())
-                  }
+                  onChange={(e) => {
+                    const val = e.target.value.toUpperCase()
+                    setSerialNumber(val)
+                    localStorage.setItem('iot_serial_number', val)
+                  }}
                   className="brutal-border rounded-none bg-black text-primary font-mono h-10 tracking-widest text-sm flex-1 placeholder:text-muted-foreground/50 placeholder:normal-case placeholder:tracking-normal"
                 />
                 <Button

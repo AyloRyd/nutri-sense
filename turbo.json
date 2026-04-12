@@ -4,7 +4,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "!-node_modules"]
+      "outputs": ["dist/**", ".next/**", "!-node_modules", ".pio/build/**"]
     },
     "lint": {
       "dependsOn": ["^lint"]

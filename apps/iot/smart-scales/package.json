@@ -1,0 +1,8 @@
+{
+  "name": "@nutri-sense/iot-smart-scales",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "pio run"
+  }
+}

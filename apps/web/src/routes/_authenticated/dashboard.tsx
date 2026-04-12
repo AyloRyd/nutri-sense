@@ -46,9 +46,12 @@ function Dashboard() {
   const { data: plan } = useQuery(
     getPlansControllerFindByDateQueryOptions(today, {}),
   )
-  const { data: scaleStatus } = useQuery(
-    getIotControllerGetStatusQueryOptions({}) as any,
-  )
+  const { data: scaleStatus } = useQuery({
+    ...(getIotControllerGetStatusQueryOptions({}) as any),
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+  })
   const { data: meals } = useQuery(
     getMealsControllerFindAllQueryOptions({ start: today, end: today }, {}),
   )
@@ -181,7 +184,7 @@ function Dashboard() {
                 <span className="font-mono text-xs text-muted-foreground uppercase">
                   Connectivity Status
                 </span>
-                {(scaleStatus as any)?.isLinked ? (
+                {(scaleStatus as any)?.is_linked ? (
                   <span className="font-mono text-xs font-bold text-primary uppercase flex items-center gap-2">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>

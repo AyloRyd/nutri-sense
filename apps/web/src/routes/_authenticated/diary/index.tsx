@@ -59,7 +59,7 @@ function DiaryCalendar() {
   }, [stats])
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 mb-24">
       <div className="mt-8 p-6 bg-black brutal-border brutal-shadow flex flex-col md:flex-row gap-6 justify-between items-center">
         <div>
           <h3 className="font-mono text-xl font-black uppercase text-white tracking-tighter">

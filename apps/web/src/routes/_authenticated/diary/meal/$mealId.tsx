@@ -33,6 +33,7 @@ import { Input } from '../../../../components/ui/input'
 import { Label } from '../../../../components/ui/label'
 import { FormDialog } from '../../../../components/shared/FormDialog'
 import { ConfirmDialog } from '../../../../components/shared/ConfirmDialog'
+import { ScaleWeightButton } from '../../../../components/shared/ScaleWeightButton'
 import {
   Select,
   SelectContent,
@@ -507,14 +508,19 @@ function MealDetails() {
               {(field) => (
                 <div className="flex flex-col gap-1">
                   <Label>Weight (g)</Label>
-                  <Input
-                    type="number"
-                    className="brutal-border rounded-none bg-black text-white h-10"
-                    value={field.state.value || ''}
-                    onChange={(e) =>
-                      field.handleChange(parseFloat(e.target.value))
-                    }
-                  />
+                  <div className="flex gap-1">
+                    <Input
+                      type="number"
+                      className="brutal-border rounded-none bg-black text-white h-10 flex-1"
+                      value={field.state.value || ''}
+                      onChange={(e) =>
+                        field.handleChange(parseFloat(e.target.value))
+                      }
+                    />
+                    <ScaleWeightButton
+                      onWeight={(g) => field.handleChange(g)}
+                    />
+                  </div>
                 </div>
               )}
             </form.Field>
