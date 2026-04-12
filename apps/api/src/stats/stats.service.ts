@@ -20,20 +20,24 @@ export class StatsService {
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
       const dateStr = d.toISOString().split('T')[0];
 
-      let activePlan: PlanEntity;
+      let activePlan: PlanEntity | null = null;
       try {
         activePlan = await this.plansService.findActiveByDate(
           userId,
           d.toISOString(),
         );
       } catch {
-        continue;
+        activePlan = null;
       }
 
       const meals = await this.mealsService.findAll(userId, {
         start: dateStr,
         end: dateStr,
       });
+
+      if (!activePlan && meals.length === 0) {
+        continue;
+      }
 
       interface MacroTotals {
         calories: number;

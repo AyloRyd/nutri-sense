@@ -148,17 +148,24 @@ function DiaryCalendar() {
 
           let statusColor = 'border-neutral-800 bg-black' // No plan = Black
           const isTodayDay = isToday(day)
-          if (dayStat) {
-            const isCalOk =
-              Math.abs(dayStat.actual_calories - dayStat.plan.day_calories) <=
-              100
-            const isFuture = isAfter(day, startOfToday())
+          const isFuture = isAfter(day, startOfToday())
 
-            if (isFuture) {
+          if (dayStat) {
+            const hasPlan = !!dayStat.plan
+            const isCalOk = hasPlan
+              ? Math.abs(
+                  dayStat.actual_calories - dayStat.plan!.day_calories,
+                ) <= 100
+              : false
+
+            if (!hasPlan) {
+              statusColor =
+                'border-neutral-700 bg-neutral-900 border-dashed text-neutral-400' // Logged but no plan
+            } else if (isFuture) {
               statusColor =
                 'border-neutral-700 bg-neutral-800/40 text-neutral-400' // Future Plan = Gray
-            } else if (isTodayDay && dayStat.actual_calories === 0) {
-              statusColor = 'border-neutral-600 bg-black text-neutral-400' // Today Pending = Black
+            } else if (dayStat.actual_calories === 0) {
+              statusColor = 'border-rose-900 bg-rose-900/30 text-rose-500' // Uncompleted / Zero Calories = Red
             } else if (isCalOk) {
               statusColor =
                 'border-emerald-800 bg-emerald-900/30 text-emerald-400' // Completed = Green
@@ -182,51 +189,72 @@ function DiaryCalendar() {
               >
                 {format(day, 'd')}
               </span>
-              {dayStat && dayStat.actual_calories > 0 && (
+              {dayStat && (
                 <div className="flex flex-col gap-0.5 w-full mt-auto">
                   <div
                     className={`font-mono font-black text-xs sm:text-sm truncate ${
-                      Math.abs(
-                        dayStat.actual_calories - dayStat.plan.day_calories,
-                      ) <= 100
-                        ? 'text-emerald-500'
-                        : 'text-rose-600'
+                      !dayStat.plan
+                        ? 'text-neutral-500'
+                        : Math.abs(
+                              dayStat.actual_calories -
+                                dayStat.plan.day_calories,
+                            ) <= 100
+                          ? 'text-emerald-500'
+                          : isFuture
+                            ? 'text-neutral-500'
+                            : 'text-rose-600'
                     }`}
                   >
                     {dayStat.actual_calories}{' '}
-                    <span className="opacity-50 font-normal text-white">
-                      / {dayStat.plan.day_calories}
-                    </span>
+                    {dayStat.plan && (
+                      <span className="opacity-50 font-normal text-white">
+                        / {dayStat.plan.day_calories}
+                      </span>
+                    )}
                   </div>
                   <div className="hidden sm:flex justify-between font-mono text-[10px] w-full uppercase">
                     <span
                       className={
-                        Math.abs(
-                          dayStat.actual_protein - dayStat.plan.day_protein,
-                        ) <= 30
-                          ? 'text-emerald-500/70'
-                          : 'text-rose-600/70'
+                        !dayStat.plan
+                          ? 'text-neutral-500/70'
+                          : Math.abs(
+                                dayStat.actual_protein -
+                                  dayStat.plan.day_protein,
+                              ) <= 30
+                            ? 'text-emerald-500/70'
+                            : isFuture
+                              ? 'text-neutral-500/70'
+                              : 'text-rose-600/70'
                       }
                     >
                       P:{dayStat.actual_protein}
                     </span>
                     <span
                       className={
-                        Math.abs(dayStat.actual_fats - dayStat.plan.day_fats) <=
-                        15
-                          ? 'text-emerald-500/70'
-                          : 'text-rose-600/70'
+                        !dayStat.plan
+                          ? 'text-neutral-500/70'
+                          : Math.abs(
+                                dayStat.actual_fats - dayStat.plan.day_fats,
+                              ) <= 15
+                            ? 'text-emerald-500/70'
+                            : isFuture
+                              ? 'text-neutral-500/70'
+                              : 'text-rose-600/70'
                       }
                     >
                       F:{dayStat.actual_fats}
                     </span>
                     <span
                       className={
-                        Math.abs(
-                          dayStat.actual_carbs - dayStat.plan.day_carbs,
-                        ) <= 30
-                          ? 'text-emerald-500/70'
-                          : 'text-rose-600/70'
+                        !dayStat.plan
+                          ? 'text-neutral-500/70'
+                          : Math.abs(
+                                dayStat.actual_carbs - dayStat.plan.day_carbs,
+                              ) <= 30
+                            ? 'text-emerald-500/70'
+                            : isFuture
+                              ? 'text-neutral-500/70'
+                              : 'text-rose-600/70'
                       }
                     >
                       C:{dayStat.actual_carbs}
@@ -234,7 +262,7 @@ function DiaryCalendar() {
                   </div>
                 </div>
               )}
-              {(!dayStat || dayStat.actual_calories === 0) && (
+              {!dayStat && (
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity text-primary font-mono text-[10px] uppercase w-full text-center mt-auto">
                   + Add Log
                 </div>

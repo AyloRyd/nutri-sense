@@ -8,8 +8,8 @@ import type { PlanEntity } from './planEntity'
 
 export interface DailyStatsEntity {
   date: string
-  /** The active plan for this specific date */
-  plan: PlanEntity
+  /** The active plan for this specific date, or null if none */
+  plan?: PlanEntity | null
   /** Sum of all meals for this date */
   actual_calories: number
   actual_protein: number

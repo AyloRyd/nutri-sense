@@ -2172,7 +2172,8 @@
             "example": "2023-12-08"
           },
           "plan": {
-            "description": "The active plan for this specific date",
+            "description": "The active plan for this specific date, or null if none",
+            "nullable": true,
             "allOf": [
               {
                 "$ref": "#/components/schemas/PlanEntity"
@@ -2199,7 +2200,6 @@
         },
         "required": [
           "date",
-          "plan",
           "actual_calories",
           "actual_protein",
           "actual_fats",

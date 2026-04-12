@@ -78,7 +78,7 @@ function DiaryDate() {
   ) || { calories: 0, protein: 0, fats: 0, carbs: 0 }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 flex-1">
       <div className="flex flex-col md:flex-row md:justify-between md:items-end border-b-2 border-white pb-4 gap-4">
         <div>
           <Link
@@ -255,56 +255,59 @@ function DiaryDate() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
-        {meals?.length === 0 && (
-          <div className="col-span-1 md:col-span-2 lg:col-span-3 py-12 text-center text-muted-foreground font-mono uppercase text-sm border-2 border-dashed border-muted">
-            NO MEALS LOGGED FOR THIS DATE.
-          </div>
-        )}
-        {meals?.map((meal) => (
-          <Card
-            key={meal.id}
-            className="brutal-border brutal-shadow rounded-none bg-black hover:bg-neutral-900 transition-colors h-full flex flex-col cursor-pointer"
-            onClick={() =>
-              navigate({
-                to: '/diary/meal/$mealId',
-                params: { mealId: meal.id.toString() },
-              })
-            }
-          >
-            <CardHeader className="border-b border-(--border) pb-4 relative">
-              <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
-              <div className="flex justify-between items-start pt-2">
-                <CardTitle className="text-xl font-bold font-mono tracking-tighter uppercase text-white truncate pr-2">
-                  {meal.name}
-                </CardTitle>
-                <div className="text-primary font-mono text-xl font-black">
-                  {Math.round(meal.calories)}
+      {meals?.length === 0 ? (
+        <div className="flex-1 flex items-center justify-center text-center text-muted-foreground font-mono uppercase text-sm border-2 border-dashed border-muted mt-2">
+          NO MEALS LOGGED FOR THIS DATE.
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
+          {meals?.map((meal) => (
+            <Card
+              key={meal.id}
+              className="brutal-border brutal-shadow rounded-none bg-black hover:bg-neutral-900 transition-colors h-full flex flex-col cursor-pointer"
+              onClick={() =>
+                navigate({
+                  to: '/diary/meal/$mealId',
+                  params: { mealId: meal.id.toString() },
+                })
+              }
+            >
+              <CardHeader className="border-b border-(--border) pb-4 relative">
+                <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
+                <div className="flex justify-between items-start pt-2">
+                  <CardTitle className="text-xl font-bold font-mono tracking-tighter uppercase text-white truncate pr-2">
+                    {meal.name}
+                  </CardTitle>
+                  <div className="text-primary font-mono text-xl font-black">
+                    {Math.round(meal.calories)}
+                  </div>
                 </div>
-              </div>
-              <CardDescription className="font-mono text-[10px] uppercase text-muted-foreground">
-                {meal.meal_foods.length} items logged
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="pt-6 flex flex-col flex-1 gap-4">
-              <div className="grid grid-cols-3 gap-2 font-mono text-xs uppercase opacity-80">
-                <div className="flex flex-col">
-                  <span className="text-muted-foreground text-[10px]">P</span>
-                  <span className="font-bold">{Math.round(meal.protein)}g</span>
+                <CardDescription className="font-mono text-[10px] uppercase text-muted-foreground">
+                  {meal.meal_foods.length} items logged
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6 flex flex-col flex-1 gap-4">
+                <div className="grid grid-cols-3 gap-2 font-mono text-xs uppercase opacity-80">
+                  <div className="flex flex-col">
+                    <span className="text-muted-foreground text-[10px]">P</span>
+                    <span className="font-bold">
+                      {Math.round(meal.protein)}g
+                    </span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-muted-foreground text-[10px]">F</span>
+                    <span className="font-bold">{Math.round(meal.fats)}g</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-muted-foreground text-[10px]">C</span>
+                    <span className="font-bold">{Math.round(meal.carbs)}g</span>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-muted-foreground text-[10px]">F</span>
-                  <span className="font-bold">{Math.round(meal.fats)}g</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-muted-foreground text-[10px]">C</span>
-                  <span className="font-bold">{Math.round(meal.carbs)}g</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

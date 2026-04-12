@@ -5,8 +5,13 @@ export class DailyStatsEntity {
   @ApiProperty({ example: '2023-12-08' })
   date: string;
 
-  @ApiProperty({ description: 'The active plan for this specific date' })
-  plan: PlanEntity;
+  @ApiProperty({
+    description: 'The active plan for this specific date, or null if none',
+    nullable: true,
+    required: false,
+    type: () => PlanEntity,
+  })
+  plan: PlanEntity | null;
 
   @ApiProperty({
     example: 1850,

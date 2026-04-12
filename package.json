@@ -11,6 +11,8 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "check": "npm run lint && npm run typecheck && npm run test",
     "test": "turbo run test",
     "openapi:generate": "turbo run openapi:generate",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\""

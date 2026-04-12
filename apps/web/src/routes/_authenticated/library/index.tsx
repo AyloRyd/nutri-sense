@@ -210,10 +210,16 @@ function Library() {
                       {meal.name}
                     </CardTitle>
                     <button
-                      onClick={(e) => {
+                      onClick={async (e) => {
                         e.stopPropagation()
-                        removeMealMutation.mutate({ id: meal.id })
-                        refetchMeals()
+                        if (
+                          window.confirm(
+                            'Are you sure you want to delete this template meal?',
+                          )
+                        ) {
+                          await removeMealMutation.mutateAsync({ id: meal.id })
+                          refetchMeals()
+                        }
                       }}
                       className="text-muted-foreground hover:text-red-500 transition-colors shrink-0 mt-0.5"
                       title="Delete"
@@ -287,10 +293,16 @@ function Library() {
                   </div>
                 </div>
                 <button
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.stopPropagation()
-                    removeFoodMutation.mutate({ id: food.id })
-                    refetchFoods()
+                    if (
+                      window.confirm(
+                        'Are you sure you want to delete this template food?',
+                      )
+                    ) {
+                      await removeFoodMutation.mutateAsync({ id: food.id })
+                      refetchFoods()
+                    }
                   }}
                   className="ml-4 p-2 text-muted-foreground hover:text-red-500 transition-colors mt-0.5"
                 >

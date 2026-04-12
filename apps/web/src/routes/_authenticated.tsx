@@ -20,7 +20,7 @@ export const Route = createFileRoute('/_authenticated')({
 
 function AuthenticatedLayout() {
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black flex flex-col">
       <header className="border-b-4 border-(--border) px-6 py-4 flex justify-between items-center bg-black sticky top-0 z-50">
         <h2 className="font-black text-white font-mono uppercase tracking-tighter text-2xl">
           Nutri<span className="text-primary">Sense</span>
@@ -128,7 +128,7 @@ function AuthenticatedLayout() {
           </Button>
         </div>
       </header>
-      <main className="p-6 md:p-12 max-w-7xl mx-auto">
+      <main className="p-6 md:p-12 max-w-7xl mx-auto w-full flex-1 flex flex-col">
         <Outlet />
       </main>
     </div>
