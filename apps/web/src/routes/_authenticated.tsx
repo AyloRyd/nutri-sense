@@ -127,10 +127,19 @@ function AuthenticatedLayout() {
                   </Link>
                   <Link
                     to="/settings"
-                    className="p-4 text-muted-foreground hover:text-primary hover:bg-white/5 [&.active]:text-primary transition-colors"
+                    className="p-4 border-b border-white/20 text-muted-foreground hover:text-primary hover:bg-white/5 [&.active]:text-primary transition-colors"
                   >
                     {t('nav.settings')}
                   </Link>
+                  <button
+                    onClick={() => {
+                      localStorage.removeItem('token')
+                      window.location.href = '/'
+                    }}
+                    className="p-4 text-left w-full text-muted-foreground hover:text-destructive hover:bg-white/5 transition-colors"
+                  >
+                    {t('nav.logout')}
+                  </button>
                 </div>
               </PopoverContent>
             </Popover>
@@ -142,7 +151,7 @@ function AuthenticatedLayout() {
               localStorage.removeItem('token')
               window.location.href = '/'
             }}
-            className="brutal-border hover:bg-destructive hover:text-white rounded-none font-bold uppercase font-mono h-10 transition-none"
+            className="hidden md:inline-flex brutal-border hover:bg-destructive hover:text-white rounded-none font-bold uppercase font-mono h-10 transition-none"
           >
             {t('nav.logout')}
           </Button>

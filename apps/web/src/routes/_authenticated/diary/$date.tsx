@@ -5,11 +5,13 @@ import { useTranslation } from 'react-i18next'
 import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
 import { PlusIcon, ArrowLeft } from 'lucide-react'
+import { NutritionRings } from '../../../components/shared/NutritionRings'
 
 import {
   getMealsControllerFindAllQueryOptions,
   useMealsControllerCreate,
 } from '../../../api/endpoints/meals/meals'
+import { usePlansControllerFindByDate } from '../../../api/endpoints/plans/plans'
 import { formatDate } from '../../../lib/date-format'
 import { useTemplateMealsControllerFindAll } from '../../../api/endpoints/template-meals/template-meals'
 import {
@@ -52,6 +54,9 @@ function DiaryDate() {
     getMealsControllerFindAllQueryOptions({ start: date, end: date }),
   )
   const { data: templates } = useTemplateMealsControllerFindAll()
+  const { data: plan } = usePlansControllerFindByDate(date, {
+    query: { retry: false },
+  })
   const createMealMutation = useMealsControllerCreate()
   const [dialogOpen, setDialogOpen] = useState(false)
   const [mode, setMode] = useState<'blank' | 'template'>('blank')
@@ -235,40 +240,22 @@ function DiaryDate() {
         </FormDialog>
       </div>
 
-      <div className="grid grid-cols-4 gap-4 bg-muted/5 p-4 brutal-border">
-        <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">
-            {t('diaryDate.totalKcal')}
-          </span>
-          <span className="font-bold text-xl text-primary font-mono">
-            {Math.round(totals.calories)}
-          </span>
-        </div>
-        <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">
-            {t('diaryDate.protein')}
-          </span>
-          <span className="font-bold text-lg font-mono">
-            {Math.round(totals.protein)}g
-          </span>
-        </div>
-        <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">
-            {t('diaryDate.fats')}
-          </span>
-          <span className="font-bold text-lg font-mono">
-            {Math.round(totals.fats)}g
-          </span>
-        </div>
-        <div className="flex flex-col">
-          <span className="text-muted-foreground text-xs font-mono uppercase">
-            {t('diaryDate.carbs')}
-          </span>
-          <span className="font-bold text-lg font-mono">
-            {Math.round(totals.carbs)}g
-          </span>
-        </div>
-      </div>
+      <NutritionRings
+        calories={totals.calories}
+        protein={totals.protein}
+        fats={totals.fats}
+        carbs={totals.carbs}
+        goals={
+          plan
+            ? {
+                calories: plan.day_calories,
+                protein: plan.day_protein,
+                fats: plan.day_fats,
+                carbs: plan.day_carbs,
+              }
+            : undefined
+        }
+      />
 
       {meals?.length === 0 ? (
         <div className="flex-1 flex items-center justify-center text-center text-muted-foreground font-mono uppercase text-sm border-2 border-dashed border-muted mt-2">
