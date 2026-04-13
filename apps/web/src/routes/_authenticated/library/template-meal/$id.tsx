@@ -355,7 +355,7 @@ function TemplateMealDetails() {
                 <Button
                   onClick={handleBarcodeSearch}
                   disabled={isSearchingBarcode}
-                  className="brutal-border rounded-none bg-primary text-black"
+                  className="brutal-border rounded-none bg-primary text-black h-10"
                 >
                   {isSearchingBarcode ? '...' : <Search className="w-4 h-4" />}
                 </Button>
