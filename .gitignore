@@ -1,13 +1,41 @@
+# Dependencies
 node_modules/
+.pnpm-store/
+
+# Build artifacts
 dist/
+.turbo/
+**/out/
+**/.next/
+**/.vercel/
 
-.tanstack
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
 
-**/.turbo
+# Prisma
+**/src/generated/prisma/
+**/prisma/seed_diary.sql
 
-src/generated/prisma
-
+# Environment
 .env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+.env.test
 
+# IOT (PlatformIO)
+.pio/
+apps/iot/smart-scales/.vscode/.browse.c_cpp.db*
+apps/iot/smart-scales/.vscode/c_cpp_properties.json
+apps/iot/smart-scales/.vscode/launch.json
+apps/iot/smart-scales/.vscode/ipch/
+
+# Tooling
+.tanstack/
 .agents/
 skills-lock.json
