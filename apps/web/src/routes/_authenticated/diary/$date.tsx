@@ -165,14 +165,17 @@ function DiaryDate() {
                     form.setFieldValue('name', selectedTemp.name)
                     form.setFieldValue(
                       'mealFoods',
-                      selectedTemp.template_meal_foods.map((f) => ({
-                        name: f.name,
-                        weight: f.weight,
-                        calories: f.calories,
-                        protein: f.protein,
-                        fats: f.fats,
-                        carbs: f.carbs,
-                      })),
+                      selectedTemp.template_meal_foods.map((f) => {
+                        const factor = 100 / f.weight
+                        return {
+                          name: f.name,
+                          weight: f.weight,
+                          calories: f.calories * factor,
+                          protein: f.protein * factor,
+                          fats: f.fats * factor,
+                          carbs: f.carbs * factor,
+                        }
+                      }),
                     )
                   }
                 }}

@@ -116,13 +116,14 @@ function TemplateMealDetails() {
 
   const openDialog = (food?: EditingFood) => {
     if (food) {
+      const factor = 100 / food.weight
       setEditingFood(food)
       form.setFieldValue('name', food.name)
       form.setFieldValue('weight', food.weight)
-      form.setFieldValue('calories', food.calories)
-      form.setFieldValue('protein', food.protein)
-      form.setFieldValue('fats', food.fats)
-      form.setFieldValue('carbs', food.carbs)
+      form.setFieldValue('calories', food.calories * factor)
+      form.setFieldValue('protein', food.protein * factor)
+      form.setFieldValue('fats', food.fats * factor)
+      form.setFieldValue('carbs', food.carbs * factor)
     } else {
       setEditingFood(null)
       form.reset()

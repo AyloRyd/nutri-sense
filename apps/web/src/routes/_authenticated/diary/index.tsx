@@ -77,7 +77,9 @@ function DiaryCalendar() {
             <span className="text-muted-foreground text-xs">
               {t('diary.totalKcal')}
             </span>
-            <span className="font-bold">{summary.cals.toLocaleString()}</span>
+            <span className="font-bold">
+              {Math.round(summary.cals).toLocaleString()}
+            </span>
           </div>
           <div className="flex flex-col">
             <span className="text-muted-foreground text-xs">
@@ -96,7 +98,8 @@ function DiaryCalendar() {
               {t('diary.totalMacros')}
             </span>
             <span className="font-bold text-xs mt-1">
-              P:{summary.prot} F:{summary.fat} C:{summary.carb}
+              P:{Math.round(summary.prot)} F:{Math.round(summary.fat)} C:
+              {Math.round(summary.carb)}
             </span>
           </div>
         </div>
@@ -216,10 +219,10 @@ function DiaryCalendar() {
                             : 'text-rose-600'
                     }`}
                   >
-                    {dayStat.actual_calories}{' '}
+                    {Math.round(dayStat.actual_calories)}{' '}
                     {dayStat.plan && (
                       <span className="opacity-50 font-normal text-white">
-                        / {dayStat.plan.day_calories}
+                        / {Math.round(dayStat.plan.day_calories)}
                       </span>
                     )}
                   </div>
@@ -238,7 +241,7 @@ function DiaryCalendar() {
                               : 'text-rose-600/70'
                       }
                     >
-                      P:{dayStat.actual_protein}
+                      P:{Math.round(dayStat.actual_protein)}
                     </span>
                     <span
                       className={
@@ -253,7 +256,7 @@ function DiaryCalendar() {
                               : 'text-rose-600/70'
                       }
                     >
-                      F:{dayStat.actual_fats}
+                      F:{Math.round(dayStat.actual_fats)}
                     </span>
                     <span
                       className={
@@ -268,7 +271,7 @@ function DiaryCalendar() {
                               : 'text-rose-600/70'
                       }
                     >
-                      C:{dayStat.actual_carbs}
+                      C:{Math.round(dayStat.actual_carbs)}
                     </span>
                   </div>
                 </div>

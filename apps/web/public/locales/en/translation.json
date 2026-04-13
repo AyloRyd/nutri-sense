@@ -156,7 +156,7 @@
   },
   "settingsPage": {
     "title": "System.",
-    "titleSpan": "Config",
+    "titleSpan": "Settings",
     "subtitle": "User preferences & hardware integrations",
     "identity": "Identity",
     "identityDesc": "Personal profile & biometric metadata",

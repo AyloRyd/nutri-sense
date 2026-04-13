@@ -135,13 +135,14 @@ function MealDetails() {
 
   const openDialog = (food?: EditingFood) => {
     if (food) {
+      const factor = 100 / food.weight
       setEditingFood(food)
       form.setFieldValue('name', food.name)
       form.setFieldValue('weight', food.weight)
-      form.setFieldValue('calories', food.calories)
-      form.setFieldValue('protein', food.protein)
-      form.setFieldValue('fats', food.fats)
-      form.setFieldValue('carbs', food.carbs)
+      form.setFieldValue('calories', food.calories * factor)
+      form.setFieldValue('protein', food.protein * factor)
+      form.setFieldValue('fats', food.fats * factor)
+      form.setFieldValue('carbs', food.carbs * factor)
     } else {
       setEditingFood(null)
       form.reset()
@@ -187,14 +188,17 @@ function MealDetails() {
     await createTemplateMealMutation.mutateAsync({
       data: {
         name: meal.name,
-        templateMealFoods: meal.meal_foods.map((f) => ({
-          name: f.name,
-          weight: f.weight,
-          calories: f.calories,
-          protein: f.protein,
-          fats: f.fats,
-          carbs: f.carbs,
-        })),
+        templateMealFoods: meal.meal_foods.map((f) => {
+          const factor = 100 / f.weight
+          return {
+            name: f.name,
+            weight: f.weight,
+            calories: f.calories * factor,
+            protein: f.protein * factor,
+            fats: f.fats * factor,
+            carbs: f.carbs * factor,
+          }
+        }),
       },
     })
   }

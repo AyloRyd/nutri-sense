@@ -402,6 +402,7 @@ function Settings() {
         </form>
       </section>
       <section
+        className="mb-10"
         id="iot-section"
         style={{
           animation: 'fadeSlideUp 0.4s ease both',
