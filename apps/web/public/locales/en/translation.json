@@ -114,7 +114,7 @@
     "execute": "EXECUTE_PLAN",
     "noPlansCreated": "NO PLANS CREATED YET.",
     "noPlansDesc": "Create constraints to dictate your macro targets.",
-    "constraintSet": "Constraint set #",
+    "constraintSet": "Constraint set",
     "starts": "Starts: ",
     "deleteTitle": "DELETE PLAN?",
     "deleteDesc": "Are you sure you want to delete this target plan?",

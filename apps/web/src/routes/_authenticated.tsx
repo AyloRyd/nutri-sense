@@ -44,7 +44,7 @@ function AuthenticatedLayout() {
         <h2 className="font-black text-white font-mono uppercase tracking-tighter text-2xl">
           Nutri<span className="text-primary">Sense</span>
         </h2>
-        <nav className="hidden md:flex gap-6 font-mono text-sm uppercase tracking-widest font-bold">
+        <nav className="hidden lg:flex gap-6 font-mono text-sm uppercase tracking-widest font-bold">
           <Link
             to="/dashboard"
             className="text-muted-foreground hover:text-primary [&.active]:text-primary [&.active]:border-b-2 [&.active]:border-primary pb-1"
@@ -85,7 +85,7 @@ function AuthenticatedLayout() {
 
         <div className="flex items-center gap-4">
           <LanguageSwitcher />
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <Popover>
               <PopoverTrigger className="inline-flex items-center justify-center brutal-border hover:bg-primary transition-none rounded-none h-10 w-10 border-2 border-white bg-black text-white outline-none focus-visible:ring-2 focus-visible:ring-primary">
                 <Menu className="h-5 w-5" />
@@ -151,7 +151,7 @@ function AuthenticatedLayout() {
               localStorage.removeItem('token')
               window.location.href = '/'
             }}
-            className="hidden md:inline-flex brutal-border hover:bg-destructive hover:text-white rounded-none font-bold uppercase font-mono h-10 transition-none"
+            className="hidden lg:inline-flex brutal-border hover:bg-destructive hover:text-white rounded-none font-bold uppercase font-mono h-10 transition-none"
           >
             {t('nav.logout')}
           </Button>

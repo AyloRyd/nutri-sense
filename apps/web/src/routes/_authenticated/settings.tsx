@@ -7,6 +7,7 @@ import { CheckCircle, XCircle, Wifi, WifiOff } from 'lucide-react'
 import {
   getUsersControllerGetMeQueryOptions,
   useUsersControllerUpdate,
+  useUsersControllerRemove,
 } from '../../api/endpoints/users/users'
 import type { UpdateUserDtoSex } from '../../api/model/updateUserDtoSex'
 import { useAuthControllerChangePassword } from '../../api/endpoints/auth/auth'
@@ -15,6 +16,17 @@ import {
   useIotControllerUnlinkDevice,
   getIotControllerGetStatusQueryOptions,
 } from '../../api/endpoints/iot-scales/iot-scales'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '../../components/ui/alert-dialog'
 import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
 import { Label } from '../../components/ui/label'
@@ -120,6 +132,7 @@ function Settings() {
   const changePasswordMutation = useAuthControllerChangePassword()
   const linkScaleMutation = useIotControllerLinkDevice()
   const unlinkScaleMutation = useIotControllerUnlinkDevice()
+  const deleteAccountMutation = useUsersControllerRemove()
 
   const [username, setUsername] = useState(user?.username || '')
   const [dateOfBirth, setDateOfBirth] = useState(
@@ -224,13 +237,23 @@ function Settings() {
     }
   }
 
+  const handleDeleteAccount = async () => {
+    if (!user) return
+    try {
+      await deleteAccountMutation.mutateAsync({ id: user.id.toString() })
+      localStorage.removeItem('token')
+      window.location.href = '/'
+    } catch {
+      console.error('Failed to delete account')
+    }
+  }
+
   const scaleData = scaleStatus as any
   const isLinked = scaleData?.is_linked
   const linkedSerial = scaleData?.serial_number as string | null
 
   return (
     <div className="flex flex-col max-w-2xl w-full mx-auto mb-24">
-      {/* Page title */}
       <div className="mb-10">
         <h1 className="text-4xl font-black font-mono uppercase tracking-tighter text-white">
           {t('settingsPage.title')}
@@ -240,8 +263,6 @@ function Settings() {
           {t('settingsPage.subtitle')}
         </p>
       </div>
-
-      {/* ── 01 PROFILE ─────────────────────────────── */}
       <section
         className="mb-10"
         style={{
@@ -320,8 +341,6 @@ function Settings() {
           </div>
         </form>
       </section>
-
-      {/* ── 02 SECURITY ─────────────────────────────── */}
       <section
         className="mb-10"
         style={{
@@ -382,8 +401,6 @@ function Settings() {
           </div>
         </form>
       </section>
-
-      {/* ── 03 IOT ─────────────────────────────── */}
       <section
         id="iot-section"
         style={{
@@ -440,8 +457,6 @@ function Settings() {
               </Button>
             )}
           </div>
-
-          {/* Link form */}
           {!isLinked && (
             <div className="flex flex-col gap-3">
               <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
@@ -475,6 +490,63 @@ function Settings() {
             state={iotFeedback.state}
             message={iotFeedback.message}
           />
+        </div>
+      </section>
+      <section
+        className="mb-10"
+        style={{
+          animation: 'fadeSlideUp 0.4s ease both',
+          animationDelay: '240ms',
+        }}
+      >
+        <SectionHeader
+          index="04"
+          title={t('settingsPage.dangerZone', 'Danger Zone')}
+          description={t('settingsPage.dangerZoneDesc', 'Irreversible actions')}
+        />
+        <div className="border-l-2 border-red-500/50 pl-5 flex flex-col gap-5">
+          <p className="font-mono text-sm text-red-500 max-w-lg mb-4">
+            {t(
+              'settingsPage.deleteWarning',
+              'Once you delete your account, there is no going back. Please be certain.',
+            )}
+          </p>
+
+          <AlertDialog>
+            <AlertDialogTrigger
+              render={<Button variant="destructive" />}
+              className="brutal-border w-fit font-bold uppercase font-mono tracking-widest text-xs h-10 px-6 rounded-none transition-none"
+            >
+              {t('settingsPage.deleteAccount', 'Delete Account')}
+            </AlertDialogTrigger>
+            <AlertDialogContent className="brutal-border bg-black border-red-500 rounded-none sm:max-w-md">
+              <AlertDialogHeader>
+                <AlertDialogTitle className="font-mono font-black uppercase text-xl text-red-500 tracking-tighter">
+                  {t(
+                    'settingsPage.deleteConfirmTitle',
+                    'Are you absolutely sure?',
+                  )}
+                </AlertDialogTitle>
+                <AlertDialogDescription className="font-mono text-muted-foreground text-sm">
+                  {t(
+                    'settingsPage.deleteConfirmDesc',
+                    'This action cannot be undone. This will permanently delete your account and remove all your data from our servers.',
+                  )}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter className="mt-6 border-t-2 border-white/10 pt-4">
+                <AlertDialogCancel className="brutal-border hover:bg-white/10 text-white rounded-none font-mono uppercase text-xs font-bold transition-none">
+                  {t('settingsPage.cancel', 'Cancel')}
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDeleteAccount}
+                  className="bg-red-500 text-white hover:bg-black hover:text-red-500 hover:border-red-500 brutal-border border-red-500 rounded-none font-mono uppercase text-xs font-bold transition-none ml-2"
+                >
+                  {t('settingsPage.deleteConfirmAction', 'Yes, Delete Account')}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </section>
 

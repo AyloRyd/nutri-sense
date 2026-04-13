@@ -87,7 +87,7 @@ function Measurements() {
     <div className="flex flex-col gap-6 flex-1">
       <div className="flex justify-between items-end border-b-2 border-white pb-4">
         <div>
-          <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
+          <h1 className="text-xl md:text-3xl font-black font-mono uppercase tracking-tighter text-white">
             {t('measurements.title')}
           </h1>
           <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest mt-1">

@@ -117,7 +117,7 @@ function Plans() {
     <div className="flex flex-col gap-6 flex-1">
       <div className="flex justify-between items-end border-b-2 border-white pb-4">
         <div>
-          <h1 className="text-3xl font-black font-mono uppercase tracking-tighter text-white">
+          <h1 className="text-xl md:text-3xl font-black font-mono uppercase tracking-tighter text-white">
             {t('plans.title')}
           </h1>
           <p className="text-muted-foreground font-mono text-xs uppercase tracking-widest mt-1">
@@ -384,7 +384,6 @@ function Plans() {
                   <div>
                     <CardTitle className="text-xl font-bold font-mono tracking-tighter uppercase text-white">
                       {t('plans.constraintSet')}
-                      {plan.id}
                     </CardTitle>
                     <CardDescription className="font-mono text-xs uppercase text-primary">
                       {t('plans.starts')}
