@@ -1,0 +1,15 @@
+config:
+  target: "http://localhost:4000"
+  phases:
+    - duration: 20
+      arrivalRate: 50
+      name: Warm up
+    - duration: 30
+      arrivalRate: 200
+      name: Sustained load
+
+scenarios:
+  - name: "Get Hello"
+    flow:
+      - get:
+          url: "/"
