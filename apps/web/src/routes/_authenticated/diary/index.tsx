@@ -63,29 +63,29 @@ function DiaryCalendar() {
 
   return (
     <div className="flex flex-col gap-6 mb-24">
-      <div className="mt-8 p-6 bg-black brutal-border brutal-shadow flex flex-col md:flex-row gap-6 justify-between items-center">
-        <div>
-          <h3 className="font-mono text-xl font-black uppercase text-white tracking-tighter">
+      <div className="mt-8 p-6 bg-black brutal-border brutal-shadow flex flex-col xl:flex-row gap-6 justify-between items-start xl:items-center">
+        <div className="border-b-2 border-primary pb-2 xl:border-none xl:pb-0 w-full xl:w-auto">
+          <h3 className="font-mono text-2xl font-black uppercase text-white tracking-widest">
             {t('diary.monthSummary')}
           </h3>
-          <p className="font-mono text-xs uppercase text-primary">
+          <p className="font-mono text-xs uppercase text-primary mt-1 font-bold">
             {t('diary.basedOnLoggedDays', { count: summary.daysWithData })}
           </p>
         </div>
-        <div className="flex gap-8 font-mono text-sm uppercase">
-          <div className="flex flex-col">
-            <span className="text-muted-foreground text-xs">
+        <div className="grid grid-cols-1 min-[400px]:grid-cols-3 gap-4 md:gap-8 font-mono text-sm uppercase w-full xl:w-auto">
+          <div className="flex flex-col bg-neutral-900 p-3 brutal-border border border-neutral-700">
+            <span className="text-muted-foreground text-[10px] tracking-widest">
               {t('diary.totalKcal')}
             </span>
-            <span className="font-bold">
+            <span className="font-black text-xl text-white">
               {Math.round(summary.cals).toLocaleString()}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="text-muted-foreground text-xs">
+          <div className="flex flex-col bg-neutral-900 p-3 brutal-border border border-neutral-700">
+            <span className="text-muted-foreground text-[10px] tracking-widest">
               {t('diary.avgKcalDay')}
             </span>
-            <span className="font-bold">
+            <span className="font-black text-xl text-white">
               {summary.daysWithData > 0
                 ? Math.round(
                     summary.cals / summary.daysWithData,
@@ -93,11 +93,11 @@ function DiaryCalendar() {
                 : 0}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="text-muted-foreground text-xs">
+          <div className="flex flex-col bg-neutral-900 p-3 brutal-border border border-neutral-700">
+            <span className="text-muted-foreground text-[10px] tracking-widest">
               {t('diary.totalMacros')}
             </span>
-            <span className="font-bold text-xs mt-1">
+            <span className="font-black text-sm mt-1 text-primary">
               P:{Math.round(summary.prot)} F:{Math.round(summary.fat)} C:
               {Math.round(summary.carb)}
             </span>
@@ -128,27 +128,27 @@ function DiaryCalendar() {
               variant="outline"
               size="icon"
               onClick={prevMonth}
-              className="brutal-border rounded-none bg-black text-white hover:bg-white hover:text-white hover:border-white"
+              className="brutal-border rounded-none bg-black text-white hover:bg-white hover:text-black border-2 border-white h-10 w-10 transition-colors"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-5 h-5" />
             </Button>
             <Button
               variant="outline"
               size="icon"
               onClick={nextMonth}
-              className="brutal-border rounded-none bg-black text-white hover:bg-white hover:text-white hover:border-white"
+              className="brutal-border rounded-none bg-black text-white hover:bg-white hover:text-black border-2 border-white h-10 w-10 transition-colors"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-5 h-5" />
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-1 md:gap-4 flex-1">
+      <div className="grid grid-cols-7 gap-1 md:gap-4 flex-1 mt-4">
         {['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].map((dayKey) => (
           <div
             key={dayKey}
-            className="text-center font-mono uppercase text-xs font-bold text-muted-foreground pb-2"
+            className="text-center font-mono uppercase text-[10px] sm:text-xs font-black tracking-widest text-primary pb-2 border-b-2 border-primary/30 mb-2"
           >
             {t(`days.${dayKey}`)}
           </div>
