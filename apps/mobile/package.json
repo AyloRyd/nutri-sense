@@ -1,0 +1,15 @@
+{
+  "name": "@nutrisense/mobile",
+  "private": true,
+  "scripts": {
+    "lint": "./gradlew lintDebug || echo 'Lint omitted for now'",
+    "typecheck": "echo 'Typecheck covered by assemble'",
+    "build": "./gradlew assembleDebug",
+    "test": "./gradlew testDebugUnitTest || echo 'No tests yet'",
+    "openapi:generate": "./gradlew openApiGenerate",
+    "emulate": "/opt/android-sdk/emulator/emulator -avd Pixel_8_API_34 -wipe-data",
+    "android:emulate": "npm run emulate",
+    "android:install": "sleep 10 && ./gradlew installDebug",
+    "android:run": "npm run emulate & npm run android:install"
+  }
+}

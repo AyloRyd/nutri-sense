@@ -39,3 +39,13 @@ apps/iot/smart-scales/.vscode/ipch/
 .tanstack/
 .agents/
 skills-lock.json
+
+# Android
+.gradle/
+**/build/
+**/local.properties
+**/.cxx/
+**/.externalNativeBuild/
+**/captures/
+*.apk
+*.aab
