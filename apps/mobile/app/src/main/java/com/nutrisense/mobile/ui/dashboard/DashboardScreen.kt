@@ -73,13 +73,25 @@ fun DashboardScreen(
                 modifier = Modifier.align(Alignment.Center)
             )
             is DashboardUiState.Error -> Column(
-                modifier = Modifier.align(Alignment.Center),
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(state.message, color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyMedium)
-                Spacer(Modifier.height(16.dp))
-                Button(onClick = viewModel::load) { Text("Retry") }
+                val isTimeout = state.message.contains("timeout", ignoreCase = true)
+                val displayMsg = if (isTimeout) {
+                    "The backend service is waking up.\nThis may take 30-60 seconds because it's on a free server.\nPlease try again."
+                } else {
+                    state.message
+                }
+                Text(
+                    text = displayMsg, 
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                )
+                Spacer(Modifier.height(24.dp))
+                Button(onClick = viewModel::load) { Text("Retry Connection") }
             }
             is DashboardUiState.Success -> PullToRefreshBox(
                 isRefreshing = false,

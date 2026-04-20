@@ -28,6 +28,15 @@ object DashboardTab
 object DiaryTab
 
 @Serializable
+data class DiaryDateRoute(val date: String)
+
+@Serializable
+data class MealDetailRoute(val mealId: Int)
+
+@Serializable
+object DiaryCalendarRoute
+
+@Serializable
 object MoreTab
 
 @Serializable

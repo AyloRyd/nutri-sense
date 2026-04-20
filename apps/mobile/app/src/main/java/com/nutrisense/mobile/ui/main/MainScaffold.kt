@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,11 +19,17 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.nutrisense.mobile.ui.dashboard.DashboardScreen
-import com.nutrisense.mobile.ui.diary.DiaryScreen
+import com.nutrisense.mobile.ui.diary.calendar.DiaryCalendarScreen
+import com.nutrisense.mobile.ui.diary.date.DiaryDateScreen
+import com.nutrisense.mobile.ui.diary.meal.MealDetailScreen
 import com.nutrisense.mobile.ui.more.MoreScreen
 import com.nutrisense.mobile.ui.navigation.BottomNavItem
 import com.nutrisense.mobile.ui.navigation.DashboardTab
 import com.nutrisense.mobile.ui.navigation.DiaryTab
+import com.nutrisense.mobile.ui.navigation.DiaryCalendarRoute
+import com.nutrisense.mobile.ui.navigation.DiaryDateRoute
+import com.nutrisense.mobile.ui.navigation.MealDetailRoute
+import androidx.navigation.compose.navigation
 import com.nutrisense.mobile.ui.navigation.MoreTab
 import com.nutrisense.mobile.ui.navigation.SettingsTab
 import com.nutrisense.mobile.ui.settings.SettingsScreen
@@ -56,7 +63,32 @@ fun MainScaffold(
                     }
                 )
             }
-            composable<DiaryTab>    { DiaryScreen() }
+            navigation<DiaryTab>(startDestination = DiaryCalendarRoute) {
+                composable<DiaryCalendarRoute> {
+                    DiaryCalendarScreen(
+                        onNavigateToDate = { date ->
+                            navController.navigate(DiaryDateRoute(date))
+                        }
+                    )
+                }
+                composable<DiaryDateRoute> { backStackEntry ->
+                    val route = backStackEntry.toRoute<DiaryDateRoute>()
+                    DiaryDateScreen(
+                        date = route.date,
+                        onNavigateBack = { navController.popBackStack() },
+                        onNavigateToMeal = { mealId ->
+                            navController.navigate(MealDetailRoute(mealId))
+                        }
+                    )
+                }
+                composable<MealDetailRoute> { backStackEntry ->
+                    val route = backStackEntry.toRoute<MealDetailRoute>()
+                    MealDetailScreen(
+                        mealId = route.mealId,
+                        onNavigateBack = { navController.popBackStack() }
+                    )
+                }
+            }
             composable<MoreTab>     { MoreScreen() }
             composable<SettingsTab> { backStackEntry ->
                 val args = backStackEntry.toRoute<SettingsTab>()
@@ -76,7 +108,7 @@ private fun NutriSenseBottomBar(navController: NavHostController) {
 
     NavigationBar {
         BottomNavItem.entries.forEach { item ->
-            val selected = currentDest?.hasRoute(item.route::class) == true
+            val selected = currentDest?.hierarchy?.any { it.hasRoute(item.route::class) } == true
             NavigationBarItem(
                 selected = selected,
                 icon = { Icon(item.icon, contentDescription = item.label) },
