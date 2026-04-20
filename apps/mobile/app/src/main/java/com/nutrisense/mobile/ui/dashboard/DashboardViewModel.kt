@@ -1,5 +1,6 @@
 package com.nutrisense.mobile.ui.dashboard
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nutrisense.mobile.data.DashboardRepository
@@ -9,6 +10,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val TAG = "DashboardVM"
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
@@ -23,13 +26,17 @@ class DashboardViewModel @Inject constructor(
     }
 
     fun load() {
+        Log.d(TAG, "load: starting dashboard fetch")
         _uiState.value = DashboardUiState.Loading
         viewModelScope.launch {
             repository.loadDashboard().collect { result ->
                 _uiState.value = if (result.isSuccess) {
+                    Log.d(TAG, "load: SUCCESS — user=${result.getOrThrow().username}")
                     DashboardUiState.Success(result.getOrThrow())
                 } else {
-                    DashboardUiState.Error(result.exceptionOrNull()?.message ?: "Unknown error")
+                    val msg = result.exceptionOrNull()?.message ?: "Unknown error"
+                    Log.e(TAG, "load: ERROR — $msg")
+                    DashboardUiState.Error(msg)
                 }
             }
         }
