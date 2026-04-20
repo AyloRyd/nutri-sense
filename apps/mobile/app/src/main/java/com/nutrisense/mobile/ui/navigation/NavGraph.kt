@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.nutrisense.mobile.ui.auth.LoginScreen
 import com.nutrisense.mobile.ui.auth.RegisterScreen
-import com.nutrisense.mobile.ui.dashboard.DashboardScreen
+import com.nutrisense.mobile.ui.main.MainScaffold
 import com.nutrisense.mobile.data.AuthRepository
 
 @Composable
@@ -15,7 +15,7 @@ fun NutriSenseNavGraph(
     navController: NavHostController = rememberNavController(),
     authRepository: AuthRepository
 ) {
-    val startDestination = if (authRepository.hasValidToken()) DashboardRoute else LoginRoute
+    val startDestination = if (authRepository.hasValidToken()) MainRoute else LoginRoute
 
     NavHost(
         navController = navController,
@@ -29,7 +29,7 @@ fun NutriSenseNavGraph(
                     }
                 },
                 onLoginSuccess = {
-                    navController.navigate(DashboardRoute) {
+                    navController.navigate(MainRoute) {
                         popUpTo(LoginRoute) { inclusive = true }
                     }
                 }
@@ -44,15 +44,15 @@ fun NutriSenseNavGraph(
                     }
                 },
                 onRegisterSuccess = {
-                    navController.navigate(DashboardRoute) {
+                    navController.navigate(MainRoute) {
                         popUpTo(RegisterRoute) { inclusive = true }
                     }
                 }
             )
         }
 
-        composable<DashboardRoute> {
-            DashboardScreen(
+        composable<MainRoute> {
+            MainScaffold(
                 onLogout = {
                     authRepository.logout()
                     navController.navigate(LoginRoute) {

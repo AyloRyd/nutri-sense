@@ -1,6 +1,9 @@
 package com.nutrisense.mobile.di
 
 import com.nutrisense.mobile.api.AuthApi
+import com.nutrisense.mobile.api.IotScalesApi
+import com.nutrisense.mobile.api.StatsApi
+import com.nutrisense.mobile.api.UsersApi
 import com.nutrisense.mobile.BuildConfig
 import com.nutrisense.mobile.data.security.AuthInterceptor
 import dagger.Module
@@ -22,7 +25,6 @@ object NetworkModule {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
-        
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
             .addInterceptor(loggingInterceptor)
@@ -32,17 +34,25 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideApiClient(okHttpClient: OkHttpClient): ApiClient {
-        val baseUrl = BuildConfig.API_BASE_URL
-        
         return ApiClient(
-            baseUrl = baseUrl,
+            baseUrl = BuildConfig.API_BASE_URL,
             okHttpClientBuilder = okHttpClient.newBuilder()
         )
     }
 
-    @Provides
-    @Singleton
-    fun provideAuthApi(apiClient: ApiClient): AuthApi {
-        return apiClient.createService(AuthApi::class.java)
-    }
+    @Provides @Singleton
+    fun provideAuthApi(apiClient: ApiClient): AuthApi =
+        apiClient.createService(AuthApi::class.java)
+
+    @Provides @Singleton
+    fun provideStatsApi(apiClient: ApiClient): StatsApi =
+        apiClient.createService(StatsApi::class.java)
+
+    @Provides @Singleton
+    fun provideUsersApi(apiClient: ApiClient): UsersApi =
+        apiClient.createService(UsersApi::class.java)
+
+    @Provides @Singleton
+    fun provideIotScalesApi(apiClient: ApiClient): IotScalesApi =
+        apiClient.createService(IotScalesApi::class.java)
 }
