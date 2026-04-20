@@ -15,6 +15,6 @@
     "android:install-apk": "adb install -r app/build/outputs/apk/debug/app-debug.apk",
     "android:launch": "adb shell am start -n com.nutrisense.mobile/.MainActivity",
     "android:deploy": "npm run build && npm run android:install-apk && npm run android:launch",
-    "android:logs": "adb logcat --pid=$(adb shell pidof com.nutrisense.mobile) AuthRepository:D DashboardRepo:D DashboardVM:D IotRepository:D SettingsVM:D *:E"
+    "android:logs": "adb logcat --pid=$(adb shell pidof com.nutrisense.mobile) AuthRepository:D DashboardRepo:D DashboardVM:D IotRepository:D SettingsVM:D MeasurementsVM:D PlansVM:D *:E"
   }
 }

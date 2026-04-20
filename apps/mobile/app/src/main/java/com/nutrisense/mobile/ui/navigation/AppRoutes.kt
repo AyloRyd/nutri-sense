@@ -1,9 +1,9 @@
 package com.nutrisense.mobile.ui.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.serialization.Serializable
@@ -28,7 +28,7 @@ object DashboardTab
 object DiaryTab
 
 @Serializable
-object PlansTab
+object MoreTab
 
 @Serializable
 data class SettingsTab(val scrollToIot: Boolean = false)
@@ -41,6 +41,6 @@ enum class BottomNavItem(
 ) {
     DASHBOARD(DashboardTab, "Dashboard", Icons.Default.Home),
     DIARY(DiaryTab, "Diary", Icons.Default.DateRange),
-    PLANS(PlansTab, "Plans", Icons.AutoMirrored.Filled.List),
+    MORE(MoreTab, "More", Icons.Default.MoreHoriz),
     SETTINGS(SettingsTab(), "Settings", Icons.Default.Settings)
 }

@@ -19,12 +19,12 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.nutrisense.mobile.ui.dashboard.DashboardScreen
 import com.nutrisense.mobile.ui.diary.DiaryScreen
+import com.nutrisense.mobile.ui.more.MoreScreen
 import com.nutrisense.mobile.ui.navigation.BottomNavItem
 import com.nutrisense.mobile.ui.navigation.DashboardTab
 import com.nutrisense.mobile.ui.navigation.DiaryTab
-import com.nutrisense.mobile.ui.navigation.PlansTab
+import com.nutrisense.mobile.ui.navigation.MoreTab
 import com.nutrisense.mobile.ui.navigation.SettingsTab
-import com.nutrisense.mobile.ui.plans.PlansScreen
 import com.nutrisense.mobile.ui.settings.SettingsScreen
 
 @Composable
@@ -52,13 +52,12 @@ fun MainScaffold(
                         navController.navigate(SettingsTab(scrollToIot = true)) {
                             popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                             launchSingleTop = true
-                            // Don't restoreState — we need the fresh scrollToIot param
                         }
                     }
                 )
             }
             composable<DiaryTab>    { DiaryScreen() }
-            composable<PlansTab>    { PlansScreen() }
+            composable<MoreTab>     { MoreScreen() }
             composable<SettingsTab> { backStackEntry ->
                 val args = backStackEntry.toRoute<SettingsTab>()
                 SettingsScreen(
