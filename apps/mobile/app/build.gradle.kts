@@ -4,6 +4,7 @@ plugins {
     id("org.openapi.generator")
     id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.20"
 }
 
 android {
@@ -20,6 +21,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.4"
@@ -30,6 +32,15 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
+    }
+    buildTypes {
+        debug {
+            buildConfigField("String", "API_BASE_URL", "\"https://nutri-sense-api.onrender.com/\"")
+        }
+        release {
+            isMinifyEnabled = true
+            buildConfigField("String", "API_BASE_URL", "\"https://nutri-sense-api.onrender.com/\"")
+        }
     }
 }
 
@@ -53,12 +64,20 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    
+    // Navigation & Serialization
+    implementation("androidx.navigation:navigation-compose:2.8.2")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    
+    // Security
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
 }
 
 openApiGenerate {
     generatorName.set("kotlin")
     inputSpec.set("$rootDir/../../openapi.json")
-    outputDir.set("$buildDir/generated/openapi")
+    outputDir.set(layout.buildDirectory.dir("generated/openapi").get().asFile.absolutePath)
     apiPackage.set("com.nutrisense.mobile.api")
     modelPackage.set("com.nutrisense.mobile.model")
     configOptions.set(mapOf(
@@ -72,7 +91,7 @@ openApiGenerate {
 // Add generated code to source sets
 android.sourceSets {
     getByName("main") {
-        java.srcDir("$buildDir/generated/openapi/src/main/kotlin")
+        java.srcDir(layout.buildDirectory.dir("generated/openapi/src/main/kotlin").get().asFile)
     }
 }
 

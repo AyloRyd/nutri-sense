@@ -9,7 +9,9 @@
     "openapi:generate": "./gradlew openApiGenerate",
     "emulate": "/opt/android-sdk/emulator/emulator -avd Pixel_8_API_34 -wipe-data",
     "android:emulate": "npm run emulate",
-    "android:install": "sleep 10 && ./gradlew installDebug",
-    "android:run": "npm run emulate & npm run android:install"
+    "android:install": "adb wait-for-device && adb shell 'while [ -z \"$(getprop sys.boot_completed)\" ]; do sleep 1; done' && ./gradlew installDebug",
+    "android:run": "bash scripts/android-run.sh",
+    "android:deploy": "./gradlew assembleDebug && adb install -r app/build/outputs/apk/debug/app-debug.apk && adb shell am start -n com.nutrisense.mobile/.MainActivity",
+    "android:logs": "adb logcat --pid=$(adb shell pidof com.nutrisense.mobile) *:E"
   }
 }

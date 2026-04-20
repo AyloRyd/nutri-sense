@@ -19,6 +19,8 @@
     "android:emulate": "npm run emulate -w @nutrisense/mobile",
     "android:install": "npm run android:install -w @nutrisense/mobile",
     "android:run": "npm run android:run -w @nutrisense/mobile",
+    "android:deploy": "npm run android:deploy -w @nutrisense/mobile",
+    "android:logs": "npm run android:logs -w @nutrisense/mobile",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\""
   },
   "devDependencies": {
