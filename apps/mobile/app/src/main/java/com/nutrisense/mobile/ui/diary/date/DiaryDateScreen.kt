@@ -74,7 +74,7 @@ fun DiaryDateScreen(
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp)
         ) {
-            NutritionRingsPlaceholder(uiState)
+            NutritionSummary(uiState)
             
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -136,34 +136,116 @@ fun DiaryDateScreen(
 }
 
 @Composable
-private fun NutritionRingsPlaceholder(uiState: DiaryDateUiState) {
+private fun NutritionSummary(uiState: DiaryDateUiState) {
     val totalCals = uiState.meals.sumOf { it.calories.toDouble() }
     val totalProt = uiState.meals.sumOf { it.protein.toDouble() }
     val totalFats = uiState.meals.sumOf { it.fats.toDouble() }
     val totalCarbs = uiState.meals.sumOf { it.carbs.toDouble() }
 
     val goalCals = uiState.plan?.dayCalories?.toDouble() ?: 0.0
+    val goalProt = uiState.plan?.dayProtein?.toDouble() ?: 100.0 // Defaults to prevent div by zero
+    val goalFats = uiState.plan?.dayFats?.toDouble() ?: 50.0
+    val goalCarbs = uiState.plan?.dayCarbs?.toDouble() ?: 200.0
 
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("TOTAL CALORIES", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(
-                "${totalCals.toInt()} / ${if (goalCals > 0) goalCals.toInt() else "-"}",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
+            // Top: Calories
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Column {
+                    Text("TOTAL CALORIES", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        "${totalCals.toInt()} / ${if (goalCals > 0) goalCals.toInt() else "-"}",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
             
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text("P: ${totalProt.toInt()}g", style = MaterialTheme.typography.bodyMedium)
-                Text("F: ${totalFats.toInt()}g", style = MaterialTheme.typography.bodyMedium)
-                Text("C: ${totalCarbs.toInt()}g", style = MaterialTheme.typography.bodyMedium)
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            // Bottom: Macro Rings
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                MacroRing(
+                    label = "Protein",
+                    value = totalProt.toFloat(),
+                    target = goalProt.toFloat(),
+                    color = androidx.compose.ui.graphics.Color(0xFF4CAF50)
+                )
+                MacroRing(
+                    label = "Fats",
+                    value = totalFats.toFloat(),
+                    target = goalFats.toFloat(),
+                    color = androidx.compose.ui.graphics.Color(0xFFFF9800)
+                )
+                MacroRing(
+                    label = "Carbs",
+                    value = totalCarbs.toFloat(),
+                    target = goalCarbs.toFloat(),
+                    color = androidx.compose.ui.graphics.Color(0xFF2196F3)
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun MacroRing(
+    label: String,
+    value: Float,
+    target: Float,
+    color: androidx.compose.ui.graphics.Color,
+    modifier: Modifier = Modifier
+) {
+    val progress = if (target > 0f) (value / target).coerceIn(0f, 1f) else 0f
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.size(80.dp)
+        ) {
+            CircularProgressIndicator(
+                progress = { progress },
+                modifier = Modifier.fillMaxSize(),
+                color = color,
+                trackColor = androidx.compose.ui.graphics.Color(0xFF2A2A2A),
+                strokeWidth = 6.dp,
+                strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
+            )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = "${value.toInt()}g",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                HorizontalDivider(
+                    modifier = Modifier.width(24.dp).padding(vertical = 2.dp),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                )
+                Text(
+                    text = "${target.toInt()}g",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 

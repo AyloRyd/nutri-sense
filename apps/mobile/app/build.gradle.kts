@@ -108,4 +108,13 @@ dependencies {
     implementation("com.patrykandpatrick.vico:compose:1.14.0")
     implementation("com.patrykandpatrick.vico:compose-m3:1.14.0")
     implementation("com.patrykandpatrick.vico:core:1.14.0")
+    
+    // CameraX & ML Kit
+    val camerax_version = "1.3.1"
+    implementation("androidx.camera:camera-core:$camerax_version")
+    implementation("androidx.camera:camera-camera2:$camerax_version")
+    implementation("androidx.camera:camera-lifecycle:$camerax_version")
+    implementation("androidx.camera:camera-view:$camerax_version")
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+    implementation("androidx.concurrent:concurrent-futures-ktx:1.1.0")
 }

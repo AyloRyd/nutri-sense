@@ -29,6 +29,9 @@ import com.nutrisense.mobile.model.MealFoodEntity
 fun MealDetailScreen(
     mealId: Int,
     onNavigateBack: () -> Unit,
+    onNavigateToScanner: () -> Unit = {},
+    barcodeResultFlow: String? = null,
+    clearBarcodeResult: () -> Unit = {},
     viewModel: MealDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -54,6 +57,15 @@ fun MealDetailScreen(
             CircularProgressIndicator()
         }
         return
+    }
+
+    LaunchedEffect(barcodeResultFlow) {
+        if (!barcodeResultFlow.isNullOrEmpty()) {
+            showAddFoodDialog = true
+            viewModel.startEditingFood(null)
+            viewModel.searchBarcode(barcodeResultFlow)
+            clearBarcodeResult()
+        }
     }
 
     Scaffold(
@@ -141,7 +153,11 @@ fun MealDetailScreen(
                 }
             },
             onUpdateForm = viewModel::updateFormState,
-            onSearchBarcode = viewModel::searchBarcode
+            onSearchBarcode = viewModel::searchBarcode,
+            onNavigateToScanner = {
+                showAddFoodDialog = false
+                onNavigateToScanner()
+            }
         )
     }
 
@@ -260,7 +276,8 @@ private fun AddFoodDialog(
     onDismiss: () -> Unit,
     onSave: () -> Unit,
     onUpdateForm: (MealFoodFormState) -> Unit,
-    onSearchBarcode: (String) -> Unit
+    onSearchBarcode: (String) -> Unit,
+    onNavigateToScanner: () -> Unit = {}
 ) {
     var selectedTab by remember { mutableStateOf(0) }
     val isEditing = uiState.editingFoodId != null
@@ -300,6 +317,24 @@ private fun AddFoodDialog(
 
                 if (selectedTab == 1 && !isEditing) {
                     var barcodeInput by remember { mutableStateOf("") }
+                    
+                    Button(
+                        onClick = onNavigateToScanner,
+                        modifier = Modifier.fillMaxWidth().height(48.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                    ) {
+                        Icon(androidx.compose.material.icons.Icons.Default.Search, contentDescription = null)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("SCAN WITH CAMERA")
+                    }
+                    
+                    Text(
+                        "OR ENTER MANUALLY",
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier.padding(vertical = 12.dp).align(Alignment.CenterHorizontally),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth()
@@ -307,7 +342,7 @@ private fun AddFoodDialog(
                         OutlinedTextField(
                             value = barcodeInput,
                             onValueChange = { barcodeInput = it },
-                            label = { Text("Barcode") },
+                            label = { Text("Barcode ID") },
                             modifier = Modifier.weight(1f),
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)

@@ -14,6 +14,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -29,6 +30,7 @@ import com.nutrisense.mobile.ui.navigation.DiaryTab
 import com.nutrisense.mobile.ui.navigation.DiaryCalendarRoute
 import com.nutrisense.mobile.ui.navigation.DiaryDateRoute
 import com.nutrisense.mobile.ui.navigation.MealDetailRoute
+import com.nutrisense.mobile.ui.navigation.CameraScannerRoute
 import androidx.navigation.compose.navigation
 import com.nutrisense.mobile.ui.navigation.MoreTab
 import com.nutrisense.mobile.ui.navigation.SettingsTab
@@ -83,9 +85,24 @@ fun MainScaffold(
                 }
                 composable<MealDetailRoute> { backStackEntry ->
                     val route = backStackEntry.toRoute<MealDetailRoute>()
+                    val barcodeResult = backStackEntry.savedStateHandle.getStateFlow<String?>("barcode_result", null).collectAsStateWithLifecycle()
                     MealDetailScreen(
                         mealId = route.mealId,
-                        onNavigateBack = { navController.popBackStack() }
+                        onNavigateBack = { navController.popBackStack() },
+                        onNavigateToScanner = { navController.navigate(CameraScannerRoute) },
+                        barcodeResultFlow = barcodeResult.value,
+                        clearBarcodeResult = { backStackEntry.savedStateHandle.remove<String>("barcode_result") }
+                    )
+                }
+                composable<CameraScannerRoute> {
+                    com.nutrisense.mobile.ui.components.QrScannerScreen(
+                        onNavigateBack = { navController.popBackStack() },
+                        onBarcodeScanned = { barcode ->
+                            navController.previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("barcode_result", barcode)
+                            navController.popBackStack()
+                        }
                     )
                 }
             }

@@ -37,6 +37,9 @@ data class MealDetailRoute(val mealId: Int)
 object DiaryCalendarRoute
 
 @Serializable
+object CameraScannerRoute
+
+@Serializable
 object MoreTab
 
 @Serializable

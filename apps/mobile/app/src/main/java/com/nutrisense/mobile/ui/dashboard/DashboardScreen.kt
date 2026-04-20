@@ -91,7 +91,7 @@ fun DashboardScreen(
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center
                 )
                 Spacer(Modifier.height(24.dp))
-                Button(onClick = viewModel::load) { Text("Retry Connection") }
+                Button(onClick = viewModel::load) { Text("Retry connection") }
             }
             is DashboardUiState.Success -> PullToRefreshBox(
                 isRefreshing = false,
