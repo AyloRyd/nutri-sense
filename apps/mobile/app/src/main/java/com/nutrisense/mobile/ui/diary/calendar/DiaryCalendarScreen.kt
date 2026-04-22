@@ -153,7 +153,11 @@ private fun MonthSummaryBanner(uiState: DiaryCalendarUiState) {
                 )
                 SummaryItem(
                     label = "AVG MACROS",
-                    value = "P:${(prot).toInt()} F:${(fat).toInt()} C:${(carb).toInt()}",
+                    value = if (daysWithData > 0) {
+                        "P:${(prot / daysWithData).toInt()} F:${(fat / daysWithData).toInt()} C:${(carb / daysWithData).toInt()}"
+                    } else {
+                        "P:0 F:0 C:0"
+                    },
                     isPrimary = true
                 )
             }

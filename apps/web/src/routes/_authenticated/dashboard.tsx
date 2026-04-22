@@ -17,6 +17,9 @@ import {
 } from '../../components/ui/card'
 import { Progress } from '../../components/ui/progress'
 
+const ANDROID_APK_URL =
+  'https://github.com/AyloRyd/nutri-sense/releases/latest/download/app-debug.apk'
+
 export const Route = createFileRoute('/_authenticated/dashboard')({
   loader: async ({ context: { queryClient } }) => {
     const today = format(new Date(), 'yyyy-MM-dd')
@@ -217,6 +220,30 @@ function Dashboard() {
             </CardContent>
           </Card>
         </Link>
+
+        <a
+          href={ANDROID_APK_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="block transition-transform hover:scale-[1.01]"
+        >
+          <Card className="brutal-border brutal-shadow rounded-none bg-black overflow-hidden">
+            <CardHeader className="border-b-2 border-white py-4 relative">
+              <div className="absolute top-0 left-0 w-full h-1 bg-primary" />
+              <CardTitle className="text-sm font-black font-mono tracking-widest uppercase text-white">
+                Android Build
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6 flex items-center justify-between">
+              <span className="font-mono text-xs uppercase text-muted-foreground">
+                Download latest APK
+              </span>
+              <span className="font-mono text-xs uppercase font-black text-primary">
+                Tap to install_
+              </span>
+            </CardContent>
+          </Card>
+        </a>
       </div>
     </div>
   )

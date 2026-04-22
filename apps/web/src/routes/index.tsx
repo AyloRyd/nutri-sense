@@ -1,6 +1,9 @@
 import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 import { Button } from '../components/ui/button'
 
+const ANDROID_APK_URL =
+  'https://github.com/AyloRyd/nutri-sense/releases/latest/download/app-debug.apk'
+
 export const Route = createFileRoute('/')({
   beforeLoad: () => {
     if (localStorage.getItem('token')) {
@@ -50,6 +53,17 @@ function Landing() {
             variant="outline"
             className="brutal-shadow brutal-border bg-black text-white hover:bg-primary hover:text-black hover:border-black text-xl uppercase font-bold py-8 px-12"
           />
+        </div>
+
+        <div className="mt-10 border-t-2 border-white/20 pt-6">
+          <a
+            href={ANDROID_APK_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-3 brutal-border brutal-shadow bg-black text-white hover:bg-primary hover:text-black transition-colors px-6 py-3 font-mono font-black uppercase tracking-widest text-sm"
+          >
+            Download Android APK_
+          </a>
         </div>
       </section>
 

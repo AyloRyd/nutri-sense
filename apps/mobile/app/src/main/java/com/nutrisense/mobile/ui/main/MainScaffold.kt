@@ -37,6 +37,7 @@ import androidx.navigation.compose.navigation
 import com.nutrisense.mobile.ui.navigation.MoreTab
 import com.nutrisense.mobile.ui.navigation.SettingsTab
 import com.nutrisense.mobile.ui.settings.SettingsScreen
+import java.time.LocalDate
 
 @Composable
 fun MainScaffold(
@@ -54,7 +55,7 @@ fun MainScaffold(
             composable<DashboardTab> {
                 DashboardScreen(
                     onNavigateToDiary = {
-                        navController.navigate(DiaryTab) {
+                        navController.navigate(DiaryDateRoute(LocalDate.now().toString())) {
                             popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                             launchSingleTop = true; restoreState = true
                         }
