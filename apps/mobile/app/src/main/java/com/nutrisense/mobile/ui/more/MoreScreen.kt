@@ -60,6 +60,8 @@ import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
+import com.patrykandpatrick.vico.compose.m3.style.m3ChartStyle
+import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
@@ -94,8 +96,7 @@ fun MoreScreen() {
 
 @Composable
 private fun PlansContent(
-    viewModel: PlansViewModel = hiltViewModel(),
-    onSwitchToMeasurements: (() -> Unit)? = null
+    viewModel: PlansViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var showDialog by remember { mutableStateOf(false) }
@@ -443,13 +444,15 @@ private fun MeasurementsChart(measurements: List<MeasurementEntity>) {
         androidx.compose.foundation.layout.Column(modifier = Modifier.padding(16.dp)) {
             Text("Weight Trend", style = androidx.compose.material3.MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             androidx.compose.foundation.layout.Spacer(Modifier.height(16.dp))
-            Chart(
-                chart = lineChart(),
-                chartModelProducer = chartEntryModelProducer,
-                startAxis = rememberStartAxis(),
-                bottomAxis = rememberBottomAxis(valueFormatter = bottomAxisValueFormatter),
-                modifier = Modifier.fillMaxWidth().height(200.dp)
-            )
+            ProvideChartStyle(m3ChartStyle()) {
+                Chart(
+                    chart = lineChart(),
+                    chartModelProducer = chartEntryModelProducer,
+                    startAxis = rememberStartAxis(),
+                    bottomAxis = rememberBottomAxis(valueFormatter = bottomAxisValueFormatter),
+                    modifier = Modifier.fillMaxWidth().height(200.dp)
+                )
+            }
         }
     }
 }
