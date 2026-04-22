@@ -19,6 +19,10 @@ data class IotStatus(
     val serialNumber: String?
 )
 
+data class ScaleWeight(
+    val weight: Double
+)
+
 @Singleton
 class IotRepository @Inject constructor(
     private val iotScalesApi: IotScalesApi,
@@ -87,6 +91,39 @@ class IotRepository @Inject constructor(
         } catch (e: Exception) {
             Log.e(TAG, "unlinkDevice: FAILED", e)
             Result.failure(e)
+        }
+    }
+
+    /**
+     * The generated endpoint is typed as Response<Unit>, so read JSON with raw OkHttp.
+     */
+    suspend fun getCurrentWeight(): Result<ScaleWeight> = withContext(Dispatchers.IO) {
+        try {
+            val request = Request.Builder()
+                .url("${BuildConfig.API_BASE_URL}iot/scales/weight")
+                .get()
+                .build()
+            val response = okHttpClient.newCall(request).execute()
+            if (!response.isSuccessful) {
+                return@withContext Result.failure(
+                    Exception("Scale did not respond (HTTP ${response.code})")
+                )
+            }
+            val body = response.body?.string() ?: "{}"
+            val json = JSONObject(body)
+            val weight = json.optDouble("weight", 0.0)
+            if (weight > 0) {
+                Result.success(ScaleWeight(weight = weight))
+            } else {
+                Result.failure(Exception("Scale responded with empty weight"))
+            }
+        } catch (e: Exception) {
+            val msg = e.message?.lowercase() ?: ""
+            if (msg.contains("timeout") || msg.contains("timed out")) {
+                Result.failure(Exception("Scale did not respond in time"))
+            } else {
+                Result.failure(Exception("Scale request failed"))
+            }
         }
     }
 }

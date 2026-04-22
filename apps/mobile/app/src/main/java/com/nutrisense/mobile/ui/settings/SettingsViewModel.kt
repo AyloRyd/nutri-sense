@@ -162,7 +162,6 @@ class SettingsViewModel @Inject constructor(
             val result = iotRepository.unlinkDevice()
             if (result.isSuccess) {
                 Log.d(TAG, "unlinkDevice: SUCCESS")
-                preferencesManager.clearIotSerial()
                 val newStatus = iotRepository.getStatus().getOrNull()
                 _uiState.update { it.copy(
                     isUnlinkingDevice = false,

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Scale
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -48,13 +49,16 @@ import com.nutrisense.mobile.model.TemplateFoodEntity
 fun AddFoodDialog(
     isEditing: Boolean,
     isSavingFood: Boolean,
+    isFetchingScaleWeight: Boolean,
     formState: FoodFormState,
     isSearchingBarcode: Boolean,
     barcodeError: String?,
+    scaleWeightError: String?,
     templateFoods: List<TemplateFoodEntity>,
     onDismiss: () -> Unit,
     onSave: () -> Unit,
     onUpdateForm: (FoodFormState) -> Unit,
+    onFetchScaleWeight: () -> Unit,
     onSearchBarcode: (String) -> Unit,
     onNavigateToScanner: () -> Unit,
     onPrefillFromTemplateFood: (TemplateFoodEntity) -> Unit
@@ -204,6 +208,28 @@ fun AddFoodDialog(
                         modifier = Modifier.weight(1f),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
+                    Button(
+                        onClick = onFetchScaleWeight,
+                        enabled = !isFetchingScaleWeight,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        ),
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier
+                            .size(48.dp)
+                            .align(Alignment.CenterVertically),
+                        contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)
+                    ) {
+                        if (isFetchingScaleWeight) {
+                            CircularProgressIndicator(modifier = Modifier.size(16.dp))
+                        } else {
+                            androidx.compose.material3.Icon(
+                                imageVector = Icons.Default.Scale,
+                                contentDescription = "Get weight from scale"
+                            )
+                        }
+                    }
                     OutlinedTextField(
                         value = formState.calories,
                         onValueChange = { onUpdateForm(formState.copy(calories = it)) },
@@ -211,6 +237,9 @@ fun AddFoodDialog(
                         modifier = Modifier.weight(1f),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
+                }
+                if (scaleWeightError != null) {
+                    Text(scaleWeightError, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                 }
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedTextField(

@@ -173,9 +173,11 @@ fun TemplateMealDetailScreen(
         AddFoodDialog(
             isEditing = uiState.editingFoodId != null,
             isSavingFood = uiState.isSavingFood,
+            isFetchingScaleWeight = uiState.isFetchingScaleWeight,
             formState = uiState.formState,
             isSearchingBarcode = uiState.isSearchingBarcode,
             barcodeError = uiState.barcodeError,
+            scaleWeightError = uiState.scaleWeightError,
             templateFoods = uiState.templateFoods,
             onDismiss = { showAddFoodDialog = false },
             onSave = {
@@ -184,6 +186,7 @@ fun TemplateMealDetailScreen(
                 }
             },
             onUpdateForm = viewModel::updateFormState,
+            onFetchScaleWeight = viewModel::fetchScaleWeight,
             onSearchBarcode = viewModel::searchBarcode,
             onNavigateToScanner = {
                 showAddFoodDialog = false

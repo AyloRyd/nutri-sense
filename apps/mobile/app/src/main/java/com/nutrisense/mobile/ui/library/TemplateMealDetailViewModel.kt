@@ -2,8 +2,10 @@ package com.nutrisense.mobile.ui.library
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nutrisense.mobile.data.IotRepository
 import com.nutrisense.mobile.data.LibraryRepository
 import com.nutrisense.mobile.data.OpenfoodfactsRepository
+import com.nutrisense.mobile.data.security.PreferencesManager
 import com.nutrisense.mobile.model.CreateTemplateMealFoodDto
 import com.nutrisense.mobile.model.TemplateFoodEntity
 import com.nutrisense.mobile.model.TemplateMealEntity
@@ -24,8 +26,10 @@ data class TemplateMealDetailUiState(
     val meal: TemplateMealEntity? = null,
     val isLoading: Boolean = false,
     val isSavingFood: Boolean = false,
+    val isFetchingScaleWeight: Boolean = false,
     val isSearchingBarcode: Boolean = false,
     val barcodeError: String? = null,
+    val scaleWeightError: String? = null,
     val formState: FoodFormState = FoodFormState(),
     val editingFoodId: Int? = null,
     val templateFoods: List<TemplateFoodEntity> = emptyList(),
@@ -35,7 +39,9 @@ data class TemplateMealDetailUiState(
 @HiltViewModel
 class TemplateMealDetailViewModel @Inject constructor(
     private val libraryRepository: LibraryRepository,
-    private val openfoodfactsRepository: OpenfoodfactsRepository
+    private val openfoodfactsRepository: OpenfoodfactsRepository,
+    private val iotRepository: IotRepository,
+    private val preferencesManager: PreferencesManager
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(TemplateMealDetailUiState())
     val uiState: StateFlow<TemplateMealDetailUiState> = _uiState.asStateFlow()
@@ -111,6 +117,51 @@ class TemplateMealDetailViewModel @Inject constructor(
                 }
             } else {
                 _uiState.update { it.copy(isSearchingBarcode = false, barcodeError = "Product not found or scanning failed") }
+            }
+        }
+    }
+
+    fun fetchScaleWeight() {
+        _uiState.update { it.copy(isFetchingScaleWeight = true, scaleWeightError = null) }
+        viewModelScope.launch {
+            val savedSerial = preferencesManager.getIotSerial()
+            if (savedSerial.isBlank()) {
+                _uiState.update {
+                    it.copy(
+                        isFetchingScaleWeight = false,
+                        scaleWeightError = "No linked scale. Link one in Settings."
+                    )
+                }
+                return@launch
+            }
+
+            val status = iotRepository.getStatus().getOrNull()
+            if (status?.isLinked != true) {
+                _uiState.update {
+                    it.copy(
+                        isFetchingScaleWeight = false,
+                        scaleWeightError = "Scale is not linked right now."
+                    )
+                }
+                return@launch
+            }
+
+            val result = iotRepository.getCurrentWeight()
+            if (result.isSuccess) {
+                val weight = result.getOrNull()?.weight?.toInt() ?: 0
+                _uiState.update {
+                    it.copy(
+                        isFetchingScaleWeight = false,
+                        formState = it.formState.copy(weight = weight.toString())
+                    )
+                }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        isFetchingScaleWeight = false,
+                        scaleWeightError = result.exceptionOrNull()?.message ?: "Scale did not respond"
+                    )
+                }
             }
         }
     }
