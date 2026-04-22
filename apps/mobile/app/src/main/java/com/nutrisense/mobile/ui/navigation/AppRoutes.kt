@@ -34,6 +34,9 @@ data class DiaryDateRoute(val date: String)
 data class MealDetailRoute(val mealId: Int)
 
 @Serializable
+data class TemplateMealDetailRoute(val templateMealId: Int)
+
+@Serializable
 object DiaryCalendarRoute
 
 @Serializable

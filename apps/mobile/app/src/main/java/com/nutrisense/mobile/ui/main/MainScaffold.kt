@@ -23,6 +23,7 @@ import com.nutrisense.mobile.ui.dashboard.DashboardScreen
 import com.nutrisense.mobile.ui.diary.calendar.DiaryCalendarScreen
 import com.nutrisense.mobile.ui.diary.date.DiaryDateScreen
 import com.nutrisense.mobile.ui.diary.meal.MealDetailScreen
+import com.nutrisense.mobile.ui.library.TemplateMealDetailScreen
 import com.nutrisense.mobile.ui.more.MoreScreen
 import com.nutrisense.mobile.ui.navigation.BottomNavItem
 import com.nutrisense.mobile.ui.navigation.DashboardTab
@@ -31,6 +32,7 @@ import com.nutrisense.mobile.ui.navigation.DiaryCalendarRoute
 import com.nutrisense.mobile.ui.navigation.DiaryDateRoute
 import com.nutrisense.mobile.ui.navigation.MealDetailRoute
 import com.nutrisense.mobile.ui.navigation.CameraScannerRoute
+import com.nutrisense.mobile.ui.navigation.TemplateMealDetailRoute
 import androidx.navigation.compose.navigation
 import com.nutrisense.mobile.ui.navigation.MoreTab
 import com.nutrisense.mobile.ui.navigation.SettingsTab
@@ -94,6 +96,17 @@ fun MainScaffold(
                         clearBarcodeResult = { backStackEntry.savedStateHandle.remove<String>("barcode_result") }
                     )
                 }
+                composable<TemplateMealDetailRoute> { backStackEntry ->
+                    val route = backStackEntry.toRoute<TemplateMealDetailRoute>()
+                    val barcodeResult = backStackEntry.savedStateHandle.getStateFlow<String?>("barcode_result", null).collectAsStateWithLifecycle()
+                    TemplateMealDetailScreen(
+                        templateMealId = route.templateMealId,
+                        onNavigateBack = { navController.popBackStack() },
+                        onNavigateToScanner = { navController.navigate(CameraScannerRoute) },
+                        barcodeResultFlow = barcodeResult.value,
+                        clearBarcodeResult = { backStackEntry.savedStateHandle.remove<String>("barcode_result") }
+                    )
+                }
                 composable<CameraScannerRoute> {
                     com.nutrisense.mobile.ui.components.QrScannerScreen(
                         onNavigateBack = { navController.popBackStack() },
@@ -106,7 +119,13 @@ fun MainScaffold(
                     )
                 }
             }
-            composable<MoreTab>     { MoreScreen() }
+            composable<MoreTab>     {
+                MoreScreen(
+                    onNavigateToTemplateMeal = { templateMealId ->
+                        navController.navigate(TemplateMealDetailRoute(templateMealId))
+                    }
+                )
+            }
             composable<SettingsTab> { backStackEntry ->
                 val args = backStackEntry.toRoute<SettingsTab>()
                 SettingsScreen(

@@ -6,8 +6,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nutrisense.mobile.model.MealEntity
+import com.nutrisense.mobile.model.TemplateMealEntity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,7 +50,7 @@ fun DiaryDateScreen(
                 title = { Text(text = "LOG $date", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -124,8 +125,15 @@ fun DiaryDateScreen(
     if (showCreateDialog) {
         CreateMealDialog(
             onDismiss = { showCreateDialog = false },
-            onCreate = { name ->
+            templates = uiState.templateMeals,
+            onCreateBlank = { name ->
                 viewModel.createMeal(name) { newMealId ->
+                    showCreateDialog = false
+                    onNavigateToMeal(newMealId)
+                }
+            },
+            onCreateFromTemplate = { template ->
+                viewModel.createMealFromTemplate(template) { newMealId ->
                     showCreateDialog = false
                     onNavigateToMeal(newMealId)
                 }
@@ -289,16 +297,58 @@ private fun MealCard(meal: MealEntity, onClick: () -> Unit) {
 @Composable
 private fun CreateMealDialog(
     onDismiss: () -> Unit,
-    onCreate: (String) -> Unit,
+    templates: List<TemplateMealEntity>,
+    onCreateBlank: (String) -> Unit,
+    onCreateFromTemplate: (TemplateMealEntity) -> Unit,
     isCreating: Boolean
 ) {
     var mealName by remember { mutableStateOf("") }
+    var mode by remember { mutableStateOf("blank") }
+    var selectedTemplateId by remember { mutableStateOf<Int?>(null) }
+    val selectedTemplate = templates.firstOrNull { it.id.toInt() == selectedTemplateId }
 
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("INIT NEW MEAL") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilterChip(
+                        selected = mode == "blank",
+                        onClick = { mode = "blank"; selectedTemplateId = null },
+                        label = { Text("Blank") }
+                    )
+                    FilterChip(
+                        selected = mode == "template",
+                        onClick = { mode = "template" },
+                        label = { Text("From Template") }
+                    )
+                }
+                if (mode == "template") {
+                    var expanded by remember { mutableStateOf(false) }
+                    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it }) {
+                        OutlinedTextField(
+                            value = selectedTemplate?.name ?: "",
+                            onValueChange = {},
+                            readOnly = true,
+                            label = { Text("Template meal") },
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                            modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                        )
+                        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                            templates.forEach { template ->
+                                DropdownMenuItem(
+                                    text = { Text("${template.name} (${template.calories.toDouble().toInt()} kcal)") },
+                                    onClick = {
+                                        selectedTemplateId = template.id.toInt()
+                                        mealName = template.name
+                                        expanded = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
                 OutlinedTextField(
                     value = mealName,
                     onValueChange = { mealName = it },
@@ -306,20 +356,21 @@ private fun CreateMealDialog(
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
-                Text(
-                    "Hint: In the future, you will be able to select a template here.",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
             }
         },
         confirmButton = {
             Button(
-                onClick = { onCreate(mealName) },
-                enabled = mealName.isNotBlank() && !isCreating
+                onClick = {
+                    if (mode == "template" && selectedTemplate != null) {
+                        onCreateFromTemplate(selectedTemplate)
+                    } else {
+                        onCreateBlank(mealName)
+                    }
+                },
+                enabled = ((mode == "template" && selectedTemplate != null) || mealName.isNotBlank()) && !isCreating
             ) {
                 if (isCreating) CircularProgressIndicator(modifier = Modifier.size(24.dp))
-                else Text("ADD MEAL")
+                else Text(if (mode == "template") "CREATE FROM TEMPLATE" else "ADD MEAL")
             }
         },
         dismissButton = {

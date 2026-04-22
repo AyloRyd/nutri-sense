@@ -2,11 +2,18 @@ package com.nutrisense.mobile.ui.diary.meal
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nutrisense.mobile.data.LibraryRepository
 import com.nutrisense.mobile.data.MealsRepository
 import com.nutrisense.mobile.data.OpenfoodfactsRepository
 import com.nutrisense.mobile.model.CreateMealFoodDto
+import com.nutrisense.mobile.model.CreateTemplateFoodDto
+import com.nutrisense.mobile.model.CreateTemplateMealDto
 import com.nutrisense.mobile.model.MealEntity
+import com.nutrisense.mobile.model.MealFoodEntity
+import com.nutrisense.mobile.model.TemplateFoodEntity
 import com.nutrisense.mobile.model.UpdateMealFoodDto
+import com.nutrisense.mobile.ui.components.FoodFormState
+import com.nutrisense.mobile.ui.components.NutritionMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,23 +23,16 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import javax.inject.Inject
 
-data class MealFoodFormState(
-    val name: String = "",
-    val weight: String = "100",
-    val calories: String = "0",
-    val protein: String = "0",
-    val fats: String = "0",
-    val carbs: String = "0"
-)
-
 data class MealDetailUiState(
     val mealId: Int = -1,
     val meal: MealEntity? = null,
+    val templateFoods: List<TemplateFoodEntity> = emptyList(),
     val isLoading: Boolean = false,
     val isSavingFood: Boolean = false,
+    val isSavingAsTemplate: Boolean = false,
     val isSearchingBarcode: Boolean = false,
     val barcodeError: String? = null,
-    val formState: MealFoodFormState = MealFoodFormState(),
+    val formState: FoodFormState = FoodFormState(),
     val editingFoodId: Int? = null,
     val error: String? = null
 )
@@ -40,6 +40,7 @@ data class MealDetailUiState(
 @HiltViewModel
 class MealDetailViewModel @Inject constructor(
     private val mealsRepository: MealsRepository,
+    private val libraryRepository: LibraryRepository,
     private val openfoodfactsRepository: OpenfoodfactsRepository
 ) : ViewModel() {
 
@@ -50,11 +51,13 @@ class MealDetailViewModel @Inject constructor(
         _uiState.update { it.copy(mealId = mealId, isLoading = true, error = null) }
         viewModelScope.launch {
             val result = mealsRepository.getMeal(mealId)
+            val templateFoodsResult = libraryRepository.getTemplateFoods()
             _uiState.update {
                 it.copy(
                     isLoading = false,
                     meal = result.getOrNull(),
-                    error = result.exceptionOrNull()?.message
+                    templateFoods = templateFoodsResult.getOrDefault(emptyList()),
+                    error = result.exceptionOrNull()?.message ?: templateFoodsResult.exceptionOrNull()?.message
                 )
             }
         }
@@ -73,29 +76,28 @@ class MealDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateFormState(newState: MealFoodFormState) {
+    fun updateFormState(newState: FoodFormState) {
         _uiState.update { it.copy(formState = newState) }
     }
 
     fun startEditingFood(id: Int?) {
         if (id == null) {
-            _uiState.update { it.copy(editingFoodId = null, formState = MealFoodFormState()) }
+            _uiState.update { it.copy(editingFoodId = null, formState = FoodFormState()) }
             return
         }
 
         val food = _uiState.value.meal?.mealFoods?.find { it.id.toInt() == id }
         if (food != null) {
-            val factor = 100.0 / food.weight.toDouble()
             _uiState.update {
                 it.copy(
                     editingFoodId = id,
-                    formState = MealFoodFormState(
+                    formState = FoodFormState(
                         name = food.name,
                         weight = food.weight.toDouble().toInt().toString(),
-                        calories = (food.calories.toDouble() * factor).toInt().toString(),
-                        protein = (food.protein.toDouble() * factor).toInt().toString(),
-                        fats = (food.fats.toDouble() * factor).toInt().toString(),
-                        carbs = (food.carbs.toDouble() * factor).toInt().toString()
+                        calories = NutritionMapper.toPer100g(food.calories.toDouble(), food.weight.toDouble()).toInt().toString(),
+                        protein = NutritionMapper.toPer100g(food.protein.toDouble(), food.weight.toDouble()).toInt().toString(),
+                        fats = NutritionMapper.toPer100g(food.fats.toDouble(), food.weight.toDouble()).toInt().toString(),
+                        carbs = NutritionMapper.toPer100g(food.carbs.toDouble(), food.weight.toDouble()).toInt().toString()
                     )
                 )
             }
@@ -113,10 +115,10 @@ class MealDetailViewModel @Inject constructor(
                 _uiState.update {
                     val form = it.formState.copy(
                         name = product.name,
-                        calories = product.calories?.toDouble()?.toInt()?.toString() ?: "0",
-                        protein = product.protein?.toDouble()?.toInt()?.toString() ?: "0",
-                        fats = product.fats?.toDouble()?.toInt()?.toString() ?: "0",
-                        carbs = product.carbs?.toDouble()?.toInt()?.toString() ?: "0"
+                        calories = product.calories.toDouble().toInt().toString(),
+                        protein = product.protein.toDouble().toInt().toString(),
+                        fats = product.fats.toDouble().toInt().toString(),
+                        carbs = product.carbs.toDouble().toInt().toString()
                     )
                     it.copy(
                         isSearchingBarcode = false,
@@ -190,6 +192,69 @@ class MealDetailViewModel @Inject constructor(
             val result = mealsRepository.removeFood(mealId, foodId)
             if (result.isSuccess) {
                 loadMeal(mealId) // Refresh
+            } else {
+                _uiState.update { it.copy(error = result.exceptionOrNull()?.message) }
+            }
+        }
+    }
+
+    fun prefillFromTemplateFood(food: TemplateFoodEntity) {
+        _uiState.update {
+            it.copy(
+                formState = it.formState.copy(
+                    name = food.name,
+                    weight = "100",
+                    calories = food.calories.toDouble().toInt().toString(),
+                    protein = food.protein.toDouble().toInt().toString(),
+                    fats = food.fats.toDouble().toInt().toString(),
+                    carbs = food.carbs.toDouble().toInt().toString()
+                )
+            )
+        }
+    }
+
+    fun saveMealAsTemplate(onSuccess: () -> Unit) {
+        val meal = _uiState.value.meal ?: return
+        _uiState.update { it.copy(isSavingAsTemplate = true, error = null) }
+        viewModelScope.launch {
+            val result = libraryRepository.createTemplateMeal(
+                CreateTemplateMealDto(
+                    name = meal.name,
+                    templateMealFoods = meal.mealFoods.map { food ->
+                        com.nutrisense.mobile.model.CreateTemplateMealFoodDto(
+                            name = food.name,
+                            weight = food.weight,
+                            calories = NutritionMapper.toPer100g(food.calories.toDouble(), food.weight.toDouble()).toBigDecimal(),
+                            protein = NutritionMapper.toPer100g(food.protein.toDouble(), food.weight.toDouble()).toBigDecimal(),
+                            fats = NutritionMapper.toPer100g(food.fats.toDouble(), food.weight.toDouble()).toBigDecimal(),
+                            carbs = NutritionMapper.toPer100g(food.carbs.toDouble(), food.weight.toDouble()).toBigDecimal()
+                        )
+                    }
+                )
+            )
+            _uiState.update { it.copy(isSavingAsTemplate = false) }
+            if (result.isSuccess) {
+                onSuccess()
+            } else {
+                _uiState.update { it.copy(error = result.exceptionOrNull()?.message) }
+            }
+        }
+    }
+
+    fun saveFoodAsTemplate(food: MealFoodEntity, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            val result = libraryRepository.createTemplateFood(
+                CreateTemplateFoodDto(
+                    name = food.name,
+                    calories = NutritionMapper.toPer100g(food.calories.toDouble(), food.weight.toDouble()).toBigDecimal(),
+                    protein = NutritionMapper.toPer100g(food.protein.toDouble(), food.weight.toDouble()).toBigDecimal(),
+                    fats = NutritionMapper.toPer100g(food.fats.toDouble(), food.weight.toDouble()).toBigDecimal(),
+                    carbs = NutritionMapper.toPer100g(food.carbs.toDouble(), food.weight.toDouble()).toBigDecimal()
+                )
+            )
+            if (result.isSuccess) {
+                onSuccess()
+                loadMeal(_uiState.value.mealId)
             } else {
                 _uiState.update { it.copy(error = result.exceptionOrNull()?.message) }
             }

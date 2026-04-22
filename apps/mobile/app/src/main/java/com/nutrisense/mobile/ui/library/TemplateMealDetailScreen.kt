@@ -1,4 +1,4 @@
-package com.nutrisense.mobile.ui.diary.meal
+package com.nutrisense.mobile.ui.library
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,9 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -43,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nutrisense.mobile.ui.components.AddFoodDialog
 import com.nutrisense.mobile.ui.components.FoodItemRow
@@ -50,39 +49,27 @@ import com.nutrisense.mobile.ui.components.MacroSummaryRings
 
 @OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
-fun MealDetailScreen(
-    mealId: Int,
+fun TemplateMealDetailScreen(
+    templateMealId: Int,
     onNavigateBack: () -> Unit,
     onNavigateToScanner: () -> Unit = {},
     barcodeResultFlow: String? = null,
     clearBarcodeResult: () -> Unit = {},
-    viewModel: MealDetailViewModel = hiltViewModel()
+    viewModel: TemplateMealDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showAddFoodDialog by remember { mutableStateOf(false) }
     var showDeleteMealDialog by remember { mutableStateOf(false) }
-    var showSaveMealTemplateDialog by remember { mutableStateOf(false) }
-    var showTemplateSavedDialog by remember { mutableStateOf(false) }
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
-
-    DisposableEffect(lifecycleOwner, mealId) {
+    DisposableEffect(lifecycleOwner, templateMealId) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.loadMeal(mealId)
+                viewModel.loadMeal(templateMealId)
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
-
-    if (uiState.isLoading && uiState.meal == null) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-        return
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
     LaunchedEffect(barcodeResultFlow) {
@@ -94,10 +81,22 @@ fun MealDetailScreen(
         }
     }
 
+    if (uiState.isLoading && uiState.meal == null) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = uiState.meal?.name ?: "Loading...", fontWeight = FontWeight.Bold) },
+                title = {
+                    Column {
+                        Text(uiState.meal?.name ?: "Loading...", fontWeight = FontWeight.Bold)
+                        Text("Template Meal", style = MaterialTheme.typography.labelSmall)
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -105,10 +104,7 @@ fun MealDetailScreen(
                 },
                 actions = {
                     IconButton(onClick = { showDeleteMealDialog = true }) {
-                        Icon(Icons.Default.Delete, contentDescription = "Delete Meal", tint = MaterialTheme.colorScheme.error)
-                    }
-                    IconButton(onClick = { showSaveMealTemplateDialog = true }) {
-                        Icon(Icons.Default.Save, contentDescription = "Save as template")
+                        Icon(Icons.Default.Delete, contentDescription = "Delete template meal", tint = MaterialTheme.colorScheme.error)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -119,14 +115,12 @@ fun MealDetailScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { 
+                onClick = {
                     viewModel.startEditingFood(null)
-                    showAddFoodDialog = true 
-                },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
+                    showAddFoodDialog = true
+                }
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Food")
+                Icon(Icons.Default.Add, contentDescription = "Add food")
             }
         }
     ) { innerPadding ->
@@ -143,10 +137,8 @@ fun MealDetailScreen(
                     fats = meal.fats.toDouble().toInt(),
                     carbs = meal.carbs.toDouble().toInt()
                 )
-                
                 Spacer(modifier = Modifier.height(16.dp))
-                
-                if (meal.mealFoods.isEmpty()) {
+                if (meal.templateMealFoods.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text("No foods added yet", color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
@@ -156,7 +148,7 @@ fun MealDetailScreen(
                         contentPadding = PaddingValues(bottom = 80.dp),
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        items(meal.mealFoods, key = { it.id.toInt() }) { food ->
+                        items(meal.templateMealFoods, key = { it.id.toInt() }) { food ->
                             FoodItemRow(
                                 name = food.name,
                                 calories = food.calories.toDouble().toInt(),
@@ -168,12 +160,7 @@ fun MealDetailScreen(
                                     viewModel.startEditingFood(food.id.toInt())
                                     showAddFoodDialog = true
                                 },
-                                onDelete = { viewModel.removeFood(food.id.toInt()) },
-                                extraTrailingContent = {
-                                    IconButton(onClick = { viewModel.saveFoodAsTemplate(food) { showTemplateSavedDialog = true } }) {
-                                        Icon(Icons.Default.Bookmark, contentDescription = "Save food as template")
-                                    }
-                                }
+                                onDelete = { viewModel.removeFood(food.id.toInt()) }
                             )
                         }
                     }
@@ -191,7 +178,7 @@ fun MealDetailScreen(
             barcodeError = uiState.barcodeError,
             templateFoods = uiState.templateFoods,
             onDismiss = { showAddFoodDialog = false },
-            onSave = { 
+            onSave = {
                 viewModel.saveFood {
                     showAddFoodDialog = false
                 }
@@ -209,8 +196,8 @@ fun MealDetailScreen(
     if (showDeleteMealDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteMealDialog = false },
-            title = { Text("Delete Meal") },
-            text = { Text("Are you sure you want to delete this meal?") },
+            title = { Text("Delete Template Meal") },
+            text = { Text("Are you sure you want to delete this template meal?") },
             confirmButton = {
                 Button(
                     onClick = {
@@ -220,50 +207,10 @@ fun MealDetailScreen(
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-                ) {
-                    Text("Delete")
-                }
+                ) { Text("Delete") }
             },
             dismissButton = {
-                TextButton(onClick = { showDeleteMealDialog = false }) {
-                    Text("Cancel")
-                }
-            }
-        )
-    }
-
-    if (showSaveMealTemplateDialog) {
-        AlertDialog(
-            onDismissRequest = { showSaveMealTemplateDialog = false },
-            title = { Text("Save as Template") },
-            text = { Text("Save this meal and all its foods to your library templates?") },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        viewModel.saveMealAsTemplate {
-                            showSaveMealTemplateDialog = false
-                            showTemplateSavedDialog = true
-                        }
-                    }
-                ) {
-                    Text("Save")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showSaveMealTemplateDialog = false }) {
-                    Text("Cancel")
-                }
-            }
-        )
-    }
-
-    if (showTemplateSavedDialog) {
-        AlertDialog(
-            onDismissRequest = { showTemplateSavedDialog = false },
-            title = { Text("Template saved") },
-            text = { Text("Saved successfully to library templates.") },
-            confirmButton = {
-                TextButton(onClick = { showTemplateSavedDialog = false }) { Text("OK") }
+                TextButton(onClick = { showDeleteMealDialog = false }) { Text("Cancel") }
             }
         )
     }

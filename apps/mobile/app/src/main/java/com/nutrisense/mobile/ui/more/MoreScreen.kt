@@ -55,6 +55,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nutrisense.mobile.model.CreatePlanDto
 import com.nutrisense.mobile.model.MeasurementEntity
 import com.nutrisense.mobile.model.PlanEntity
+import com.nutrisense.mobile.ui.library.LibraryContent
 import java.time.LocalDate
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
@@ -71,7 +72,9 @@ import java.time.format.DateTimeFormatter
 private val tabTitles = listOf("Plans", "Measurements", "Library")
 
 @Composable
-fun MoreScreen() {
+fun MoreScreen(
+    onNavigateToTemplateMeal: (Int) -> Unit = {}
+) {
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -87,7 +90,7 @@ fun MoreScreen() {
         when (selectedTab) {
             0 -> PlansContent()
             1 -> MeasurementsContent()
-            2 -> LibraryPlaceholder()
+            2 -> LibraryContent(onNavigateToTemplateMeal = onNavigateToTemplateMeal)
         }
     }
 }
@@ -549,19 +552,6 @@ private fun CreateMeasurementDialog(
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
     )
-}
-
-// ─────────────────────────── LIBRARY (placeholder) ───────────────────────────
-
-@Composable
-private fun LibraryPlaceholder() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Library", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            Text("Coming soon", style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-    }
 }
 
 // ─────────────────────────── Shared ───────────────────────────

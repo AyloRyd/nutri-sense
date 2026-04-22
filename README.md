@@ -19,9 +19,13 @@ This is a monorepo powered with Turborepo. Repository includes REST API, fronten
 
 ## Mobile
 
-Coming soon...
+- Kotlin
+- Jetpack Compose
+- Navigation Compose
+- Material Design 3
 
 ## IoT
 
 - C++
+- ESP32
 - MQTT protocol

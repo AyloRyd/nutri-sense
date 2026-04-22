@@ -9,6 +9,9 @@ import com.nutrisense.mobile.api.UsersApi
 import com.nutrisense.mobile.api.MealsApi
 import com.nutrisense.mobile.api.MealFoodsApi
 import com.nutrisense.mobile.api.OpenfoodfactsApi
+import com.nutrisense.mobile.api.TemplateMealFoodsApi
+import com.nutrisense.mobile.api.TemplateMealsApi
+import com.nutrisense.mobile.api.TemplateFoodsApi
 import com.nutrisense.mobile.BuildConfig
 import com.nutrisense.mobile.data.security.AuthInterceptor
 import dagger.Module
@@ -105,4 +108,16 @@ object NetworkModule {
     @Provides @Singleton
     fun provideOpenfoodfactsApi(apiClient: ApiClient): OpenfoodfactsApi =
         apiClient.createService(OpenfoodfactsApi::class.java)
+
+    @Provides @Singleton
+    fun provideTemplateMealsApi(apiClient: ApiClient): TemplateMealsApi =
+        apiClient.createService(TemplateMealsApi::class.java)
+
+    @Provides @Singleton
+    fun provideTemplateMealFoodsApi(apiClient: ApiClient): TemplateMealFoodsApi =
+        apiClient.createService(TemplateMealFoodsApi::class.java)
+
+    @Provides @Singleton
+    fun provideTemplateFoodsApi(apiClient: ApiClient): TemplateFoodsApi =
+        apiClient.createService(TemplateFoodsApi::class.java)
 }
