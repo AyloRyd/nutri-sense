@@ -164,7 +164,10 @@ function DiaryCalendar() {
           const isTodayDay = isToday(day)
           const isFuture = isAfter(day, startOfToday())
 
-          if (dayStat) {
+          if (isFuture) {
+            statusColor =
+              'border-neutral-700 bg-neutral-800/40 text-neutral-400' // Future = Gray
+          } else if (dayStat) {
             const hasPlan = !!dayStat.plan
             const isCalOk = hasPlan
               ? Math.abs(
@@ -175,9 +178,6 @@ function DiaryCalendar() {
             if (!hasPlan) {
               statusColor =
                 'border-neutral-700 bg-neutral-900 border-dashed text-neutral-400' // Logged but no plan
-            } else if (isFuture) {
-              statusColor =
-                'border-neutral-700 bg-neutral-800/40 text-neutral-400' // Future Plan = Gray
             } else if (dayStat.actual_calories === 0) {
               statusColor = 'border-rose-900 bg-rose-900/30 text-rose-500' // Uncompleted / Zero Calories = Red
             } else if (isCalOk) {
@@ -203,30 +203,33 @@ function DiaryCalendar() {
               >
                 {formatDate(day, 'd')}
               </span>
-              {dayStat && (
+              {(dayStat || isFuture) && (
                 <div className="flex flex-col gap-0.5 w-full mt-auto">
                   <div
                     className={`font-mono font-black text-xs sm:text-sm truncate ${
-                      !dayStat.plan
+                      isFuture
+                        ? 'text-neutral-500'
+                        : !dayStat?.plan
                         ? 'text-neutral-500'
                         : Math.abs(
-                              dayStat.actual_calories -
-                                dayStat.plan.day_calories,
+                              dayStat.actual_calories - dayStat.plan.day_calories,
                             ) <= 100
                           ? 'text-emerald-500'
-                          : isFuture
-                            ? 'text-neutral-500'
-                            : 'text-rose-600'
+                          : 'text-rose-600'
                     }`}
                   >
-                    {Math.round(dayStat.actual_calories)}{' '}
-                    {dayStat.plan && (
+                    {isFuture ? '-' : Math.round(dayStat?.actual_calories ?? 0)}{' '}
+                    {(dayStat?.plan || isFuture) && (
                       <span className="opacity-50 font-normal text-white">
-                        / {Math.round(dayStat.plan.day_calories)}
+                        /{' '}
+                        {dayStat?.plan
+                          ? Math.round(dayStat.plan.day_calories)
+                          : '-'}
                       </span>
                     )}
                   </div>
-                  <div className="hidden sm:flex justify-between font-mono text-[10px] w-full uppercase">
+                  {!!dayStat && !isFuture && (
+                    <div className="hidden sm:flex justify-between font-mono text-[10px] w-full uppercase">
                     <span
                       className={
                         !dayStat.plan
@@ -236,9 +239,7 @@ function DiaryCalendar() {
                                   dayStat.plan.day_protein,
                               ) <= 30
                             ? 'text-emerald-500/70'
-                            : isFuture
-                              ? 'text-neutral-500/70'
-                              : 'text-rose-600/70'
+                            : 'text-rose-600/70'
                       }
                     >
                       P:{Math.round(dayStat.actual_protein)}
@@ -251,9 +252,7 @@ function DiaryCalendar() {
                                 dayStat.actual_fats - dayStat.plan.day_fats,
                               ) <= 15
                             ? 'text-emerald-500/70'
-                            : isFuture
-                              ? 'text-neutral-500/70'
-                              : 'text-rose-600/70'
+                            : 'text-rose-600/70'
                       }
                     >
                       F:{Math.round(dayStat.actual_fats)}
@@ -266,17 +265,16 @@ function DiaryCalendar() {
                                 dayStat.actual_carbs - dayStat.plan.day_carbs,
                               ) <= 30
                             ? 'text-emerald-500/70'
-                            : isFuture
-                              ? 'text-neutral-500/70'
-                              : 'text-rose-600/70'
+                            : 'text-rose-600/70'
                       }
                     >
                       C:{Math.round(dayStat.actual_carbs)}
                     </span>
-                  </div>
+                    </div>
+                  )}
                 </div>
               )}
-              {!dayStat && (
+              {!dayStat && !isFuture && (
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity text-primary font-mono text-[10px] uppercase w-full text-center mt-auto">
                   {t('diary.addLog')}
                 </div>

@@ -1,5 +1,6 @@
 package com.nutrisense.mobile.ui.more
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -103,6 +104,7 @@ private fun PlansContent(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var showDialog by remember { mutableStateOf(false) }
+    var editingPlan by remember { mutableStateOf<PlanEntity?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.load()
@@ -128,7 +130,14 @@ private fun PlansContent(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(state.plans, key = { it.id.toInt() }) { plan ->
-                        PlanCard(plan = plan, onDelete = { viewModel.delete(plan.id) })
+                        PlanCard(
+                            plan = plan,
+                            onClick = {
+                                editingPlan = plan
+                                showDialog = true
+                            },
+                            onDelete = { viewModel.delete(plan.id) }
+                        )
                     }
                     item { Spacer(Modifier.height(80.dp)) }
                 }
@@ -137,26 +146,49 @@ private fun PlansContent(
     }
 
     if (showDialog) {
+        val goalFromPlan = when (editingPlan?.plan) {
+            PlanEntity.Plan.MAINTAIN -> CreatePlanDto.Goal.MAINTAIN
+            PlanEntity.Plan.GAIN -> CreatePlanDto.Goal.GAIN
+            PlanEntity.Plan.LOSE -> CreatePlanDto.Goal.LOSE
+            null -> CreatePlanDto.Goal.MAINTAIN
+        }
         CreatePlanDialog(
             isCreating = state.isCreating,
             error = state.error,
             missingProfileData = state.missingProfileData,
             hasProfile = state.hasProfile,
             hasMeasurements = state.hasMeasurements,
-            onDismiss = { showDialog = false },
-            onCreate = { startDate, goal, autoCalc, cal, pro, fat, carb ->
-                viewModel.create(startDate, goal, autoCalc, cal, pro, fat, carb)
+            initialStartDate = editingPlan?.startDate?.toLocalDate()?.toString() ?: LocalDate.now().toString(),
+            initialGoal = goalFromPlan,
+            initialIsAutoCalc = editingPlan == null,
+            initialCalories = editingPlan?.dayCalories?.toInt()?.toString() ?: "",
+            initialProtein = editingPlan?.dayProtein?.toInt()?.toString() ?: "",
+            initialFats = editingPlan?.dayFats?.toInt()?.toString() ?: "",
+            initialCarbs = editingPlan?.dayCarbs?.toInt()?.toString() ?: "",
+            confirmText = if (editingPlan == null) "Create" else "Save",
+            onDismiss = {
                 showDialog = false
+                editingPlan = null
+            },
+            onCreate = { startDate, goal, autoCalc, cal, pro, fat, carb ->
+                val plan = editingPlan
+                if (plan == null) {
+                    viewModel.create(startDate, goal, autoCalc, cal, pro, fat, carb)
+                } else {
+                    viewModel.update(plan.id, startDate, goal, autoCalc, cal, pro, fat, carb)
+                }
+                showDialog = false
+                editingPlan = null
             }
         )
     }
 }
 
 @Composable
-private fun PlanCard(plan: PlanEntity, onDelete: () -> Unit) {
+private fun PlanCard(plan: PlanEntity, onClick: () -> Unit, onDelete: () -> Unit) {
     var showConfirm by remember { mutableStateOf(false) }
 
-    ElevatedCard(modifier = Modifier.fillMaxWidth()) {
+    ElevatedCard(modifier = Modifier.fillMaxWidth().clickable(onClick = onClick)) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -220,16 +252,24 @@ private fun CreatePlanDialog(
     missingProfileData: Boolean,
     hasProfile: Boolean,
     hasMeasurements: Boolean,
+    initialStartDate: String,
+    initialGoal: CreatePlanDto.Goal,
+    initialIsAutoCalc: Boolean,
+    initialCalories: String,
+    initialProtein: String,
+    initialFats: String,
+    initialCarbs: String,
+    confirmText: String,
     onDismiss: () -> Unit,
     onCreate: (String, CreatePlanDto.Goal, Boolean, Int?, Int?, Int?, Int?) -> Unit
 ) {
-    var startDate by rememberSaveable { mutableStateOf(LocalDate.now().toString()) }
-    var goal by rememberSaveable { mutableStateOf(CreatePlanDto.Goal.MAINTAIN) }
-    var isAutoCalc by rememberSaveable { mutableStateOf(true) }
-    var calories by rememberSaveable { mutableStateOf("") }
-    var protein by rememberSaveable { mutableStateOf("") }
-    var fats by rememberSaveable { mutableStateOf("") }
-    var carbs by rememberSaveable { mutableStateOf("") }
+    var startDate by rememberSaveable(initialStartDate) { mutableStateOf(initialStartDate) }
+    var goal by rememberSaveable(initialGoal) { mutableStateOf(initialGoal) }
+    var isAutoCalc by rememberSaveable(initialIsAutoCalc) { mutableStateOf(initialIsAutoCalc) }
+    var calories by rememberSaveable(initialCalories) { mutableStateOf(initialCalories) }
+    var protein by rememberSaveable(initialProtein) { mutableStateOf(initialProtein) }
+    var fats by rememberSaveable(initialFats) { mutableStateOf(initialFats) }
+    var carbs by rememberSaveable(initialCarbs) { mutableStateOf(initialCarbs) }
     var goalExpanded by remember { mutableStateOf(false) }
 
     AlertDialog(
@@ -353,7 +393,7 @@ private fun CreatePlanDialog(
                     enabled = !isCreating
                 ) {
                     if (isCreating) CircularProgressIndicator(Modifier.height(16.dp).width(16.dp))
-                    else Text("Create")
+                    else Text(confirmText)
                 }
             }
         },
@@ -371,6 +411,7 @@ private fun CreatePlanDialog(
 private fun MeasurementsContent(viewModel: MeasurementsViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var showDialog by remember { mutableStateOf(false) }
+    var editingMeasurement by remember { mutableStateOf<MeasurementEntity?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.load()
@@ -404,7 +445,14 @@ private fun MeasurementsContent(viewModel: MeasurementsViewModel = hiltViewModel
                             Text("History", style = androidx.compose.material3.MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                         }
                         items(sorted, key = { it.id.toInt() }) { m ->
-                            MeasurementCard(measurement = m, onDelete = { viewModel.delete(m.id) })
+                            MeasurementCard(
+                                measurement = m,
+                                onClick = {
+                                    editingMeasurement = m
+                                    showDialog = true
+                                },
+                                onDelete = { viewModel.delete(m.id) }
+                            )
                         }
                         item { Spacer(Modifier.height(80.dp)) }
                     }
@@ -416,10 +464,24 @@ private fun MeasurementsContent(viewModel: MeasurementsViewModel = hiltViewModel
     if (showDialog) {
         CreateMeasurementDialog(
             isCreating = state.isCreating,
-            onDismiss = { showDialog = false },
-            onCreate = { w, h, a, d ->
-                viewModel.create(w, h, a, d)
+            initialWeight = editingMeasurement?.weight?.toPlainString() ?: "",
+            initialHeight = editingMeasurement?.height?.toPlainString() ?: "",
+            initialActivity = editingMeasurement?.activity?.toPlainString() ?: "1.2",
+            initialDate = editingMeasurement?.date?.toLocalDate()?.toString() ?: LocalDate.now().toString(),
+            confirmText = if (editingMeasurement == null) "Save" else "Update",
+            onDismiss = {
                 showDialog = false
+                editingMeasurement = null
+            },
+            onCreate = { w, h, a, d ->
+                val measurement = editingMeasurement
+                if (measurement == null) {
+                    viewModel.create(w, h, a, d)
+                } else {
+                    viewModel.update(measurement.id, w, h, a, d)
+                }
+                showDialog = false
+                editingMeasurement = null
             }
         )
     }
@@ -461,11 +523,11 @@ private fun MeasurementsChart(measurements: List<MeasurementEntity>) {
 }
 
 @Composable
-private fun MeasurementCard(measurement: MeasurementEntity, onDelete: () -> Unit) {
+private fun MeasurementCard(measurement: MeasurementEntity, onClick: () -> Unit, onDelete: () -> Unit) {
     var showConfirm by remember { mutableStateOf(false) }
     val dateStr = measurement.date.toLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
-    ElevatedCard(modifier = Modifier.fillMaxWidth()) {
+    ElevatedCard(modifier = Modifier.fillMaxWidth().clickable(onClick = onClick)) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -508,13 +570,18 @@ private fun MeasurementCard(measurement: MeasurementEntity, onDelete: () -> Unit
 @Composable
 private fun CreateMeasurementDialog(
     isCreating: Boolean,
+    initialWeight: String,
+    initialHeight: String,
+    initialActivity: String,
+    initialDate: String,
+    confirmText: String,
     onDismiss: () -> Unit,
     onCreate: (Double, Double, Double, String) -> Unit
 ) {
-    var weight by rememberSaveable { mutableStateOf("") }
-    var height by rememberSaveable { mutableStateOf("") }
-    var activity by rememberSaveable { mutableStateOf("1.2") }
-    var date by rememberSaveable { mutableStateOf(LocalDate.now().toString()) }
+    var weight by rememberSaveable(initialWeight) { mutableStateOf(initialWeight) }
+    var height by rememberSaveable(initialHeight) { mutableStateOf(initialHeight) }
+    var activity by rememberSaveable(initialActivity) { mutableStateOf(initialActivity) }
+    var date by rememberSaveable(initialDate) { mutableStateOf(initialDate) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -547,7 +614,7 @@ private fun CreateMeasurementDialog(
                 enabled = !isCreating && weight.isNotBlank() && height.isNotBlank()
             ) {
                 if (isCreating) CircularProgressIndicator(Modifier.height(16.dp).width(16.dp))
-                else Text("Save")
+                else Text(confirmText)
             }
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }

@@ -9,6 +9,7 @@ import com.nutrisense.mobile.api.UsersApi
 import com.nutrisense.mobile.model.CreatePlanDto
 import com.nutrisense.mobile.model.MeasurementEntity
 import com.nutrisense.mobile.model.PlanEntity
+import com.nutrisense.mobile.model.UpdatePlanDto
 import com.nutrisense.mobile.model.UserEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -34,9 +35,16 @@ data class PlansUiState(
 ) {
     /** True when user is missing sex, date_of_birth, or has no measurements */
     val missingProfileData: Boolean
-        get() = user?.sex == null || user?.dateOfBirth == null || !hasMeasurements
+        get() {
+            val currentUser = user
+            return currentUser == null || currentUser.sex == null || currentUser.dateOfBirth == null || !hasMeasurements
+        }
 
-    val hasProfile: Boolean get() = user?.sex != null && user?.dateOfBirth != null
+    val hasProfile: Boolean
+        get() {
+            val currentUser = user ?: return false
+            return currentUser.sex != null && currentUser.dateOfBirth != null
+        }
 }
 
 @HiltViewModel
@@ -109,6 +117,45 @@ class PlansViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "create: EXCEPTION", e)
+                _uiState.update { it.copy(isCreating = false, error = e.message) }
+            }
+        }
+    }
+
+    fun update(
+        id: java.math.BigDecimal,
+        startDate: String,
+        goal: CreatePlanDto.Goal,
+        isAutoCalc: Boolean,
+        calories: Int?,
+        protein: Int?,
+        fats: Int?,
+        carbs: Int?
+    ) {
+        _uiState.update { it.copy(isCreating = true, error = null) }
+        viewModelScope.launch {
+            try {
+                val dto = UpdatePlanDto(
+                    startDate = startDate,
+                    goal = when (goal) {
+                        CreatePlanDto.Goal.MAINTAIN -> UpdatePlanDto.Goal.MAINTAIN
+                        CreatePlanDto.Goal.GAIN -> UpdatePlanDto.Goal.GAIN
+                        CreatePlanDto.Goal.LOSE -> UpdatePlanDto.Goal.LOSE
+                    },
+                    dayCalories = if (!isAutoCalc) calories?.toBigDecimal() else null,
+                    dayProtein = if (!isAutoCalc) protein?.toBigDecimal() else null,
+                    dayFats = if (!isAutoCalc) fats?.toBigDecimal() else null,
+                    dayCarbs = if (!isAutoCalc) carbs?.toBigDecimal() else null
+                )
+                val resp = plansApi.plansControllerUpdate(id, dto)
+                if (resp.isSuccessful) {
+                    _uiState.update { it.copy(isCreating = false, successMsg = "Plan updated") }
+                    load()
+                } else {
+                    val errBody = resp.errorBody()?.string() ?: "Update failed"
+                    _uiState.update { it.copy(isCreating = false, error = errBody) }
+                }
+            } catch (e: Exception) {
                 _uiState.update { it.copy(isCreating = false, error = e.message) }
             }
         }

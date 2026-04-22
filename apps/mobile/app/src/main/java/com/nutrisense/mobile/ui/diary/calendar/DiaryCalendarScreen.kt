@@ -95,6 +95,7 @@ fun DiaryCalendarScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         CalendarGrid(
+            modifier = Modifier.weight(1f),
             uiState = uiState,
             onDateClick = { date ->
                 onNavigateToDate(date.format(DateTimeFormatter.ISO_LOCAL_DATE))
@@ -221,6 +222,7 @@ private fun CalendarHeader(
 
 @Composable
 private fun CalendarGrid(
+    modifier: Modifier = Modifier,
     uiState: DiaryCalendarUiState,
     onDateClick: (LocalDate) -> Unit
 ) {
@@ -229,87 +231,114 @@ private fun CalendarGrid(
     val firstDayOfWeek = yearMonth.atDay(1).dayOfWeek.value % 7 // Sunday = 0
 
     val days = listOf("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT")
+    val dayCellsCount = firstDayOfWeek + daysInMonth
+    val rows = kotlin.math.ceil(dayCellsCount / 7.0).toInt().coerceAtLeast(1)
+    val rowSpacing = 6.dp
+    val headerHeight = 22.dp
+    val contentTopSpacing = 8.dp
+    val fixedVertical = headerHeight + contentTopSpacing + rowSpacing * (rows - 1)
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(7),
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        // Headers
-        items(days) { day ->
-            Text(
-                text = day,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
+    BoxWithConstraints(modifier = modifier.fillMaxSize()) {
+        val cellHeight = ((maxHeight - fixedVertical) / rows).coerceAtLeast(56.dp)
 
-        // Empty padding cells
-        items(firstDayOfWeek) {
-            Box(modifier = Modifier.aspectRatio(1f))
-        }
-
-        // Day cells
-        items(daysInMonth) { index ->
-            val date = yearMonth.atDay(index + 1)
-            val dateStr = date.format(DateTimeFormatter.ISO_LOCAL_DATE)
-            val stat = uiState.stats.find { it.date == dateStr }
-            val isToday = date == LocalDate.now()
-
-            val backgroundColor = when {
-                stat == null -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-                stat.actualCalories.toDouble() == 0.0 -> MaterialTheme.colorScheme.errorContainer
-                stat.plan != null && Math.abs(stat.actualCalories.toDouble() - stat.plan!!.dayCalories.toDouble()) <= 100 -> MaterialTheme.colorScheme.primaryContainer
-                else -> MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f)
-            }
-
-            val contentColor = when {
-                stat == null -> MaterialTheme.colorScheme.onSurfaceVariant
-                stat.actualCalories.toDouble() == 0.0 -> MaterialTheme.colorScheme.onErrorContainer
-                stat.plan != null && Math.abs(stat.actualCalories.toDouble() - stat.plan!!.dayCalories.toDouble()) <= 100 -> MaterialTheme.colorScheme.onPrimaryContainer
-                else -> MaterialTheme.colorScheme.onErrorContainer
-            }
-
-            Box(
+        Column(modifier = Modifier.fillMaxSize()) {
+            Row(
                 modifier = Modifier
-                    .aspectRatio(1f)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(backgroundColor)
-                    .border(
-                        width = if (isToday) 2.dp else 0.dp,
-                        color = if (isToday) MaterialTheme.colorScheme.onBackground else Color.Transparent,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clickable { onDateClick(date) }
-                    .padding(4.dp)
+                    .fillMaxWidth()
+                    .height(headerHeight),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    Text(
-                        text = date.dayOfMonth.toString(),
-                        style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight.Bold,
-                        color = if (isToday) MaterialTheme.colorScheme.background else contentColor,
-                        modifier = Modifier
-                            .background(
-                                color = if (isToday) MaterialTheme.colorScheme.onBackground else Color.Transparent,
-                                shape = RoundedCornerShape(4.dp)
-                            )
-                            .padding(horizontal = 4.dp, vertical = 2.dp)
-                    )
-                    
-                    if (stat != null && stat.actualCalories.toDouble() > 0) {
+                days.forEach { day ->
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
                         Text(
-                            text = stat.actualCalories.toInt().toString(),
+                            text = day,
+                            textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = contentColor
+                            color = MaterialTheme.colorScheme.primary
                         )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(contentTopSpacing))
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(7),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalArrangement = Arrangement.spacedBy(rowSpacing),
+                userScrollEnabled = false,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                // Empty padding cells
+                items(firstDayOfWeek) {
+                    Box(modifier = Modifier.height(cellHeight))
+                }
+
+                // Day cells
+                items(daysInMonth) { index ->
+                    val date = yearMonth.atDay(index + 1)
+                    val dateStr = date.format(DateTimeFormatter.ISO_LOCAL_DATE)
+                    val stat = uiState.stats.find { it.date == dateStr }
+                    val today = LocalDate.now()
+                    val isToday = date == today
+                    val isFuture = date.isAfter(today)
+                    val actualCalories = stat?.actualCalories?.toInt() ?: 0
+                    val plannedCalories = stat?.plan?.dayCalories?.toInt()
+                    val hasPlan = plannedCalories != null
+                    val isNearPlan = hasPlan && kotlin.math.abs(actualCalories - plannedCalories!!) <= 100
+
+                    val stateBorderColor = when {
+                        isFuture -> MaterialTheme.colorScheme.outline
+                        isNearPlan -> MaterialTheme.colorScheme.primary
+                        hasPlan -> MaterialTheme.colorScheme.error
+                        else -> MaterialTheme.colorScheme.outline
+                    }
+                    val stateTextColor = when {
+                        isFuture -> MaterialTheme.colorScheme.onSurfaceVariant
+                        isNearPlan -> MaterialTheme.colorScheme.primary
+                        hasPlan -> MaterialTheme.colorScheme.error
+                        else -> MaterialTheme.colorScheme.onSurfaceVariant
+                    }
+                    val caloriesText = if (isFuture) {
+                        if (hasPlan) "- / ${plannedCalories}" else "- / -"
+                    } else {
+                        "${if (actualCalories > 0) actualCalories else "-"} / ${plannedCalories?.toString() ?: "-"}"
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .height(cellHeight)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.surface)
+                            .border(
+                                width = if (isToday) 2.dp else 1.dp,
+                                color = if (isToday) MaterialTheme.colorScheme.onBackground else stateBorderColor,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .clickable { onDateClick(date) }
+                            .padding(6.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.SpaceBetween,
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            Text(
+                                text = date.dayOfMonth.toString(),
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.Bold,
+                                color = if (isToday) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onSurface
+                            )
+
+                            Text(
+                                text = caloriesText,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = stateTextColor,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
                     }
                 }
             }

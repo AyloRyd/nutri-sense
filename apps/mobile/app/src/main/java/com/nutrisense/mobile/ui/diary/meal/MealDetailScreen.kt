@@ -15,6 +15,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -63,6 +64,8 @@ fun MealDetailScreen(
     var showDeleteMealDialog by remember { mutableStateOf(false) }
     var showSaveMealTemplateDialog by remember { mutableStateOf(false) }
     var showTemplateSavedDialog by remember { mutableStateOf(false) }
+    var showEditMealDialog by remember { mutableStateOf(false) }
+    var mealNameInput by remember { mutableStateOf("") }
 
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
 
@@ -106,6 +109,12 @@ fun MealDetailScreen(
                 actions = {
                     IconButton(onClick = { showDeleteMealDialog = true }) {
                         Icon(Icons.Default.Delete, contentDescription = "Delete Meal", tint = MaterialTheme.colorScheme.error)
+                    }
+                    IconButton(onClick = {
+                        mealNameInput = uiState.meal?.name.orEmpty()
+                        showEditMealDialog = true
+                    }) {
+                        Icon(Icons.Default.Edit, contentDescription = "Edit meal")
                     }
                     IconButton(onClick = { showSaveMealTemplateDialog = true }) {
                         Icon(Icons.Default.Save, contentDescription = "Save as template")
@@ -267,6 +276,34 @@ fun MealDetailScreen(
             text = { Text("Saved successfully to library templates.") },
             confirmButton = {
                 TextButton(onClick = { showTemplateSavedDialog = false }) { Text("OK") }
+            }
+        )
+    }
+
+    if (showEditMealDialog) {
+        AlertDialog(
+            onDismissRequest = { showEditMealDialog = false },
+            title = { Text("Edit Meal") },
+            text = {
+                androidx.compose.material3.OutlinedTextField(
+                    value = mealNameInput,
+                    onValueChange = { mealNameInput = it },
+                    label = { Text("Meal name") },
+                    singleLine = true
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.updateMealName(mealNameInput) {
+                            showEditMealDialog = false
+                        }
+                    },
+                    enabled = mealNameInput.isNotBlank()
+                ) { Text("Save") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEditMealDialog = false }) { Text("Cancel") }
             }
         )
     }

@@ -13,6 +13,7 @@ import com.nutrisense.mobile.model.CreateTemplateMealDto
 import com.nutrisense.mobile.model.MealEntity
 import com.nutrisense.mobile.model.MealFoodEntity
 import com.nutrisense.mobile.model.TemplateFoodEntity
+import com.nutrisense.mobile.model.UpdateMealDto
 import com.nutrisense.mobile.model.UpdateMealFoodDto
 import com.nutrisense.mobile.ui.components.FoodFormState
 import com.nutrisense.mobile.ui.components.NutritionMapper
@@ -75,6 +76,20 @@ class MealDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val result = mealsRepository.deleteMeal(mealId)
             if (result.isSuccess) {
+                onSuccess()
+            } else {
+                _uiState.update { it.copy(error = result.exceptionOrNull()?.message) }
+            }
+        }
+    }
+
+    fun updateMealName(newName: String, onSuccess: () -> Unit) {
+        val mealId = _uiState.value.mealId
+        if (mealId == -1 || newName.isBlank()) return
+        viewModelScope.launch {
+            val result = mealsRepository.updateMeal(mealId, UpdateMealDto(name = newName))
+            if (result.isSuccess) {
+                loadMeal(mealId)
                 onSuccess()
             } else {
                 _uiState.update { it.copy(error = result.exceptionOrNull()?.message) }

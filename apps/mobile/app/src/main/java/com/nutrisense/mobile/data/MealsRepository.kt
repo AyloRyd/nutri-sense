@@ -6,6 +6,7 @@ import com.nutrisense.mobile.model.CreateMealDto
 import com.nutrisense.mobile.model.CreateMealFoodDto
 import com.nutrisense.mobile.model.MealEntity
 import com.nutrisense.mobile.model.MealFoodEntity
+import com.nutrisense.mobile.model.UpdateMealDto
 import com.nutrisense.mobile.model.UpdateMealFoodDto
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -66,6 +67,21 @@ class MealsRepository @Inject constructor(
                 Result.success(Unit)
             } else {
                 Result.failure(Exception("Failed to delete meal: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updateMeal(id: Int, updateMealDto: UpdateMealDto): Result<MealEntity> {
+        return try {
+            val response = mealsApi.mealsControllerUpdate(BigDecimal(id), updateMealDto)
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) Result.success(body)
+                else Result.failure(Exception("Updated meal is null"))
+            } else {
+                Result.failure(Exception("Failed to update meal: ${response.code()}"))
             }
         } catch (e: Exception) {
             Result.failure(e)

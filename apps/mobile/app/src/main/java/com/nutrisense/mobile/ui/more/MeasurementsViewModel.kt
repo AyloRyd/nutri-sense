@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.nutrisense.mobile.api.MeasurementsApi
 import com.nutrisense.mobile.model.CreateMeasurementDto
 import com.nutrisense.mobile.model.MeasurementEntity
+import com.nutrisense.mobile.model.UpdateMeasurementDto
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -76,6 +77,30 @@ class MeasurementsViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "create: EXCEPTION", e)
+                _uiState.update { it.copy(isCreating = false, error = e.message) }
+            }
+        }
+    }
+
+    fun update(id: java.math.BigDecimal, weight: Double, height: Double, activity: Double, date: String) {
+        _uiState.update { it.copy(isCreating = true, error = null) }
+        viewModelScope.launch {
+            try {
+                val dto = UpdateMeasurementDto(
+                    weight = weight.toBigDecimal(),
+                    height = height.toBigDecimal(),
+                    activity = activity.toBigDecimal(),
+                    date = date
+                )
+                val resp = api.measurementsControllerUpdate(id, dto)
+                if (resp.isSuccessful) {
+                    _uiState.update { it.copy(isCreating = false, successMsg = "Measurement updated") }
+                    load()
+                } else {
+                    val errBody = resp.errorBody()?.string()
+                    _uiState.update { it.copy(isCreating = false, error = "Update failed: $errBody") }
+                }
+            } catch (e: Exception) {
                 _uiState.update { it.copy(isCreating = false, error = e.message) }
             }
         }

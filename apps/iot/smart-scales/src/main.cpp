@@ -15,12 +15,25 @@ float tareOffset = 0.0;
 WiFiClient espClient;
 PubSubClient client(espClient);
 
+// Fallback broker list (disabled for now; single-broker mode enabled)
+// const char* MQTT_BROKERS[] = {
+//   MQTT_SERVER,
+//   "broker.hivemq.com",
+//   "broker.emqx.io"
+// };
+// const size_t MQTT_BROKER_COUNT = sizeof(MQTT_BROKERS) / sizeof(MQTT_BROKERS[0]);
+// size_t currentBrokerIndex = 0;
+// int failedConnectAttemptsOnBroker = 0;
+// const int MAX_FAILED_ATTEMPTS_PER_BROKER = 3;
+
 void setup_wifi();
 void callback(char* topic, byte* payload, unsigned int length);
 float readWeight();
 void performTare();
 void sendWeightData();
 void reconnect();
+void printDnsDiagnostics(const char* brokerHost);
+void switchToNextBroker();
 
 void setup() {
   Serial.begin(115200);
@@ -37,6 +50,7 @@ void setup() {
   Serial.println("--------------------------------");
 
   setup_wifi();
+  // Single-broker mode
   client.setServer(MQTT_SERVER, MQTT_PORT);
   client.setCallback(callback); 
 }
@@ -114,7 +128,13 @@ void sendWeightData() {
 
 void reconnect() {
   while (!client.connected()) {
+    const char* currentBroker = MQTT_SERVER;
+    printDnsDiagnostics(currentBroker);
+
     Serial.print("Attempting MQTT connection.. ");
+    Serial.print("(broker=");
+    Serial.print(currentBroker);
+    Serial.print(") ");
     String clientId = "ESP32-" + String(DEVICE_SERIAL) + "-" + String(random(0xffff), HEX);
     
     if (client.connect(clientId.c_str())) {
@@ -126,7 +146,53 @@ void reconnect() {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
+      // rc=-2 means TCP connect failed; usually DNS/network/broker reachability.
+      if (client.state() == -2) {
+        printDnsDiagnostics(currentBroker);
+      }
+      // Fallback broker switching is intentionally disabled (single-broker mode).
+      // if (failedConnectAttemptsOnBroker >= MAX_FAILED_ATTEMPTS_PER_BROKER) {
+      //   switchToNextBroker();
+      // }
+
       delay(5000);
     }
   }
+}
+
+void printDnsDiagnostics(const char* brokerHost) {
+  Serial.println("\n[MQTT DIAGNOSTICS]");
+  Serial.print("WiFi status: ");
+  Serial.println(WiFi.status() == WL_CONNECTED ? "CONNECTED" : "DISCONNECTED");
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.print("Local IP: ");
+    Serial.println(WiFi.localIP());
+    Serial.print("RSSI: ");
+    Serial.print(WiFi.RSSI());
+    Serial.println(" dBm");
+  }
+  Serial.print("Broker host: ");
+  Serial.println(brokerHost);
+
+  IPAddress resolvedIp;
+  if (WiFi.hostByName(brokerHost, resolvedIp)) {
+    Serial.print("DNS resolved: ");
+    Serial.println(resolvedIp);
+  } else {
+    Serial.println("DNS resolved: FAILED");
+  }
+  Serial.println("[/MQTT DIAGNOSTICS]");
+}
+
+void switchToNextBroker() {
+  // Disabled: keep function for quick re-enable later.
+  // size_t previous = currentBrokerIndex;
+  // currentBrokerIndex = (currentBrokerIndex + 1) % MQTT_BROKER_COUNT;
+  // failedConnectAttemptsOnBroker = 0;
+  //
+  // client.setServer(MQTT_BROKERS[currentBrokerIndex], MQTT_PORT);
+  // Serial.print("\nSwitching MQTT broker: ");
+  // Serial.print(MQTT_BROKERS[previous]);
+  // Serial.print(" -> ");
+  // Serial.println(MQTT_BROKERS[currentBrokerIndex]);
 }
