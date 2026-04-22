@@ -2,7 +2,7 @@ import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 import { Button } from '../components/ui/button'
 
 const ANDROID_APK_URL =
-  'https://github.com/AyloRyd/nutri-sense/releases/latest/download/app-debug.apk'
+  'https://github.com/AyloRyd/nutri-sense/releases/latest/download/NutriSense.apk'
 
 export const Route = createFileRoute('/')({
   beforeLoad: () => {

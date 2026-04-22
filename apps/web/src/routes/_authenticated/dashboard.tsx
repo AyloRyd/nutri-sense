@@ -18,7 +18,7 @@ import {
 import { Progress } from '../../components/ui/progress'
 
 const ANDROID_APK_URL =
-  'https://github.com/AyloRyd/nutri-sense/releases/latest/download/app-debug.apk'
+  'https://github.com/AyloRyd/nutri-sense/releases/latest/download/NutriSense.apk'
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
   loader: async ({ context: { queryClient } }) => {
