@@ -32,6 +32,6 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: MQTT_HOST
-        value: test.mosquitto.org
+        value: broker.hivemq.com
       - key: MQTT_PORT
         value: "1883"

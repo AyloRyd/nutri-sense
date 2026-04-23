@@ -17,7 +17,7 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:password@db:5432/NutriSense?schema=public
       - JWT_SECRET=zjP9h6ZI5LoSKCRj
-      - MQTT_HOST=test.mosquitto.org
+      - MQTT_HOST=broker.hivemq.com
       - MQTT_PORT=1883
     depends_on:
       - db
